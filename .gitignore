@@ -301,3 +301,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Customized targets that should be ignored
+3rdParty/
+assets/
