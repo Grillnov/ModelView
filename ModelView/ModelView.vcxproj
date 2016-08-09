@@ -14,7 +14,7 @@
     <ClInclude Include="..\Demo\Demo.hpp" />
     <ClInclude Include="..\include\AllinGL.h" />
     <ClInclude Include="..\include\BenchmarkTimer.h" />
-    <ClInclude Include="..\include\BufferPack.h" />
+    <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CamPack.h" />
     <ClInclude Include="..\include\EventPack.h" />
     <ClInclude Include="..\include\GLApplication.h" />
@@ -26,7 +26,6 @@
     <ClInclude Include="..\include\UniformPack.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\BufferPack.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
     <ClCompile Include="..\src\main.cpp" />

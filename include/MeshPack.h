@@ -9,25 +9,27 @@
 # ifndef MESHPACK
 # define MESHPACK
 # include "AllinGL.h"
-# include "BufferPack.h"
+# include "BufferPack.hpp"
 
 class MeshPack : public GLAttachable, public GLObject
 {
 private:
 	/** Buffer storing vertex coordinates*/
-	BufferPack VertexCoord;
+	BufferPack<GLfloat> VertexCoord;
 
 	/** Buffer storing normal vector coordinates*/
-	BufferPack NormalCoord;
+	BufferPack<GLfloat> NormalCoord;
 
 	/** Buffer storing texture coordinates*/
-	BufferPack TextureCoord;
+	BufferPack<GLfloat> TextureCoord;
+
+	/** Buffer storing indices of vertex, defining how triangles are assembled*/
+	BufferPack<GLuint> ElementArr;
 
 	/** Buffer storing tangent coordinates for normal mapping*/
 	//BufferPack TangentCoord; //Wait...Do we actually need this?
 
-	/** Buffer storing indices of vertex, defining how triangles are assembled*/
-	BufferPack VertexIndex;
+	GLfloat scale;
 
 	/** Parse a plain text 3D model into blobs*/
 	void ParseModel(std::string Path);
@@ -49,7 +51,7 @@ public:
 	@params
 	@Path specifies the path to the designated asset, can be plain text 3D Model or blob.
 	*/
-	MeshPack(std::string Path);
+	MeshPack(std::string Path, float scale = 1.0f);
 
 	/** Attach this mesh. GLVertexArray, AttribPointer and stuff*/
 	void Attach() override;

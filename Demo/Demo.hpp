@@ -1,6 +1,7 @@
-#ifndef PHONG
-#define PHONG
-#include "GLApplication.h"
+# ifndef PHONG
+# define PHONG
+# include "GLApplication.h"
+# include "MeshPack.h"
 
 class Phong :public GLApplication
 {
@@ -11,7 +12,8 @@ public:
 	}
 	void fun()
 	{
-		BufferPack Pact2(20);
+		MeshPack Pack("D:/ModelView/assets/A6M2_scale10000.obj");
+		BufferPack<GLfloat> Pact2(20);
 		Pact2.Detach();
 		Pact2.Attach();
 	}
@@ -19,7 +21,7 @@ public:
 	{
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
-		BufferPack Pact1(40);
+		BufferPack<GLfloat> Pact1(40);
 		fun();
 		Pact1.Attach();
 		Pact1.Detach();
@@ -34,4 +36,4 @@ public:
 	}
 private:
 };
-#endif
+# endif

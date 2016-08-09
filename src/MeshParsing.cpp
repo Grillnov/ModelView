@@ -19,7 +19,7 @@ struct vec3
 	GLfloat y;
 	GLfloat z;
 	vec3(){};
-	vec3(double x, double y, double z) :x(x), y(y), z(z){}
+	vec3(float x, float y, float z) :x(x), y(y), z(z){}
 };
 
 struct Vertex
@@ -46,17 +46,27 @@ struct Vertex
 	}
 };
 
+bool operator<(const Vertex& lhs, const Vertex& rhs)
+{
+	return lhs.ID < rhs.ID;
+}
+
+bool operator==(const Vertex& lhs, const Vertex& rhs)
+{
+	return lhs.ID == rhs.ID;
+}
+
 void MeshPack::ParseModel(std::string Path)
 {
 	std::fstream fin(Path, std::ios::in);
 	if (!fin.is_open())
 	{
 		fin.close();
-		Error(debugMsg, "Asset %s is not found!", Path);
+		Error(debugMsg, "Asset %s is not found!", Path.c_str());
 	}
 	else
 	{
-		Log(debugMsg, "Model %s is now being parsed!", Path);
+		Log(debugMsg, "Model %s is now being parsed!", Path.c_str());
 	}
 
 	fin.seekg(0, std::ios::end);
@@ -68,7 +78,7 @@ void MeshPack::ParseModel(std::string Path)
 
 	std::vector<vec3> VertexAttribTemp[texCoord + 1];
 	std::vector<GLuint> ElementArrayTemp;
-	std::set<Vertex> VertexBuffer;
+	std::set<Vertex> Vertices;
 
 	std::stringstream objStream(source);
 	while (!objStream.eof())
@@ -117,7 +127,7 @@ void MeshPack::ParseModel(std::string Path)
 						PosTexNor[i]--;
 					}
 					ElementArrayTemp.push_back(PosTexNor[0]);
-					VertexBuffer.insert(Vertex(VertexAttribTemp[Coord].at(PosTexNor[Coord]), VertexAttribTemp[normalDir].at(PosTexNor[normalDir]), vec3(0, 0, 0), PosTexNor[0]));
+					Vertices.insert(Vertex(VertexAttribTemp[Coord].at(PosTexNor[Coord]), VertexAttribTemp[normalDir].at(PosTexNor[normalDir]), vec3(0, 0, 0), PosTexNor[0]));
 				}
 			}
 			else
@@ -131,7 +141,7 @@ void MeshPack::ParseModel(std::string Path)
 						PosTexNor[i]--;
 					}
 					ElementArrayTemp.push_back(PosTexNor[0]);
-					VertexBuffer.insert(Vertex(VertexAttribTemp[Coord].at(PosTexNor[Coord]), VertexAttribTemp[normalDir].at(PosTexNor[normalDir]), VertexAttribTemp[texCoord].at(PosTexNor[texCoord]), PosTexNor[0]));
+					Vertices.insert(Vertex(VertexAttribTemp[Coord].at(PosTexNor[Coord]), VertexAttribTemp[normalDir].at(PosTexNor[normalDir]), VertexAttribTemp[texCoord].at(PosTexNor[texCoord]), PosTexNor[0]));
 				}
 			}
 			break;
@@ -145,79 +155,64 @@ void MeshPack::ParseModel(std::string Path)
 		VertexAttribTemp[i].clear();
 	}
 
-	size_t VertexSum = VertexBuffer.size();
+	size_t VertexSum = Vertices.size();
 	size_t IndexSum = ElementArrayTemp.size();
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[Coord]);
-	GLfloat* VertexlocalBuffer = new GLfloat[4 * VertexSum];
+	GLfloat* Coord = new GLfloat[4 * VertexSum];
 	unsigned counter = 0;
-	for (auto a : VertexBuffer)
+	for (auto a : Vertices)
 	{
-		VertexlocalBuffer[4 * counter] = a.vertexCoord[0] / this->Scale[scalex];
-		VertexlocalBuffer[4 * counter + 1] = a.vertexCoord[1] / this->Scale[scaley];
-		VertexlocalBuffer[4 * counter + 2] = a.vertexCoord[2] / this->Scale[scalez];
-		VertexlocalBuffer[4 * counter + 3] = 1.0f;
+		Coord[4 * counter] = a.vertexCoord[0] / scale;
+		Coord[4 * counter + 1] = a.vertexCoord[1] / scale;
+		Coord[4 * counter + 2] = a.vertexCoord[2] / scale;
+		Coord[4 * counter + 3] = 1.0f;
 		++counter;
 	}
-	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(GLfloat)*VertexSum, VertexlocalBuffer, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(0);
-	delete[] VertexlocalBuffer;
+	this->VertexCoord = BufferPack<GLfloat>(Coord, 4 * VertexSum);
 
-	VertexlocalBuffer = new GLfloat[3 * VertexSum];
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[normalDir]);
+	GLfloat* Norm = new GLfloat[3 * VertexSum];
 	counter = 0;
-	for (auto a : VertexBuffer)
+	for (auto a : Vertices)
 	{
-		VertexlocalBuffer[3 * counter] = a.normalDir[0];
-		VertexlocalBuffer[3 * counter + 1] = a.normalDir[1];
-		VertexlocalBuffer[3 * counter + 2] = a.normalDir[2];
+		Norm[3 * counter] = a.normalDir[0];
+		Norm[3 * counter + 1] = a.normalDir[1];
+		Norm[3 * counter + 2] = a.normalDir[2];
 		++counter;
 	}
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*VertexSum, VertexlocalBuffer, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(1);
-	delete[] VertexlocalBuffer;
+	this->NormalCoord = BufferPack<GLfloat>(Norm, 3 * VertexSum);
 
-	VertexlocalBuffer = new GLfloat[3 * VertexSum];
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[texCoord]);
+	GLfloat* Tex = new GLfloat[3 * VertexSum];
 	counter = 0;
-	for (auto a : VertexBuffer)
+	for (auto a : Vertices)
 	{
-		VertexlocalBuffer[3 * counter] = a.texCoord[0] / this->Scale[scaleuv];
-		VertexlocalBuffer[3 * counter + 1] = a.texCoord[1] / this->Scale[scaleuv];
-		VertexlocalBuffer[3 * counter + 2] = a.texCoord[2] / this->Scale[scaleuv];
+		Tex[3 * counter] = a.texCoord[0];
+		Tex[3 * counter + 1] = a.texCoord[1];
+		Tex[3 * counter + 2] = a.texCoord[2];
 		++counter;
 	}
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3)*VertexSum, VertexlocalBuffer, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(2);
-
-	delete[] VertexlocalBuffer;
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[vertexID]);
+	this->TextureCoord = BufferPack<GLfloat>(Tex, 3 * VertexSum);
+	
+	/*Maybe this could be of use
 	counter = 0;
-	GLuint* localIDBuffer = new GLuint[VertexSum];
-	for (auto a : VertexBuffer)
+	GLuint* IDnum = new GLuint[VertexSum];
+	for (auto a : Vertices)
 	{
-		localIDBuffer[counter] = a.ID;
+		IDnum[counter] = a.ID;
 		++counter;
 	}
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint)*VertexSum, localIDBuffer, GL_STATIC_DRAW);
-	glVertexAttribIPointer(3, 1, GL_INT, 0, nullptr);
-	glEnableVertexAttribArray(3);
-	delete[] localIDBuffer;
+	this->VertexID = BufferPack<GLuint>(IDnum, );
+	*/
 
-	VertexBuffer.clear();
+	Vertices.clear();
 
-	glGenBuffers(1, &IBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, ElementArrayTemp.size()*sizeof(GLuint), ElementArrayTemp.data(), GL_STATIC_DRAW);
-	cout << this->Dir << ": " << "Faces in triangles: " << ElementArrayTemp.size() / 3 << endl;
+	GLuint* EleArr = new GLuint[ElementArrayTemp.size()];
+	counter = 0;
+	for (auto a : ElementArrayTemp)
+	{
+		EleArr[counter] = a;
+	}
+	this->ElementArr = BufferPack<GLuint>(EleArr, ElementArrayTemp.size());
 
+	Info(debugMsg, "Model %s has %u faces in triangles.", Path.c_str(), ElementArrayTemp.size());
 	ElementArrayTemp.clear();
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

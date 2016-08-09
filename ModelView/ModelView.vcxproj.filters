@@ -24,9 +24,6 @@
     <ClInclude Include="..\include\BenchmarkTimer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\BufferPack.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\CamPack.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -57,11 +54,11 @@
     <ClInclude Include="..\include\UniformPack.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\BufferPack.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\BufferPack.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

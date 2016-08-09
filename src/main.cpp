@@ -1,6 +1,6 @@
 # include "AllinGL.h"
 # include "GLApplication.h"
-# include "BufferPack.h"
+# include "BufferPack.hpp"
 # include "Demo.hpp"
 
 int main(void)

@@ -47,7 +47,7 @@ public:
 	/**
 	Telling whether it's attached.
 	*/
-	virtual bool IsAttached() = 0;
+	virtual bool IsAttached() { return this->isAttached; }
 };
 
 # endif

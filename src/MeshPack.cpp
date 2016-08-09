@@ -8,16 +8,16 @@
 
 # include "MeshPack.h"
 
-MeshPack::MeshPack(std::string Path)
+MeshPack::MeshPack(std::string Path, float scale) : scale(scale)
 {
-	if (Path.find(".bin") == -1)
+	if (Path.find(".bin") == Path.npos)
 	{
-		if (Path.find(".obj") == -1)
+		if (Path.find(".obj") == Path.npos)
 		{
 			Error(debugMsg, "Only binary and .obj files are supported.");
 			return;
 		}
-		Log(debugMsg, "Asset %s is not converted to binary yet. Conversion may take some time.", Path);
+		Log(debugMsg, "Asset %s is not converted to binary yet. Conversion may take some time.", Path.c_str());
 		std::string binaryPath = Path.substr(0, Path.find(".obj")) + ".bin";
 		LoadFromModel(Path);
 	}
