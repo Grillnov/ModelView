@@ -56,25 +56,15 @@ bool operator==(const Vertex& lhs, const Vertex& rhs)
 	return lhs.ID == rhs.ID;
 }
 
-void MeshPack::ParseModel(std::string Path)
-{
-	std::fstream fin(Path, std::ios::in);
-	if (!fin.is_open())
-	{
-		fin.close();
-		Error(debugMsg, "Asset %s is not found!", Path.c_str());
-	}
-	else
-	{
-		Log(debugMsg, "Model %s is now being parsed!", Path.c_str());
-	}
+void MeshPack::ParseModel(std::string Path, std::fstream& fin)
+{	
+	Log(debugMsg, "Model %s is now being parsed!", Path.c_str());
 
 	fin.seekg(0, std::ios::end);
 	//size_t fileSize = fin.tellg();
 	fin.seekg(0);
 	std::string source;
 	source.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
-	fin.close();
 
 	std::vector<vec3> VertexAttribTemp[texCoord + 1];
 	std::vector<GLuint> ElementArrayTemp;
@@ -155,10 +145,11 @@ void MeshPack::ParseModel(std::string Path)
 		VertexAttribTemp[i].clear();
 	}
 
-	size_t VertexSum = Vertices.size();
+	this->SizeInVertices = Vertices.size();
 	size_t IndexSum = ElementArrayTemp.size();
+	this->SizeInTriangles = IndexSum / 3;
 
-	GLfloat* Coord = new GLfloat[4 * VertexSum];
+	GLfloat* Coord = new GLfloat[4 * SizeInVertices];
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
@@ -168,9 +159,9 @@ void MeshPack::ParseModel(std::string Path)
 		Coord[4 * counter + 3] = 1.0f;
 		++counter;
 	}
-	this->VertexCoord = BufferPack<GLfloat>(Coord, 4 * VertexSum);
+	this->VertexCoord = new BufferPack<GLfloat>(Coord, 4 * SizeInVertices);
 
-	GLfloat* Norm = new GLfloat[3 * VertexSum];
+	GLfloat* Norm = new GLfloat[3 * SizeInVertices];
 	counter = 0;
 	for (auto a : Vertices)
 	{
@@ -179,9 +170,9 @@ void MeshPack::ParseModel(std::string Path)
 		Norm[3 * counter + 2] = a.normalDir[2];
 		++counter;
 	}
-	this->NormalCoord = BufferPack<GLfloat>(Norm, 3 * VertexSum);
+	this->NormalCoord = new BufferPack<GLfloat>(Norm, 3 * SizeInVertices);
 
-	GLfloat* Tex = new GLfloat[3 * VertexSum];
+	GLfloat* Tex = new GLfloat[3 * SizeInVertices];
 	counter = 0;
 	for (auto a : Vertices)
 	{
@@ -190,7 +181,7 @@ void MeshPack::ParseModel(std::string Path)
 		Tex[3 * counter + 2] = a.texCoord[2];
 		++counter;
 	}
-	this->TextureCoord = BufferPack<GLfloat>(Tex, 3 * VertexSum);
+	this->TextureCoord = new BufferPack<GLfloat>(Tex, 3 * SizeInVertices);
 	
 	/*Maybe this could be of use
 	counter = 0;
@@ -205,14 +196,13 @@ void MeshPack::ParseModel(std::string Path)
 
 	Vertices.clear();
 
-	GLuint* EleArr = new GLuint[ElementArrayTemp.size()];
+	GLuint* EleArr = new GLuint[IndexSum];
 	counter = 0;
 	for (auto a : ElementArrayTemp)
 	{
 		EleArr[counter] = a;
 	}
-	this->ElementArr = BufferPack<GLuint>(EleArr, ElementArrayTemp.size());
+	this->ElementArr = new BufferPack<GLuint>(EleArr, IndexSum);
 
-	Info(debugMsg, "Model %s has %u faces in triangles.", Path.c_str(), ElementArrayTemp.size());
 	ElementArrayTemp.clear();
 }

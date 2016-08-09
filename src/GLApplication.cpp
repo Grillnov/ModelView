@@ -93,7 +93,7 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 	*/
 	if (device.find('M') != -1)
 	{
-		Warning(debugMsg, "Notebook video card detected. GlewExperimental flag switched on.");
+		Warning(debugMsg, "Notebook video card was detected. GlewExperimental flag is now switched on.");
 		glewExperimental = GL_TRUE;
 	}
 	if (GLEW_OK != glewInit())
