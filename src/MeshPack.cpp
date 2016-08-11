@@ -60,20 +60,29 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 	Log(debugMsg, "Loading binary from blob file %s now.", binaryPath.c_str());
 	size_t temp;
 	
+	//Size of vertex position in bytes
 	fin.read(reinterpret_cast<char*>(&temp), sizeof(size_t));
+
 	this->SizeInVertices = temp / 4 / sizeof(GLfloat);
 	this->VertexCoord = new BufferPack<GLfloat>(SizeInVertices * 4);
+
+	//Vertex positions
 	fin.read(reinterpret_cast<char*>(VertexCoord->LocalPtr), temp);
 
+	//Normal positions
 	this->NormalCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
 	fin.read(reinterpret_cast<char*>(NormalCoord->LocalPtr), SizeInVertices * 3 * sizeof(GLfloat));
 
+	//Texture coordinates
 	this->TextureCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
 	fin.read(reinterpret_cast<char*>(TextureCoord->LocalPtr), SizeInVertices * 3 * sizeof(GLfloat));
 
+	//Size of element array in bytes
 	fin.read(reinterpret_cast<char*>(&temp), sizeof(size_t));
 	this->SizeInTriangles = temp / 3 / sizeof(GLuint);
 	this->ElementArr = new BufferPack<GLuint>(SizeInTriangles * 3);
+
+	//Element array
 	fin.read(reinterpret_cast<char*>(ElementArr->LocalPtr), temp);
 
 	Info(debugMsg, "Loading complete. Model %s has %u faces in triangles.", Path.c_str(), this->SizeInTriangles);
@@ -109,7 +118,8 @@ void MeshPack::SaveBinary()
 
 void MeshPack::Attach()
 {
-
+	glBindBuffer(GL_ARRAY_BUFFER, VertexCoord->getGLID());
+	VertexCoord->Upload2Server(GL_ARRAY_BUFFER);
 }
 
 void MeshPack::Detach()

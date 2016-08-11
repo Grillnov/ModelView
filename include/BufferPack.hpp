@@ -19,14 +19,18 @@ template<typename GLclientside>
 class BufferPack : public GLAttachable, public GLObject
 {
 protected:
-	GLclientside* LocalPtr;/** local pointer to client side memory*/
 	size_t num_of_elements;
 	bool isUploaded;/** is server side memory allocated and written by the client yet?*/
 public:
 	/**
+	local pointer to client side memory
+	*/
+	GLclientside* LocalPtr;
+
+	/**
 	Default constructor, not supposed to be of any use.
 	*/
-	BufferPack();
+	//BufferPack();
 
 	/**
 	Constructor that sets the local pointer to Ptr, with size specified.
@@ -51,6 +55,7 @@ public:
 	/**
 	Telling whether it's attached or not
 	*/
+	//bool IsAttached() override { return this->isAttached; }
 
 	/**
 	Free its memory space allocated on the client side.
@@ -78,10 +83,12 @@ public:
 	GLclientside* at_Server(size_t index);
 };
 
+/*
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack()
 	: isUploaded(false), LocalPtr(nullptr), num_of_elements(0)
 {}
+*/
 
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, size_t num_of_elements)
@@ -117,6 +124,7 @@ void BufferPack<GLclientside>::Detach()
 		Warning(debugMsg, "Buffer %u is not attached yet, bailing.", this->AssetID);
 		return;
 	}
+	glInvalidateBufferData(this->AssetID);
 	glDeleteBuffers(1, &this->AssetID);
 	CheckStatus(__FUNCTION__);
 	Log(debugMsg, "Detached buffer %u", this->AssetID);
@@ -136,12 +144,14 @@ BufferPack<GLclientside>::~BufferPack()
 template<typename GLclientside>
 void BufferPack<GLclientside>::Upload2Server(GLenum bindingPoint, GLenum usage)
 {
+	size_t BufferSize = this->num_of_elements * sizeof(GLclientside);
 	if (!this->isUploaded)
 	{
-		glBufferData(bindingPoint, this->BufferSize, this->LocalPtr, usage);
+		glBindBuffer(bindingPoint, this->AssetID);
+		glBufferData(bindingPoint, BufferSize, this->LocalPtr, usage);
 		this->isUploaded = true;
 		CheckStatus(__FUNCTION__);
-		Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", this->BufferSize, this->AssetID);
+		Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", BufferSize, this->AssetID);
 	}
 	else
 	{

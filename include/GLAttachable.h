@@ -48,6 +48,8 @@ public:
 	Telling whether it's attached.
 	*/
 	virtual bool IsAttached() { return this->isAttached; }
+
+	GLuint getGLID(){ return this->AssetID; }
 };
 
 # endif

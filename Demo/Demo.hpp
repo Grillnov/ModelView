@@ -12,14 +12,14 @@ public:
 	}
 	void fun()
 	{
-		MeshPack Pack("D:/ModelView/assets/A6M2_scale10000.obj");
+		MeshPack Pack("D:/ModelView/assets/teapot.obj");
 		BufferPack<GLfloat> Pact2(20);
 		Pact2.Detach();
 		Pact2.Attach();
 	}
 	virtual void CreateApplication()
 	{
-		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
+		glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		BufferPack<GLfloat> Pact1(40);
 		fun();
