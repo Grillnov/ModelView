@@ -14,12 +14,12 @@
 class ShaderPack : public GLAttachable, public GLObject
 {
 private:
+	std::string Path;
 	std::string SrcCode;
+	void LoadFromText(std::string Path);
 public:
-	GLboolean LoadFromText(std::string Path);
-	GLboolean Compile();
-	GLboolean Attach();
-	GLboolean Detach();
+	void Load(std::string Path);
+	void Compile();
 };
 
 # endif

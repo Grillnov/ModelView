@@ -39,7 +39,7 @@ void GLObject::CheckStatus(const char* function)
 	}
 	GLenum error = glGetError();
 	static bool firstCall = true;
-	if(error != GL_NO_ERROR)
+	if (error != GL_NO_ERROR)
 	{
 		if (error == 1280 && firstCall)
 		{
@@ -50,8 +50,8 @@ void GLObject::CheckStatus(const char* function)
 		{
 			return;
 		}
-		Error(debugMsg, "Error spotted during the execution of function: %s", function);
-		Error(debugMsg, "Fatal OpenGL Error %d:%s", error, glGetString(error));
+		Warning(debugMsg, "Error spotted during the execution of function: %s", function);
+		Error(debugMsg, "Fatal OpenGL Error %d: %s", error, glewGetErrorString(error));
 	}
 }
 
@@ -162,6 +162,6 @@ void GLObject::Error(const char* file, unsigned line, const char* function, cons
 	printf("\n");
 	va_end(ap);
 
-	exit(-1);
+	//exit(-1);
 	// FIXME: Shall we do more than just exit?
 }

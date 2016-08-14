@@ -10,13 +10,13 @@
 # define TEXTUREPACK
 
 # include "AllinGL.h"
-# include "BufferPack.h"
+# include "BufferPack.hpp"
 // OpenCV support
 
 class TexturePack : public GLAttachable, public GLObject
 {
 private:
-	BufferPackf Texel;
+	BufferPack<GLfloat> *Texel;
 public:
 	GLboolean LoadFromFile(std::string InputFile);
 };

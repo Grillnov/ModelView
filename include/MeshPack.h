@@ -14,6 +14,7 @@
 class MeshPack : public GLAttachable, public GLObject
 {
 private:
+	const static enum VertArrs{ Pos, Nor, Tex, Ele };
 	/** Buffer storing vertex coordinates*/
 	BufferPack<GLfloat>* VertexCoord;
 
@@ -38,6 +39,8 @@ private:
 	/** How many triangles and how many vertices are there in the mesh?*/
 	size_t SizeInTriangles;
 	size_t SizeInVertices;
+
+	GLuint VertArray;
 
 	/** Parse a plain text 3D model into blobs*/
 	void ParseModel(std::string Path, std::fstream& fin);

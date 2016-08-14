@@ -1,5 +1,5 @@
 //
-//  BufferPack.h
+//  MeshPack.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 4, 2016.
@@ -63,8 +63,8 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 	//Size of vertex position in bytes
 	fin.read(reinterpret_cast<char*>(&temp), sizeof(size_t));
 
-	this->SizeInVertices = temp / 4 / sizeof(GLfloat);
-	this->VertexCoord = new BufferPack<GLfloat>(SizeInVertices * 4);
+	this->SizeInVertices = temp / 3 / sizeof(GLfloat);
+	this->VertexCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
 
 	//Vertex positions
 	fin.read(reinterpret_cast<char*>(VertexCoord->LocalPtr), temp);
@@ -100,11 +100,10 @@ void MeshPack::SaveBinary()
 	std::string binaryPath = this->Path.substr(0, this->Path.find(".obj")) + ".bin";
 	std::fstream fout(binaryPath, std::ios::out | std::ios::binary);
 
-	size_t temp = this->SizeInVertices * 4 * sizeof(GLfloat);
+	size_t temp = this->SizeInVertices * 3 * sizeof(GLfloat);
 	fout.write(reinterpret_cast<const char*>(&temp), sizeof(size_t));
 	fout.write(reinterpret_cast<const char*>(VertexCoord->LocalPtr), temp);
 
-	temp = this->SizeInVertices * 3 * sizeof(GLfloat);
 	fout.write(reinterpret_cast<const char*>(NormalCoord->LocalPtr), temp);
 	fout.write(reinterpret_cast<const char*>(TextureCoord->LocalPtr), temp);
 
@@ -113,23 +112,74 @@ void MeshPack::SaveBinary()
 	fout.write(reinterpret_cast<const char*>(ElementArr->LocalPtr), temp);
 
 	fout.close();
-	Log(debugMsg, "Model was successfully converted into binary blob. Conversions will be skipped from now.", this->Path.c_str());
+	Log(debugMsg, "Model %s was successfully saved as binary blob. Conversions will be skipped from now.", this->Path.c_str());
 }
 
 void MeshPack::Attach()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, VertexCoord->getGLID());
-	VertexCoord->Upload2Server(GL_ARRAY_BUFFER);
+	if (this->isAttached)
+	{
+		Warning(debugMsg, "Mesh %s is already attached, bailing.", this->Path.c_str());
+		return;
+	}
+
+	glGenVertexArrays(1, &VertArray);
+	glBindVertexArray(VertArray);
+
+	VertexCoord->Attach();
+	VertexCoord->Bind(GL_ARRAY_BUFFER);
+	glVertexAttribPointer(Pos, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(Pos);
+
+	NormalCoord->Attach();
+	NormalCoord->Bind(GL_ARRAY_BUFFER);
+	glVertexAttribPointer(Nor, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(Nor);
+
+	TextureCoord->Attach();
+	TextureCoord->Bind(GL_ARRAY_BUFFER);
+	glVertexAttribPointer(Tex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(Tex);
+
+	ElementArr->Attach();
+
+	glBindVertexArray(0);
+
+	Log(debugMsg, "Mesh %s successfully attached.", this->Path.c_str());
+	this->isAttached = true;
 }
 
 void MeshPack::Detach()
 {
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Mesh %s is not attached yet, bailing.", this->Path.c_str());
+		return;
+	}
+	glDeleteVertexArrays(1, &VertArray);
+	CheckStatus(__FUNCTION__);
 
+	VertexCoord->Detach();
+	NormalCoord->Detach();
+	TextureCoord->Detach();
+	ElementArr->Detach();
+
+	Log(debugMsg, "Mesh %s is successfully detached.", this->Path.c_str());
+	this->isAttached = false;
 }
 
 void MeshPack::DrawMesh()
 {
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Attempting to draw without attaching mesh %s, bailing.", this->Path.c_str());
+		return;
+	}
 
+	glBindVertexArray(this->VertArray);
+	ElementArr->Bind(GL_ELEMENT_ARRAY_BUFFER);
+	glDrawElements(GL_TRIANGLES, this->SizeInTriangles * 3, GL_UNSIGNED_INT, nullptr);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 MeshPack::~MeshPack()

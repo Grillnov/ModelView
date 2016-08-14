@@ -21,6 +21,7 @@
     <ClInclude Include="..\include\GLAttachable.h" />
     <ClInclude Include="..\include\GLObject.h" />
     <ClInclude Include="..\include\MeshPack.h" />
+    <ClInclude Include="..\include\ProgramPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\UniformPack.h" />
@@ -31,6 +32,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />
+    <ClCompile Include="..\src\ProgramPack.cpp" />
     <ClCompile Include="..\src\UniformPack.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -70,12 +72,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

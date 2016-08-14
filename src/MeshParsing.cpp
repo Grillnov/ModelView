@@ -149,17 +149,16 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	size_t IndexSum = ElementArrayTemp.size();
 	this->SizeInTriangles = IndexSum / 3;
 
-	GLfloat* Coord = new GLfloat[4 * SizeInVertices];
+	GLfloat* Coord = new GLfloat[3 * SizeInVertices];
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
-		Coord[4 * counter] = a.vertexCoord[0] / scale;
-		Coord[4 * counter + 1] = a.vertexCoord[1] / scale;
-		Coord[4 * counter + 2] = a.vertexCoord[2] / scale;
-		Coord[4 * counter + 3] = 1.0f;
+		Coord[3 * counter] = a.vertexCoord[0] / scale;
+		Coord[3 * counter + 1] = a.vertexCoord[1] / scale;
+		Coord[3 * counter + 2] = a.vertexCoord[2] / scale;
 		++counter;
 	}
-	this->VertexCoord = new BufferPack<GLfloat>(Coord, 4 * SizeInVertices);
+	this->VertexCoord = new BufferPack<GLfloat>(Coord, 3 * SizeInVertices);
 
 	GLfloat* Norm = new GLfloat[3 * SizeInVertices];
 	counter = 0;
@@ -201,6 +200,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	for (auto a : ElementArrayTemp)
 	{
 		EleArr[counter] = a;
+		counter++;
 	}
 	this->ElementArr = new BufferPack<GLuint>(EleArr, IndexSum);
 

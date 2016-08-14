@@ -18,9 +18,8 @@ GL type is designated by macros when invoking GL interfaces, thus template is no
 template<typename GLclientside>
 class BufferPack : public GLAttachable, public GLObject
 {
-protected:
+private:
 	size_t num_of_elements;
-	bool isUploaded;/** is server side memory allocated and written by the client yet?*/
 public:
 	/**
 	local pointer to client side memory
@@ -53,14 +52,18 @@ public:
 	void Detach() override;	
 
 	/**
-	Telling whether it's attached or not
+	Bind the buffer to some target
 	*/
-	//bool IsAttached() override { return this->isAttached; }
+	void Bind(GLenum target);
 
 	/**
-	Free its memory space allocated on the client side.
 	It's always a bad idea to include OpenGL invokes in destructing functions
-	So we just simply check that out
+	So we just simply detach this in this function.
+	*/
+	void DeleteObject() override;
+
+	/**
+	Free its memory space allocated on the client side, and destroy the buffer pack.
 	*/
 	~BufferPack();
 
@@ -69,8 +72,9 @@ public:
 	@ params
 	@ bindingPoint the binded target of the buffer.
 	@ usage the hinted usage of this buffer area.
+	Currently this function is deprecated.
 	*/
-	void Upload2Server(GLenum bindingPoint, GLenum usage = GL_STATIC_DRAW);
+	//void Upload2Server(GLenum bindingPoint, GLenum usage = GL_STATIC_DRAW);
 
 	/** Access client side memory
 	@ params
@@ -92,12 +96,12 @@ BufferPack<GLclientside>::BufferPack()
 
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, size_t num_of_elements)
-	: isUploaded(false), LocalPtr(Ptr), num_of_elements(num_of_elements)
+	: LocalPtr(Ptr), num_of_elements(num_of_elements)
 {}
 
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(size_t num_of_elements)
-	: isUploaded(false), num_of_elements(num_of_elements)
+	: num_of_elements(num_of_elements)
 {
 	this->LocalPtr = new GLclientside[num_of_elements];
 }
@@ -112,6 +116,17 @@ void BufferPack<GLclientside>::Attach()
 	}
 	glCreateBuffers(1, &this->AssetID);
 	CheckStatus(__FUNCTION__);
+
+	size_t bufferSize = this->num_of_elements * sizeof(GLclientside);
+
+	glBindBuffer(GL_COPY_WRITE_BUFFER, this->AssetID);
+	glBufferData(GL_COPY_WRITE_BUFFER, bufferSize, this->LocalPtr, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
+
+	CheckStatus(__FUNCTION__);
+	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
+
 	Log(debugMsg, "Attached buffer %u", this->AssetID);
 	this->isAttached = true;
 }
@@ -132,6 +147,20 @@ void BufferPack<GLclientside>::Detach()
 }
 
 template<typename GLclientside>
+void BufferPack<GLclientside>::Bind(GLenum target)
+{
+	glBindBuffer(target, this->AssetID);
+	CheckStatus(__FUNCTION__);
+}
+
+template<typename GLclientside>
+void BufferPack<GLclientside>::DeleteObject()
+{
+	this->Detach();
+	this->~BufferPack();
+}
+
+template<typename GLclientside>
 BufferPack<GLclientside>::~BufferPack()
 {
 	if (this->isAttached)
@@ -139,24 +168,6 @@ BufferPack<GLclientside>::~BufferPack()
 		Warning(debugMsg, "Buffer %u isn't detached before destruction, risk of causing memory leakage on server side.", this->AssetID);
 	}
 	delete[] this->LocalPtr;
-}
-
-template<typename GLclientside>
-void BufferPack<GLclientside>::Upload2Server(GLenum bindingPoint, GLenum usage)
-{
-	size_t BufferSize = this->num_of_elements * sizeof(GLclientside);
-	if (!this->isUploaded)
-	{
-		glBindBuffer(bindingPoint, this->AssetID);
-		glBufferData(bindingPoint, BufferSize, this->LocalPtr, usage);
-		this->isUploaded = true;
-		CheckStatus(__FUNCTION__);
-		Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", BufferSize, this->AssetID);
-	}
-	else
-	{
-		Warning(debugMsg, "Buffer %u has already been sent to the server, bailing.", this->AssetID);
-	}
 }
 
 template<typename GLclientside>

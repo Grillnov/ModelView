@@ -5,34 +5,31 @@
 
 class Phong :public GLApplication
 {
+private:
+	MeshPack* Pack;
 public:
 	virtual void MouseScroll(double x, double y)
 	{
 		
 	}
-	void fun()
-	{
-		MeshPack Pack("D:/ModelView/assets/teapot.obj");
-		BufferPack<GLfloat> Pact2(20);
-		Pact2.Detach();
-		Pact2.Attach();
-	}
+	
 	virtual void CreateApplication()
 	{
 		glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
-		BufferPack<GLfloat> Pact1(40);
-		fun();
-		Pact1.Attach();
-		Pact1.Detach();
+		Pack = new MeshPack("D:/ModelView/assets/BasePlain.obj");
+		Pack->Attach();
 	}
 	virtual void RenderFrame()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
+		Pack->DrawMesh();
 	}
 	virtual void ShutdownApplication()
 	{
+		Pack->Detach();
+		delete Pack;
 	}
 private:
 };

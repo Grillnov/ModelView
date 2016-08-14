@@ -10,7 +10,6 @@ int main(void)
 	app->WindowCreation("Demo", 640, 480);
 	app->RunMainLoop();
 	
-	system("pause");// Shall be commented
 	delete app;
 
 	return 0;
