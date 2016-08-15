@@ -44,6 +44,22 @@ void ProgramPack::AddShader(std::string Path, GLenum type)
 void ProgramPack::Attach()
 {
 	this->AssetID = glCreateProgram();
+	for (auto shader : this->ShaderTable)
+	{
+		shader.second->Attach();
+		glAttachShader(this->AssetID, shader.second->getID());
+		Log(debugMsg, "Attached a(n) %s to program with ID %u.",
+			getShaderTypeStr(shader.second->getType()), this->AssetID);
+	}
+
+	glLinkProgram(this->AssetID);
+
+	GLint programStatus;
+	glGetProgramiv(this->AssetID, GL_LINK_STATUS, &programStatus);
+	if (programStatus != GL_TRUE)
+	{
+		glGetProgramiv(this->AssetID, GL_INFO_LOG_LENGTH, &programStatus);
+	}
 }
 
 void ProgramPack::Detach()

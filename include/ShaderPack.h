@@ -70,9 +70,14 @@ public:
 	*/
 	void Detach() override;
 
-	std::string getPath()
+	GLuint getID()
 	{
-		return this->Path;
+		return this->AssetID;
+	}
+
+	GLenum getType()
+	{
+		return this->ShaderType;
 	}
 };
 
