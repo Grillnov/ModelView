@@ -60,9 +60,6 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 {	
 	Log(debugMsg, "Model %s is now being parsed!", Path.c_str());
 
-	fin.seekg(0, std::ios::end);
-	//size_t fileSize = fin.tellg();
-	fin.seekg(0);
 	std::string source;
 	source.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
 

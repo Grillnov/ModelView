@@ -33,6 +33,7 @@
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />
+    <ClCompile Include="..\src\ShaderPack.cpp" />
     <ClCompile Include="..\src\UniformPack.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -115,7 +115,6 @@ void BufferPack<GLclientside>::Attach()
 		return;
 	}
 	glCreateBuffers(1, &this->AssetID);
-	CheckStatus(__FUNCTION__);
 
 	size_t bufferSize = this->num_of_elements * sizeof(GLclientside);
 

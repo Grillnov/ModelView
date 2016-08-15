@@ -17,7 +17,7 @@ MeshPack::MeshPack(std::string Path, float scale) : scale(scale), Path(Path)
 	if (Path.find(".bin") != Path.npos)//A binary blob was ordered to be loaded.
 	{
 		if (!fin.is_open())
-			Error(debugMsg, "Cannot open file %s", Path.c_str());
+			Error(debugMsg, "Cannot open binary model file %s", Path.c_str());
 		LoadFromBinary(Path, fin);
 		fin.close();
 	}
@@ -31,7 +31,7 @@ MeshPack::MeshPack(std::string Path, float scale) : scale(scale), Path(Path)
 			fin.close();
 			fin.open(Path, std::ios::in);
 			if (!fin.is_open())
-				Error(debugMsg, "Cannot open file %s", Path.c_str());
+				Error(debugMsg, "Cannot open model file %s", Path.c_str());
 			Warning(debugMsg, "Loading from plain text model %s. Conversion may take some time.", Path.c_str());
 			LoadFromModel(Path, fin);
 			fin.close();
@@ -44,7 +44,7 @@ MeshPack::MeshPack(std::string Path, float scale) : scale(scale), Path(Path)
 		}
 	}
 	else
-		Error(debugMsg, "%s is neither a .obj nor a .bin, incompatible file format.", Path.c_str());
+		Error(debugMsg, "%s is neither a .obj nor a .bin, incompatible model file format.", Path.c_str());
 }
 
 void MeshPack::LoadFromModel(std::string Path, std::fstream& fin)
@@ -145,6 +145,8 @@ void MeshPack::Attach()
 
 	glBindVertexArray(0);
 
+	CheckStatus(__FUNCTION__);
+
 	Log(debugMsg, "Mesh %s successfully attached.", this->Path.c_str());
 	this->isAttached = true;
 }
@@ -157,12 +159,13 @@ void MeshPack::Detach()
 		return;
 	}
 	glDeleteVertexArrays(1, &VertArray);
-	CheckStatus(__FUNCTION__);
 
 	VertexCoord->Detach();
 	NormalCoord->Detach();
 	TextureCoord->Detach();
 	ElementArr->Detach();
+
+	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Mesh %s is successfully detached.", this->Path.c_str());
 	this->isAttached = false;
