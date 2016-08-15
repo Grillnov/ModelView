@@ -59,7 +59,17 @@ void ProgramPack::Attach()
 	if (programStatus != GL_TRUE)
 	{
 		glGetProgramiv(this->AssetID, GL_INFO_LOG_LENGTH, &programStatus);
+		char* InfoLogStr = new char[programStatus];
+		glGetProgramInfoLog(this->AssetID, programStatus, nullptr, InfoLogStr);
+		Error(debugMsg, "Program linkage failed with link error message: %s", InfoLogStr);
+		delete[] InfoLogStr;
 	}
+	else
+	{
+		Log(debugMsg, "Program %u was successfully linked and ready to be used.", this->AssetID);
+	}
+
+	CheckStatus(__FUNCTION__);
 }
 
 void ProgramPack::Detach()
