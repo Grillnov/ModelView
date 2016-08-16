@@ -66,18 +66,48 @@ void ProgramPack::Attach()
 	}
 	else
 	{
+		CheckStatus(__FUNCTION__);
 		Log(debugMsg, "Program %u was successfully linked and ready to be used.", this->AssetID);
+		this->isAttached = true;
 	}
-
-	CheckStatus(__FUNCTION__);
 }
 
 void ProgramPack::Detach()
 {
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is not attached yet, bailing.", this->AssetID);
+	}
+	for (auto shader : this->ShaderTable)
+	{
+		glDetachShader(this->AssetID, shader.second->getID());
+		shader.second->Detach();
+	}
+	glDeleteProgram(this->AssetID);
+	CheckStatus(__FUNCTION__);
 
+	Log(debugMsg, "Program %u was detached successfully.", this->AssetID);
+	this->isAttached = false;
+}
+
+void ProgramPack::UseProgramPack()
+{
+	if (!IsAttached())
+	{
+		Warning(debugMsg, "Program is not attached yet, bailing.");
+		return;
+	}
+	else
+	{
+		glUseProgram(this->AssetID);
+		CheckStatus(__FUNCTION__);
+	}
 }
 
 ProgramPack::~ProgramPack()
 {
-
+	for (auto shader : this->ShaderTable)
+	{
+		delete shader.second;
+	}
 }

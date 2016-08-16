@@ -36,6 +36,10 @@
     <ClCompile Include="..\src\ShaderPack.cpp" />
     <ClCompile Include="..\src\UniformPack.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shaders\simpleFragment.glsl" />
+    <None Include="..\Shaders\simpleVertex.glsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{90DA552A-44EF-41D4-885A-E32588B2225A}</ProjectGuid>
     <RootNamespace>ModelView</RootNamespace>

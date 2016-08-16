@@ -74,22 +74,30 @@ void ShaderPack::Attach()
 			glGetShaderiv(this->AssetID, GL_INFO_LOG_LENGTH, &shaderStatus);
 			char* InfoLogStr = new char[shaderStatus];
 			glGetShaderInfoLog(this->AssetID, shaderStatus, nullptr, InfoLogStr);
-			Error(debugMsg, "Shader compilation failed with compile error message: %s", InfoLogStr);
+			Error(debugMsg, "Shader %s compilation failed with compile error message: %s", Path.c_str(), InfoLogStr);
 			delete[] InfoLogStr;
 		}
 		else
 		{
-			Log(debugMsg, "Shader %s was successfully compiled.", this->Path.c_str());
+			Log(debugMsg, "Shader %s was successfully compiled and attached.", this->Path.c_str());
 			SaveBinary();
 			Log(debugMsg, "Blob compiled from shader %s was saved.", this->Path.c_str());
+			CheckStatus(__FUNCTION__);
+			this->isAttached = true;
 		}
-
-		CheckStatus(__FUNCTION__);
 	}
 }
 
 void ShaderPack::Detach()
 {
+	if (!IsAttached())
+	{
+		Warning(debugMsg, "Shader %s is not attached yet, bailing.", this->Path.c_str());
+		return;
+	}
 	glDeleteShader(this->AssetID);
+
 	CheckStatus(__FUNCTION__);
+	Log(debugMsg, "Shader %s was successfully detached.", this->Path.c_str());
+	this->isAttached = false;
 }
