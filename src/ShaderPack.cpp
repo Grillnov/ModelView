@@ -52,6 +52,11 @@ void ShaderPack::SaveBinary()
 
 void ShaderPack::Attach()
 {
+	if (this->isAttached)
+	{
+		Warning(debugMsg, "Shader %s is already attached, bailing.", this->Path.c_str());
+		return;
+	}
 	if (SrcCode.empty())
 	{
 		//Attach from binary

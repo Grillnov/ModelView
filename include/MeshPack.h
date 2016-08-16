@@ -73,7 +73,7 @@ public:
 	void Detach() override;
 
 	/** GLDraw. Renders the mesh.*/
-	void DrawMesh();
+	void DrawMesh(GLenum mode = GL_TRIANGLES);
 };
 
 # endif

@@ -43,6 +43,11 @@ void ProgramPack::AddShader(std::string Path, GLenum type)
 
 void ProgramPack::Attach()
 {
+	if (this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is already attached, bailing", this->AssetID);
+		return;
+	}
 	this->AssetID = glCreateProgram();
 	for (auto shader : this->ShaderTable)
 	{
@@ -86,7 +91,7 @@ void ProgramPack::Detach()
 	glDeleteProgram(this->AssetID);
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Program %u was detached successfully.", this->AssetID);
+	Log(debugMsg, "Program %u was successfully detached.", this->AssetID);
 	this->isAttached = false;
 }
 

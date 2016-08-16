@@ -167,11 +167,11 @@ void MeshPack::Detach()
 
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Mesh %s is successfully detached.", this->Path.c_str());
+	Log(debugMsg, "Mesh %s was successfully detached.", this->Path.c_str());
 	this->isAttached = false;
 }
 
-void MeshPack::DrawMesh()
+void MeshPack::DrawMesh(GLenum mode)
 {
 	if (!this->isAttached)
 	{
@@ -181,7 +181,7 @@ void MeshPack::DrawMesh()
 
 	glBindVertexArray(this->VertArray);
 	ElementArr->Bind(GL_ELEMENT_ARRAY_BUFFER);
-	glDrawElements(GL_TRIANGLES, this->SizeInTriangles * 3, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(mode, this->SizeInTriangles * 3, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 

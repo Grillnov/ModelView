@@ -13,7 +13,7 @@ public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		Pack = new MeshPack("D:/ModelView/assets/teapot.obj");
+		Pack = new MeshPack("D:/ModelView/assets/A6M2_scale10000.obj", 10000.0f);
 		Pack->Attach();
 
 		Program = new ProgramPack();
