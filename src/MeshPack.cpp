@@ -126,22 +126,22 @@ void MeshPack::Attach()
 	glGenVertexArrays(1, &VertArray);
 	glBindVertexArray(VertArray);
 
-	VertexCoord->Attach();
+	VertexCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	VertexCoord->Bind(GL_ARRAY_BUFFER);
 	glVertexAttribPointer(Pos, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(Pos);
 
-	NormalCoord->Attach();
+	NormalCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	NormalCoord->Bind(GL_ARRAY_BUFFER);
 	glVertexAttribPointer(Nor, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(Nor);
 
-	TextureCoord->Attach();
+	TextureCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	TextureCoord->Bind(GL_ARRAY_BUFFER);
 	glVertexAttribPointer(Tex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(Tex);
 
-	ElementArr->Attach();
+	ElementArr->Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 

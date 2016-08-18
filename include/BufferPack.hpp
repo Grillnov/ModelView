@@ -42,9 +42,18 @@ public:
 	BufferPack(size_t num_of_elements);
 
 	/**
-	Simply register the asset, without allocating memory or copying anything from client to server.
+	A naiver version of Attach().
+	Effective, yet may cause some performance issues.
+	Simply register the asset, allocating memory on the server side and upload
+	local memory.
 	*/
 	void Attach() override;
+
+	/**
+	When glBufferData is invoked, current binding target and usage will affect
+	the memory location allocated to this buffer.
+	*/
+	void Attach(GLenum hintBindtarget, GLenum hintUsage);
 
 	/**
 	Unregister the asset.
@@ -60,7 +69,7 @@ public:
 	It's always a bad idea to include OpenGL invokes in destructing functions
 	So we just simply detach this in this function.
 	*/
-	void DeleteObject() override;
+	//void DeleteObject() override;
 
 	/**
 	Free its memory space allocated on the client side, and destroy the buffer pack.
@@ -131,6 +140,30 @@ void BufferPack<GLclientside>::Attach()
 }
 
 template<typename GLclientside>
+void BufferPack<GLclientside>::Attach(GLenum hintBindingPoint, GLenum hintUsage)
+{
+	if (this->isAttached)
+	{
+		Warning(debugMsg, "Buffer %u is already attached, bailing.", this->AssetID);
+		return;
+	}
+	glCreateBuffers(1, &this->AssetID);
+
+	size_t bufferSize = this->num_of_elements * sizeof(GLclientside);
+
+	glBindBuffer(hintBindingPoint, this->AssetID);
+	glBufferData(hintBindingPoint, bufferSize, this->LocalPtr, hintUsage);
+
+	glBindBuffer(hintBindingPoint, 0);
+
+	CheckStatus(__FUNCTION__);
+	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
+
+	Log(debugMsg, "Attached buffer %u", this->AssetID);
+	this->isAttached = true;
+}
+
+template<typename GLclientside>
 void BufferPack<GLclientside>::Detach()
 {
 	if (!this->isAttached)
@@ -140,6 +173,7 @@ void BufferPack<GLclientside>::Detach()
 	}
 	glInvalidateBufferData(this->AssetID);
 	glDeleteBuffers(1, &this->AssetID);
+
 	CheckStatus(__FUNCTION__);
 	Log(debugMsg, "Detached buffer %u", this->AssetID);
 	this->isAttached = false;
@@ -150,13 +184,6 @@ void BufferPack<GLclientside>::Bind(GLenum target)
 {
 	glBindBuffer(target, this->AssetID);
 	CheckStatus(__FUNCTION__);
-}
-
-template<typename GLclientside>
-void BufferPack<GLclientside>::DeleteObject()
-{
-	this->Detach();
-	this->~BufferPack();
 }
 
 template<typename GLclientside>

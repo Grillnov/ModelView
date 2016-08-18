@@ -21,7 +21,7 @@ GLApplication* GLApplication::fInstance = nullptr;
 
 GLApplication::GLApplication() : fWindow(nullptr)
 {
-	// Set up OpenGL environment and do necessary stuffs.
+	// Set up OpenGL environment and do necessary stuff.
 
 	// TODO: we can't do this in initializer for a compiler bug of VS2013, 
 	// Maybe this will be fixed in the next generation of VS
@@ -77,6 +77,7 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 	glfwSetScrollCallback(fWindow, GLApplication::ScrollCallback);
 	glfwSetCursorPosCallback(fWindow, GLApplication::MotionCallback);
 	glfwSetFramebufferSizeCallback(fWindow, GLApplication::FramebufferSizeCallback);
+	glfwSetWindowCloseCallback(fWindow, GLApplication::WindowClosedCallback);
 
 # ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));

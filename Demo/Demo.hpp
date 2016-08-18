@@ -37,6 +37,5 @@ public:
 		Program->Detach();
 		delete Program;
 	}
-private:
 };
 # endif

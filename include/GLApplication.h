@@ -37,37 +37,63 @@ public:
 	void RunMainLoop();
 
 	/** @brief Gets the key state. */
-	bool IsKeyDown(unsigned char chr) {return fKeyState[chr] == 1;}
+	bool IsKeyDown(unsigned char chr)
+	{
+		return fKeyState[chr] == 1;
+	}
 	/** @brief Gets the mouse key state. */
 	bool IsMouseKeyDown(int which)
-	{return (which <= 2 && which >= 0) ? (fMouseState[which] == 1) : false;}
+	{
+		return (which <= 2 && which >= 0) ? (fMouseState[which] == 1) : false;
+	}
 
 	/** @brief Gets the window width.
 	 * @see GetWindowHeight()
 	 */
-	int GetWindowWidth() {return fWindowSize[0];}
+	int GetWindowWidth()
+	{
+		return fWindowSize[0];
+	}
 	/** @brief Gets the window height.
 	 * @see GetWindowWidth()
 	 */
-	int GetWindowHeight() {return fWindowSize[1];}
+	int GetWindowHeight()
+	{
+		return fWindowSize[1];
+	}
 	/** @brief Gets the framebuffer width.
 	 * @see GetWindowFramebufferHeight().
 	 */
-	int GetWindowFramebufferWidth() {return fWindowFramebufferSize[0];}
+	int GetWindowFramebufferWidth()
+	{
+		return fWindowFramebufferSize[0];
+	}
 	/** @brief Gets the framebuffer height.
 	 * @see GetWindowFramebufferWidth().
 	 */
-	int GetWindowFramebufferHeight() {return fWindowFramebufferSize[1];}
+	int GetWindowFramebufferHeight()
+	{
+		return fWindowFramebufferSize[1];
+	}
 	/** @brief Gets the pointer X coordinate.
 	 * @see GetPointerY()
 	 */
-	int GetPointerX() {return fMousePosition[0];}
+	int GetPointerX()
+	{
+		return fMousePosition[0];
+	}
 	/** @brief Gets the pointer Y coordinate.
 	 * @see GetPointerX()
 	 */
-	int GetPointerY() {return fMousePosition[1];}
+	int GetPointerY()
+	{
+		return fMousePosition[1];
+	}
 
-	GLFWwindow* getWindow(){ return this->fWindow; };
+	GLFWwindow* getWindow()
+	{
+		return this->fWindow;
+	}
 
 protected:
 
@@ -86,6 +112,7 @@ protected:
 	 *  - MouseMove()
 	 *  - MouseScrollUp()
 	 *  - MouseScrollDown()
+	 *  - WindowClosed()
 	 */
 	virtual void CreateApplication() = 0;
 	/** @brief Event callback of every frame draw event.
@@ -104,7 +131,20 @@ protected:
 	 * @param[in] height the new window height.
 	 * @see WindowFramebufferSizeChanged()
 	 */
-	virtual void WindowSizeChanged(int width, int height) {return;}
+	virtual void WindowSizeChanged(int width, int height)
+	{
+		return;
+	}
+
+	/**
+	Event callback when the window is closed.
+	*/
+	virtual void WindowClosed(GLFWwindow* window)
+	{
+		Info(debugMsg, "Window with width: %u and height: %u is now closed!",
+			this->fWindowSize[0], this->fWindowSize[1]);
+		return;
+	}
 
 	 /**
 	 * @brief Event callback when the framebuffer size of window has changed.
@@ -117,43 +157,64 @@ protected:
 	 * @param[in] height the new framebuffer height.
 	 * @see WindowSizeChanged()
 	 */
-	virtual void WindowFramebufferSizeChanged(int width, int height) {return;}
+	virtual void WindowFramebufferSizeChanged(int width, int height)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when a mouse key is pressed.
 	 * @param[in] which the key id, 0 stands for left button, and 1 the
 	 * middle button, 2 the right button.
 	 * @see MouseKeyUp()
 	 */
-	virtual void MouseKeyDown(int which) {return;}
+	virtual void MouseKeyDown(int which)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when a mouse key is released.
 	 * @param[in] which the key id.
 	 * @see MouseKeyDown()
 	 */
-	virtual void MouseKeyUp(int which) {return;}
+	virtual void MouseKeyUp(int which)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when a keyboard key is pressed.
 	 * @param[in] which the key char.
 	 * @see KeyUp()
 	 */
-	virtual void KeyDown(unsigned char which) {return;}
+	virtual void KeyDown(unsigned char which)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when a keyboard key is release.
 	 * @param[in] which the key char.
 	 * @see KeyDown()
 	 */
-	virtual void KeyUp(unsigned char which) {return;}
+	virtual void KeyUp(unsigned char which)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when the pointer moves in window.
 	 * @param[in] x the x coordinate of pointer.
 	 * @param[in] y the y coordinate of pointer.
 	 */
-	virtual void MouseMove(int x, int y) {return;}
+	virtual void MouseMove(int x, int y)
+	{
+		return;
+	}
 
 	 /** @brief Event callback when scrolls.
 	 *
 	 */
-	virtual void MouseScroll(double xoffset, double yoffset) {return;}
+	virtual void MouseScroll(double xoffset, double yoffset)
+	{
+		return;
+	}
 
 private:
 	 /** @brief The singleton pointer of GLApplication. */
@@ -198,7 +259,10 @@ private:
 	{
 		instance()->FramebufferSize(window, width, height);
 	}
-
+	static void WindowClosedCallback(GLFWwindow* window)
+	{
+		instance()->WindowClosed(window);
+	}
 	GLFWwindow* fWindow;
 	int fWindowSize[2];
 	int fWindowFramebufferSize[2];
@@ -206,4 +270,4 @@ private:
 	int fMousePosition[2];
 };
 
-# endif /* defined(__GLApplication_H__) */
+# endif
