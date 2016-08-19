@@ -63,6 +63,9 @@
     <ClInclude Include="..\include\ProgramPack.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\VertexArrayPack.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -87,6 +90,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ShaderPack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VertexArrayPack.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -35,7 +35,7 @@
 /** Comment this macro definition below to disable log message*/
 # define LOGDEBUGMSG
 
-/** GL errors will not be checked if the macro definition is present*/
+/** GL errors will not be checked if the macro definition below is present*/
 /** Uncomment this macro definition below during release build*/
 //# define RELEASEBUILD
 

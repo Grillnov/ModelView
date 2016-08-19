@@ -11,7 +11,7 @@
 
 # include "BenchmarkTimer.h"
 
-BenchmarkTimer GlobalTimer;// A global timer
+BenchmarkTimer GlobalTimer;// A global timer, for performance benchmarking.
 GLApplication* GLApplication::fInstance = nullptr;
 
 # ifdef __llvm__
