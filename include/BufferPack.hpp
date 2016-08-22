@@ -8,28 +8,42 @@
 
 # ifndef BUFFERPACK
 # define BUFFERPACK
+
 # include "AllinGL.h"
+# include <exception>
 
 /**
-Base class for all kinds of buffer objects.
-Generic class for buffers.
-GL type is designated by macros when invoking GL interfaces, thus template is not used.
+Chunks of continuous memory as buffer objects.
+Generic class for all kinds of buffers.
 */
 template<typename GLclientside>
 class BufferPack : public GLAttachable, public GLObject
 {
 private:
-	size_t num_of_elements;
-public:
 	/**
-	local pointer to client side memory
+	Amount of elements.
 	*/
-	GLclientside* LocalPtr;
+	size_t num_of_elements;
 
 	/**
-	Default constructor, not supposed to be of any use.
+	The target the buffer is binded to.
 	*/
-	//BufferPack();
+	GLenum CurrentBindedTarget;
+
+	/**
+	Local pointer to client side memory.
+	*/
+	GLclientside* LocalPtr;
+public:
+	
+
+	/**
+	Returns the amount of elements.
+	*/
+	size_t Size()
+	{
+		return num_of_elements;
+	}
 
 	/**
 	Constructor that sets the local pointer to Ptr, with size specified.
@@ -66,6 +80,11 @@ public:
 	void Bind(GLenum target);
 
 	/**
+	Restore binded target to its default status
+	*/
+	void UnBind();
+
+	/**
 	It's always a bad idea to include OpenGL invokes in destructing functions
 	So we just simply detach this in this function.
 	*/
@@ -76,43 +95,44 @@ public:
 	*/
 	~BufferPack();
 
-	/**
-	Synchorize the local client side memory with server side buffer.
-	@ params
-	@ bindingPoint the binded target of the buffer.
-	@ usage the hinted usage of this buffer area.
-	Currently this function is deprecated.
-	*/
-	//void Upload2Server(GLenum bindingPoint, GLenum usage = GL_STATIC_DRAW);
-
 	/** Access client side memory
 	@ params
 	@ index the index of the element
 	*/
 	GLclientside& operator[](size_t index);
 
-	/** Modify the server side memory
+	/**
+	Get the client side local pointer to the buffer.
 	*/
-	GLclientside* at_Server(size_t index);
+	GLclientside* GetLocalPtr()
+	{
+		return this->LocalPtr;
+	}
 };
-
-/*
-template<typename GLclientside>
-BufferPack<GLclientside>::BufferPack()
-	: isUploaded(false), LocalPtr(nullptr), num_of_elements(0)
-{}
-*/
 
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, size_t num_of_elements)
-	: LocalPtr(Ptr), num_of_elements(num_of_elements)
-{}
+	: LocalPtr(Ptr), num_of_elements(num_of_elements), CurrentBindedTarget(-1)
+{
+	if (num_of_elements == 0)
+		Error(debugMsg, "Illegal size of elements: %u", num_of_elements);
+}
 
 template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(size_t num_of_elements)
-	: num_of_elements(num_of_elements)
+	: num_of_elements(num_of_elements), CurrentBindedTarget(-1)
 {
-	this->LocalPtr = new GLclientside[num_of_elements];
+	if (num_of_elements == 0)
+		Error(debugMsg, "Illegal size of elements: %u", num_of_elements);
+	try
+	{
+		this->LocalPtr = new GLclientside[num_of_elements];
+	}
+	catch (std::bad_alloc exception)
+	{
+		Error(debugMsg, "Unable to allocate %u bytes of memory for client side buffer."
+			, this->num_of_elements*sizeof(GLclientside));
+	}
 }
 
 template<typename GLclientside>
@@ -135,7 +155,7 @@ void BufferPack<GLclientside>::Attach()
 	CheckStatus(__FUNCTION__);
 	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
 
-	Log(debugMsg, "Attached buffer %u", this->AssetID);
+	Log(debugMsg, "Buffer %u was successfully attached.", this->AssetID);
 	this->isAttached = true;
 }
 
@@ -159,7 +179,7 @@ void BufferPack<GLclientside>::Attach(GLenum hintBindingPoint, GLenum hintUsage)
 	CheckStatus(__FUNCTION__);
 	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
 
-	Log(debugMsg, "Attached buffer %u", this->AssetID);
+	Log(debugMsg, "Buffer %u was successfully attached.", this->AssetID);
 	this->isAttached = true;
 }
 
@@ -175,14 +195,29 @@ void BufferPack<GLclientside>::Detach()
 	glDeleteBuffers(1, &this->AssetID);
 
 	CheckStatus(__FUNCTION__);
-	Log(debugMsg, "Detached buffer %u", this->AssetID);
+	Log(debugMsg, "Buffer %u was successfully detached.", this->AssetID);
 	this->isAttached = false;
 }
 
 template<typename GLclientside>
 void BufferPack<GLclientside>::Bind(GLenum target)
 {
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Cannot bind buffer %u for it's not attached yet, bailing.", this->AssetID);
+		return;
+	}
+	this->CurrentBindedTarget = target;
 	glBindBuffer(target, this->AssetID);
+	CheckStatus(__FUNCTION__);
+}
+
+template<typename GLclientside>
+void BufferPack<GLclientside>::UnBind()
+{
+	if (this->CurrentBindedTarget == -1)
+		Error(debugMsg, "Buffer %u hasn't been binded to any target yet, bailing.", this->AssetID);
+	glBindBuffer(this->CurrentBindedTarget, this->AssetID);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -199,7 +234,7 @@ BufferPack<GLclientside>::~BufferPack()
 template<typename GLclientside>
 GLclientside& BufferPack<GLclientside>::operator[](size_t index)
 {
-	if (index * sizeof(GLclientside) > this->BufferSize)
+	if (index > this->num_of_elements)
 	{
 		Warning(debugMsg, "Index %u is out of boundary!", index);
 	}

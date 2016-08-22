@@ -5,12 +5,10 @@
 
 int main(void)
 {
-	GLApplication* app = new Phong();
+	Phong app = Phong();
 
-	app->WindowCreation("Demo", 640, 480);
-	app->RunMainLoop();
-	
-	delete app;
+	app.WindowCreation("Demo", 640, 480);
+	app.RunMainLoop();
 
 	return 0;
 }

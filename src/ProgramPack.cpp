@@ -23,7 +23,7 @@ static const char* getShaderTypeStr(GLenum type)
 	case GL_GEOMETRY_SHADER:
 		return "Geometry shader";
 	default:
-		break;
+		return "Not a valid shader type";
 	}
 }
 
@@ -53,7 +53,7 @@ void ProgramPack::Attach()
 	{
 		shader.second->Attach();
 		glAttachShader(this->AssetID, shader.second->getID());
-		Log(debugMsg, "Attached a(n) %s to program with ID %u.",
+		Log(debugMsg, "Attached a %s to program with ID %u.",
 			getShaderTypeStr(shader.second->getType()), this->AssetID);
 	}
 
@@ -95,7 +95,7 @@ void ProgramPack::Detach()
 	this->isAttached = false;
 }
 
-void ProgramPack::UseProgramPack()
+void ProgramPack::Use()
 {
 	if (!IsAttached())
 	{

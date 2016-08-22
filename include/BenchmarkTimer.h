@@ -20,12 +20,11 @@ private:
 	__int64 endTime;
 	bool isTimerStarted;
 public:
-	BenchmarkTimer()
+	BenchmarkTimer() : isTimerStarted(false)
 	{
 		LARGE_INTEGER temp;
 		QueryPerformanceFrequency(&temp);
 		this->frequency = temp.QuadPart;
-		this->isTimerStarted = false;
 	}
 	void startTimer()
 	{
@@ -48,32 +47,33 @@ public:
 	}
 	double getDeltaTimeInms()
 	{
-		return 1000 * ((this->endTime - this->startTime) / this->frequency);
+		return 1000.0 * ((this->endTime - this->startTime) / this->frequency);
 	}
 };
 # else
 
+# include <sys/time.h>
+
 class BenchmarkTimer
 {
 private:
-	double frequency;
-	__int64 startTime;
-	__int64 endTime;
+	timeval timer;
 	bool isTimerStarted;
+	long sec;
+	long usec;
+	long esec;
+	long eusec;
 public:
-	BenchmarkTimer()
+	BenchmarkTimer() : this->isTimerStarted(false)
 	{
-		LARGE_INTEGER temp;
-		QueryPerformanceFrequency(&temp);
-		this->frequency = temp.QuadPart;
-		this->isTimerStarted = false;
+		
 	}
 	void startTimer()
 	{
-		LARGE_INTEGER temp;
 		this->isTimerStarted = true;
-		QueryPerformanceCounter(&temp);
-		this->startTime = temp.QuadPart;
+		gettimeofday(&timer, nullptr);
+		this->sec = timer.tv_sec;
+		this->usec = timer.tv_usec;
 	}
 	void endTimer()
 	{
@@ -82,14 +82,14 @@ public:
 			std::cout << "Timer not started yet" << std::endl;
 			return;
 		}
-		LARGE_INTEGER temp;
 		this->isTimerStarted = false;
-		QueryPerformanceCounter(&temp);
-		this->endTime = temp.QuadPart;
+		gettimeofday(&timer, nullptr);
+		this->esec = timer.tv_sec;
+		this->eusec = timer.tv_usec;
 	}
 	double getDeltaTimeInms()
 	{
-		return 1000 * ((this->endTime - this->startTime) / this->frequency);
+		return 1000.0 * (esec - sec) + (eusec - usec) / 1000.0;
 	}
 };
 

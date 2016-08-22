@@ -63,10 +63,10 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	fWindow = glfwCreateWindow(width, height, title, NULL, NULL);
 
-	glfwGetFramebufferSize(fWindow, fWindowFramebufferSize, fWindowFramebufferSize+1);
+	glfwGetFramebufferSize(fWindow, fWindowFramebufferSize, fWindowFramebufferSize + 1);
 
 	if(!fWindow)
-		Error(__FILE__, __LINE__, __FUNCTION__, "Could not create window");
+		Error(debugMsg, "Could not create window.");
 
 	glfwMakeContextCurrent(fWindow);
 	glfwSwapInterval(1);
@@ -82,14 +82,16 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 # ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 	std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-	/* An Intel integrated graphics device is detected.
+	/**
+	An Intel integrated graphics device is detected.
 	Certain Intel drivers are not supported by glew, and null function pointers might be retrieved.
 	*/
 	if (vendor.find("Intel") != -1)
 	{
 		Warning(debugMsg, "Running this framework on Windows platform with an Intel device may cause crashing due to glew support.");
 	}
-	/* It might be troublesome if a laptop video card is detected.
+	/**
+	It might be troublesome if a laptop video card is detected on windows platform.
 	Glew expects global flag glewExperimental to be on so that function pointers are retrieved properly.
 	*/
 	if (device.find('M') != -1)
@@ -102,7 +104,8 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 		Error(debugMsg, "glew initialization failed");
 	}
 # endif
-	/* Initialization complete!
+	/**
+	Initialization complete!
 	*/
 	is_initiated = true;
 	CheckStatus(__FUNCTION__);

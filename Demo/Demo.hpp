@@ -13,7 +13,7 @@ public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		Pack = new MeshPack("D:/ModelView/assets/A6M2_scale10000.obj", 10000.0f);
+		Pack = new MeshPack("D:/ModelView/assets/teapot.obj", 0.5f);
 		Pack->Attach();
 
 		Program = new ProgramPack();
@@ -21,7 +21,7 @@ public:
 		Program->AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
 
 		Program->Attach();
-		Program->UseProgramPack();
+		Program->Use();
 	}
 	virtual void RenderFrame()
 	{

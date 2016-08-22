@@ -64,18 +64,21 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 	fin.read(reinterpret_cast<char*>(&temp), sizeof(size_t));
 
 	this->SizeInVertices = temp / 3 / sizeof(GLfloat);
-	this->VertexCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
+	BufferPack<GLfloat>* VertexCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
 
 	//Vertex positions
-	fin.read(reinterpret_cast<char*>(VertexCoord->LocalPtr), temp);
+	fin.read(reinterpret_cast<char*>(VertexCoord->GetLocalPtr()), temp);
+	Vertices.AddBufferWithIndex(VertexCoord, Pos, 3);
 
 	//Normal positions
-	this->NormalCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
-	fin.read(reinterpret_cast<char*>(NormalCoord->LocalPtr), SizeInVertices * 3 * sizeof(GLfloat));
+	BufferPack<GLfloat>* NormalCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
+	fin.read(reinterpret_cast<char*>(NormalCoord->GetLocalPtr()), SizeInVertices * 3 * sizeof(GLfloat));
+	Vertices.AddBufferWithIndex(NormalCoord, Nor, 3);
 
 	//Texture coordinates
-	this->TextureCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
-	fin.read(reinterpret_cast<char*>(TextureCoord->LocalPtr), SizeInVertices * 3 * sizeof(GLfloat));
+	BufferPack<GLfloat>* TextureCoord = new BufferPack<GLfloat>(SizeInVertices * 3);
+	fin.read(reinterpret_cast<char*>(TextureCoord->GetLocalPtr()), SizeInVertices * 3 * sizeof(GLfloat));
+	Vertices.AddBufferWithIndex(TextureCoord, Tex, 3);
 
 	//Size of element array in bytes
 	fin.read(reinterpret_cast<char*>(&temp), sizeof(size_t));
@@ -83,7 +86,7 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 	this->ElementArr = new BufferPack<GLuint>(SizeInTriangles * 3);
 
 	//Element array
-	fin.read(reinterpret_cast<char*>(ElementArr->LocalPtr), temp);
+	fin.read(reinterpret_cast<char*>(ElementArr->GetLocalPtr()), temp);
 
 	Info(debugMsg, "Loading complete. Model %s has %u faces in triangles.", Path.c_str(), this->SizeInTriangles);
 }
@@ -102,14 +105,17 @@ void MeshPack::SaveBinary()
 
 	size_t temp = this->SizeInVertices * 3 * sizeof(GLfloat);
 	fout.write(reinterpret_cast<const char*>(&temp), sizeof(size_t));
-	fout.write(reinterpret_cast<const char*>(VertexCoord->LocalPtr), temp);
+	fout.write(reinterpret_cast<const char*>
+		(reinterpret_cast<BufferPack<GLfloat>*>(Vertices[Pos])->GetLocalPtr()), temp);
 
-	fout.write(reinterpret_cast<const char*>(NormalCoord->LocalPtr), temp);
-	fout.write(reinterpret_cast<const char*>(TextureCoord->LocalPtr), temp);
+	fout.write(reinterpret_cast<const char*>
+		(reinterpret_cast<BufferPack<GLfloat>*>(Vertices[Nor])->GetLocalPtr()), temp);
+	fout.write(reinterpret_cast<const char*>
+		(reinterpret_cast<BufferPack<GLfloat>*>(Vertices[Tex])->GetLocalPtr()), temp);
 
 	temp = this->SizeInTriangles * 3 * sizeof(GLuint);
 	fout.write(reinterpret_cast<const char*>(&temp), sizeof(size_t));
-	fout.write(reinterpret_cast<const char*>(ElementArr->LocalPtr), temp);
+	fout.write(reinterpret_cast<const char*>(ElementArr->GetLocalPtr()), temp);
 
 	fout.close();
 	Log(debugMsg, "Model %s was successfully saved as binary blob. Conversions will be skipped from now.", this->Path.c_str());
@@ -123,31 +129,13 @@ void MeshPack::Attach()
 		return;
 	}
 
-	glGenVertexArrays(1, &VertArray);
-	glBindVertexArray(VertArray);
-
-	VertexCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	VertexCoord->Bind(GL_ARRAY_BUFFER);
-	glVertexAttribPointer(Pos, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(Pos);
-
-	NormalCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	NormalCoord->Bind(GL_ARRAY_BUFFER);
-	glVertexAttribPointer(Nor, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(Nor);
-
-	TextureCoord->Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	TextureCoord->Bind(GL_ARRAY_BUFFER);
-	glVertexAttribPointer(Tex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(Tex);
+	Vertices.Attach();
 
 	ElementArr->Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-	glBindVertexArray(0);
-
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Mesh %s successfully attached.", this->Path.c_str());
+	Log(debugMsg, "Mesh %s was successfully attached.", this->Path.c_str());
 	this->isAttached = true;
 }
 
@@ -158,11 +146,7 @@ void MeshPack::Detach()
 		Warning(debugMsg, "Mesh %s is not attached yet, bailing.", this->Path.c_str());
 		return;
 	}
-	glDeleteVertexArrays(1, &VertArray);
-
-	VertexCoord->Detach();
-	NormalCoord->Detach();
-	TextureCoord->Detach();
+	Vertices.Detach();
 	ElementArr->Detach();
 
 	CheckStatus(__FUNCTION__);
@@ -179,16 +163,25 @@ void MeshPack::DrawMesh(GLenum mode)
 		return;
 	}
 
-	glBindVertexArray(this->VertArray);
+	Vertices.Bind();
 	ElementArr->Bind(GL_ELEMENT_ARRAY_BUFFER);
 	glDrawElements(mode, this->SizeInTriangles * 3, GL_UNSIGNED_INT, nullptr);
+	Vertices.UnBind();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 MeshPack::~MeshPack()
 {
-	delete this->VertexCoord;
-	delete this->NormalCoord;
-	delete this->TextureCoord;
 	delete this->ElementArr;
+}
+
+void MeshPack::AlignCenter()
+{
+	BufferPack<GLfloat>* ptr = reinterpret_cast<BufferPack<GLfloat>*>(this->Vertices[0]);
+	for (unsigned i = 0; i != ptr->Size(); i += 3)
+	{
+		(*ptr)[i] -= MassCenter[0];
+		(*ptr)[i + 1] -= MassCenter[1];
+		(*ptr)[i + 2] -= MassCenter[2];
+	}
 }

@@ -37,7 +37,7 @@ public:
 	/**
 	Call glUseProgram.
 	*/
-	void UseProgramPack();
+	void Use();
 
 	/**
 	Add some shaders to this program so that it knows where to start.

@@ -146,16 +146,34 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	size_t IndexSum = ElementArrayTemp.size();
 	this->SizeInTriangles = IndexSum / 3;
 
+	for (unsigned i = 0; i != 3; ++i)
+	{
+		MassCenter[i] = 0.0f;
+	}
+
 	GLfloat* Coord = new GLfloat[3 * SizeInVertices];
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
 		Coord[3 * counter] = a.vertexCoord[0] / scale;
+		MassCenter[0] += Coord[3 * counter];
+
 		Coord[3 * counter + 1] = a.vertexCoord[1] / scale;
+		MassCenter[1] += Coord[3 * counter + 1];
+
 		Coord[3 * counter + 2] = a.vertexCoord[2] / scale;
+		MassCenter[2] += Coord[3 * counter + 2];
+
 		++counter;
 	}
-	this->VertexCoord = new BufferPack<GLfloat>(Coord, 3 * SizeInVertices);
+
+	for (unsigned i = 0; i != 3; ++i)
+	{
+		MassCenter[i] = MassCenter[i] / Vertices.size();
+	}
+
+	BufferPack<GLfloat>* VertexCoord = new BufferPack<GLfloat>(Coord, 3 * SizeInVertices);
+	this->Vertices.AddBufferWithIndex(VertexCoord, Pos, 3);
 
 	GLfloat* Norm = new GLfloat[3 * SizeInVertices];
 	counter = 0;
@@ -166,30 +184,21 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		Norm[3 * counter + 2] = a.normalDir[2];
 		++counter;
 	}
-	this->NormalCoord = new BufferPack<GLfloat>(Norm, 3 * SizeInVertices);
+	BufferPack<GLfloat>* NormalCoord = new BufferPack<GLfloat>(Norm, 3 * SizeInVertices);
+	this->Vertices.AddBufferWithIndex(NormalCoord, Nor, 3);
 
-	GLfloat* Tex = new GLfloat[3 * SizeInVertices];
+	GLfloat* Texture = new GLfloat[3 * SizeInVertices];
 	counter = 0;
 	for (auto a : Vertices)
 	{
-		Tex[3 * counter] = a.texCoord[0];
-		Tex[3 * counter + 1] = a.texCoord[1];
-		Tex[3 * counter + 2] = a.texCoord[2];
+		Texture[3 * counter] = a.texCoord[0];
+		Texture[3 * counter + 1] = a.texCoord[1];
+		Texture[3 * counter + 2] = a.texCoord[2];
 		++counter;
 	}
-	this->TextureCoord = new BufferPack<GLfloat>(Tex, 3 * SizeInVertices);
+	BufferPack<GLfloat>* TextureCoord = new BufferPack<GLfloat>(Texture, 3 * SizeInVertices);
+	this->Vertices.AddBufferWithIndex(TextureCoord, Tex, 3);
 	
-	/*Maybe this could be of use
-	counter = 0;
-	GLuint* IDnum = new GLuint[VertexSum];
-	for (auto a : Vertices)
-	{
-		IDnum[counter] = a.ID;
-		++counter;
-	}
-	this->VertexID = BufferPack<GLuint>(IDnum, );
-	*/
-
 	Vertices.clear();
 
 	GLuint* EleArr = new GLuint[IndexSum];
@@ -200,6 +209,8 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		counter++;
 	}
 	this->ElementArr = new BufferPack<GLuint>(EleArr, IndexSum);
+
+	AlignCenter();
 
 	ElementArrayTemp.clear();
 }

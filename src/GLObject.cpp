@@ -11,17 +11,21 @@
 # include "GLApplication.h"
 
 # ifdef _MSC_VER
+
 # include <Windows.h>
 HANDLE consoleH = nullptr;
 WORD defaultAttr;
 CONSOLE_SCREEN_BUFFER_INFO csbInfo;
-# endif
+
+# else
 
 # define RESET_F "\033[0m"
 # define PURPLE_F "\033[0;35m"
 # define RED_F "\033[0;31m"
 # define YELLOW_F "\033[0;33m"
 # define GREEN_F "\033[0;32m"
+
+# endif
 // TODO: Add color to these titles shown on the console
 
 bool is_exit = false;
@@ -34,7 +38,7 @@ void GLObject::CheckStatus(const char* function)
 # endif
 	if (!is_initiated)
 	{
-		Log(debugMsg, "OpenGL context not intiated yet, error checking skipped");
+		Log(debugMsg, "OpenGL context not intiated yet, error checking skipped.");
 		return;
 	}
 	GLenum error = glGetError();
@@ -50,8 +54,8 @@ void GLObject::CheckStatus(const char* function)
 		{
 			return;
 		}
-		Warning(debugMsg, "Error spotted during the execution of function: %s", function);
-		Error(debugMsg, "Fatal OpenGL Error %d: %s", error, glewGetErrorString(error));
+		Warning(debugMsg, "Error spotted during the execution of function: %s!", function);
+		Error(debugMsg, "Fatal OpenGL Error %d:\n %s", error, glewGetErrorString(error));
 	}
 }
 
@@ -111,10 +115,6 @@ void GLObject::Info(const char* file, unsigned line, const char* function, const
 
 void GLObject::Warning(const char* file, unsigned line, const char* function, const char* msg, ...)
 {
-# ifndef LOGDEBUGMSG
-	return;
-# endif
-
 	va_list ap;
 # ifndef _MSC_VER
 	printf(YELLOW_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);
@@ -138,10 +138,6 @@ void GLObject::Warning(const char* file, unsigned line, const char* function, co
 
 void GLObject::Error(const char* file, unsigned line, const char* function, const char* msg, ...)
 {
-# ifndef LOGDEBUGMSG
-	return;
-# endif
-
 	va_list ap;
 # ifndef _MSC_VER
 	printf(RED_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);

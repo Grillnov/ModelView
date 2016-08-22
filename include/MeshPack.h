@@ -10,52 +10,78 @@
 # define MESHPACK
 # include "AllinGL.h"
 # include "BufferPack.hpp"
+# include "VertexArrayPack.h"
 
 class MeshPack : public GLAttachable, public GLObject
 {
 private:
-	const static enum VertArrs{ Pos, Nor, Tex, Ele };
-	/** Buffer storing vertex coordinates*/
-	BufferPack<GLfloat>* VertexCoord;
+	const static enum VertArrs{ Pos, Nor, Tex };
+	
+	/**
+	Vertex array.
+	*/
+	VertexArrayPack Vertices;
 
-	/** Buffer storing normal vector coordinates*/
-	BufferPack<GLfloat>* NormalCoord;
-
-	/** Buffer storing texture coordinates*/
-	BufferPack<GLfloat>* TextureCoord;
-
-	/** Buffer storing indices of vertex, defining how triangles are assembled*/
+	/**
+	Buffer storing indices of vertex, defining how triangles are assembled.
+	*/
 	BufferPack<GLuint>* ElementArr;
 
-	/** Buffer storing tangent coordinates for normal mapping*/
+	/**
+	Buffer storing tangent coordinates for normal mapping
+	*/
 	//BufferPack TangentCoord; //Wait...Do we actually need this?
 
-	/** We may need this path later*/
+	/**
+	We may need this path later as a designator to the mesh.
+	*/
 	std::string Path;
 
-	/** Sometimes 3D models in plain text can't fit into NDS coordinates and we have to scale them down.*/
+	/**
+	What's the center of the Mesh?
+	*/
+	GLfloat MassCenter[3];
+
+	/**
+	Sometimes 3D models in plain text can't fit into NDS coordinates and we have to scale them down.
+	*/
 	GLfloat scale;
 
-	/** How many triangles and how many vertices are there in the mesh?*/
+	/**
+	How many triangles and how many vertices are there in the mesh?
+	*/
 	size_t SizeInTriangles;
 	size_t SizeInVertices;
 
-	GLuint VertArray;
-
-	/** Parse a plain text 3D model into blobs*/
+	/**
+	Parse a plain text 3D model into blobs.
+	*/
 	void ParseModel(std::string Path, std::fstream& fin);
 
-	/** Save the blob to a binary file*/
+	/**
+	Save the blob to a binary file.
+	*/
 	void SaveBinary();
 
-	/** Load from plain text 3D models*/
+	/**
+	Load from plain text 3D models.
+	*/
 	void LoadFromModel(std::string Path, std::fstream& fin);
 
-	/** Load from preprocessed blob files*/
+	/**
+	Load from preprocessed blob files.
+	*/
 	void LoadFromBinary(std::string Path, std::fstream& fout);
 
-	/** Generate tangent for normal mapping*/
+	/**
+	Generate tangent for normal mapping.
+	*/
 	void GenTangent();
+
+	/**
+	Move the mesh so that it's centered on the origin.
+	*/
+	void AlignCenter();
 public:
 	/** 
 	@brief Constructor.
@@ -66,14 +92,27 @@ public:
 
 	~MeshPack();
 
-	/** Attach this mesh. GLVertexArray, AttribPointer and stuff*/
+	/**
+	Attach this mesh, creating GLVertexArray, AttribPointer and stuff.
+	*/
 	void Attach() override;
 
-	/** Detach this mesh.*/
+	/**
+	Detach this mesh.
+	*/
 	void Detach() override;
 
-	/** GLDraw. Renders the mesh.*/
+	/**
+	GLDraw. Invoking drawcalls to render the mesh.
+	*/
 	void DrawMesh(GLenum mode = GL_TRIANGLES);
+
+	/**
+	Add customized buffers as new vertex attrib arrays.
+	*/
+	void AddAttribWithIndex(BufferPack<GLfloat>* buffer, GLuint index, GLuint components);
+
+	void AddAttribWithIndex(BufferPack<GLint>* buffer, GLuint index, GLuint components);
 };
 
 # endif
