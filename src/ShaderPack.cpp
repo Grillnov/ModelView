@@ -19,7 +19,7 @@ ShaderPack::ShaderPack(std::string Path, GLenum type) :Path(Path), ShaderType(ty
 		LoadFromBinary(Path, fin);
 		fin.close();
 	}
-	else if (Path.find(".glsl") != Path.npos)//A glsl source file was ordered to be loaded.
+	else//A glsl source file was ordered to be loaded.
 	{
 		fin.close();
 		fin.open(Path, std::ios::in);
@@ -29,8 +29,6 @@ ShaderPack::ShaderPack(std::string Path, GLenum type) :Path(Path), ShaderType(ty
 		LoadFromText(Path, fin);
 		fin.close();
 	}
-	else
-		Error(debugMsg, "%s is neither a .glsl nor a .bin, incompatible shader file format.", Path.c_str());
 }
 
 void ShaderPack::LoadFromText(std::string Path, std::fstream& fin)

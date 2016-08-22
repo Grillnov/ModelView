@@ -41,6 +41,30 @@ void ProgramPack::AddShader(std::string Path, GLenum type)
 	}
 }
 
+void ProgramPack::AddShader(std::string Path)
+{
+	if (Path.find(".vert") != Path.npos ||
+		Path.find(".vertex") != Path.npos ||
+		Path.find(".vertexshader") != Path.npos)
+		AddShader(Path, GL_VERTEX_SHADER);
+	else if
+		(Path.find(".frag") != Path.npos ||
+		Path.find(".fragment") != Path.npos ||
+		Path.find(".fragmentshader") != Path.npos)
+		AddShader(Path, GL_FRAGMENT_SHADER);
+	else if
+		(Path.find(".tessc") != Path.npos)
+		AddShader(Path, GL_TESS_CONTROL_SHADER);
+	else if
+		(Path.find(".tesse") != Path.npos)
+		AddShader(Path, GL_TESS_EVALUATION_SHADER);
+	else if
+		(Path.find(".geo") != Path.npos)
+		AddShader(Path, GL_GEOMETRY_SHADER);
+	else
+		Error(debugMsg, "Unrecognized shader postfix: %s", Path.substr(Path.rfind("."), Path.size()).c_str());
+}
+
 void ProgramPack::Attach()
 {
 	if (this->isAttached)

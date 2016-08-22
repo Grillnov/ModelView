@@ -45,6 +45,11 @@ public:
 	*/
 	void AddShader(std::string Path, GLenum type);
 
+	/*
+	Add some shaders, type told by its postfix.
+	*/
+	void AddShader(std::string Path);
+
 	/**
 	Reallocate its resources.
 	*/
