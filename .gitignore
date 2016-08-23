@@ -303,6 +303,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # Customized targets that should be ignored
-3rdParty/glfw/docs/
+13rdParty/
 assets/
-3rdParty/glm/doc
