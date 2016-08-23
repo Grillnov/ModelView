@@ -303,5 +303,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # Customized targets that should be ignored
-13rdParty/
+3rdParty/
 assets/
