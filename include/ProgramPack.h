@@ -13,12 +13,13 @@
 # include "ShaderPack.h"
 # include <map>
 # include <unordered_map>
-# include "UniformPack.h"
+# include "UBOPack.h"
 
 class ProgramPack : public GLAttachable, public GLObject
 {
 private:
 	std::unordered_map<GLenum, ShaderPack*> ShaderTable;
+	GLint Fetch(std::string name);
 	//std::unordered_map<GLuint, UniformPack*> UniformMap;
 public:
 	/**
@@ -36,8 +37,9 @@ public:
 
 	/**
 	Call glUseProgram.
+	Deprecated. Now it's merged with Attach().
 	*/
-	void Use();
+	//void Use();
 
 	/**
 	Add some shaders to this program so that it knows where to start.
@@ -54,6 +56,46 @@ public:
 	Reallocate its resources.
 	*/
 	~ProgramPack();
+
+	/**
+	A serie of functions that feeds the program with uniforms.
+	*/
+	void Uniform1(std::string name, GLfloat val);
+	void Uniform1(std::string name, GLdouble val);
+	void Uniform1(std::string name, GLint val);
+	void Uniform1(std::string name, GLuint val);
+	
+	void Uniform2(std::string name, GLfloat* valLoc);
+	void Uniform2(std::string name, GLdouble* valLoc);
+	void Uniform2(std::string name, GLint* valLoc);
+	void Uniform2(std::string name, GLuint* valLoc);
+
+	void Uniform3(std::string name, GLfloat* valLoc);
+	void Uniform3(std::string name, GLdouble* valLoc);
+	void Uniform3(std::string name, GLint* valLoc);
+	void Uniform3(std::string name, GLuint* valLoc);
+
+	void Uniform4(std::string name, GLfloat* valLoc);
+	void Uniform4(std::string name, GLdouble* valLoc);
+	void Uniform4(std::string name, GLint* valLoc);
+	void Uniform4(std::string name, GLuint* valLoc);
+	
+	/**
+	A serie of functions that feeds the program with uniform matrices.
+	isTransposed is set to GL_TRUE by default, making the matrix row-major.
+	*/
+	void UniformMat2(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat2(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+
+	void UniformMat3(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat3(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+
+	void UniformMat4(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat4(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+
+	/**
+	Feed the program with uniform blocks. Time to make them global.
+	*/
 };
 
 # endif

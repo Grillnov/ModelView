@@ -305,3 +305,4 @@ $RECYCLE.BIN/
 # Customized targets that should be ignored
 3rdParty/glfw/docs/
 assets/
+3rdParty/glm/doc

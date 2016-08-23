@@ -24,7 +24,7 @@
     <ClInclude Include="..\include\ProgramPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />
-    <ClInclude Include="..\include\UniformPack.h" />
+    <ClInclude Include="..\include\UBOPack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
   </ItemGroup>
   <ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />
     <ClCompile Include="..\src\ShaderPack.cpp" />
-    <ClCompile Include="..\src\UniformPack.cpp" />
+    <ClCompile Include="..\src\UBOPack.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
   </ItemGroup>
   <ItemGroup>

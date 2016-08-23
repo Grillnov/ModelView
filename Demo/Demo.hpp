@@ -13,15 +13,27 @@ public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		Pack = new MeshPack("D:/ModelView/assets/teapot.obj", 0.5f);
+		Pack = new MeshPack("D:/ModelView/assets/teapot.obj");
 		Pack->Attach();
 
 		Program = new ProgramPack();
-		Program->AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
 		Program->AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
+		Program->AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
 
 		Program->Attach();
-		Program->Use();
+		GLfloat Color[4] = { 1.0f, 0.0f, 1.0f, 1.0f };
+		Program->Uniform3("Color", Color);
+
+		GLfloat MVP[16] =
+		{
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		};
+		Program->UniformMat4("MVP", MVP);
+		Program->Uniform1("scale", 0.4);
+		//Program->Use();
 	}
 	virtual void RenderFrame()
 	{

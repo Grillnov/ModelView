@@ -77,7 +77,7 @@ void ShaderPack::Attach()
 			glGetShaderiv(this->AssetID, GL_INFO_LOG_LENGTH, &shaderStatus);
 			char* InfoLogStr = new char[shaderStatus];
 			glGetShaderInfoLog(this->AssetID, shaderStatus, nullptr, InfoLogStr);
-			Error(debugMsg, "Shader %s compilation failed with compile error message: %s", Path.c_str(), InfoLogStr);
+			Error(debugMsg, "Shader %s compilation failed with compile error message:\n%s", Path.c_str(), InfoLogStr);
 			delete[] InfoLogStr;
 		}
 		else
