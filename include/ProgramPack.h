@@ -82,16 +82,16 @@ public:
 	
 	/**
 	A serie of functions that feeds the program with uniform matrices.
-	isTransposed is set to GL_TRUE by default, making the matrix row-major.
+	@isTransposed is set to GL_FALSE by default, making the matrix column-major, compatible with GLM.
 	*/
-	void UniformMat2(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
-	void UniformMat2(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat2(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_FALSE);
+	void UniformMat2(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_FALSE);
 
-	void UniformMat3(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
-	void UniformMat3(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat3(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_FALSE);
+	void UniformMat3(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_FALSE);
 
-	void UniformMat4(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_TRUE);
-	void UniformMat4(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_TRUE);
+	void UniformMat4(std::string name, GLfloat* valLoc, GLenum isTransposed = GL_FALSE);
+	void UniformMat4(std::string name, GLdouble* valLoc, GLenum isTransposed = GL_FALSE);
 
 	/**
 	Feed the program with uniform blocks. Time to make them global.

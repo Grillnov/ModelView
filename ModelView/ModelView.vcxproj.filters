@@ -66,6 +66,9 @@
     <ClInclude Include="..\include\UBOPack.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\标头.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -93,6 +96,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UBOPack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\源.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

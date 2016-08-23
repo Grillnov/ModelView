@@ -26,6 +26,7 @@
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\UBOPack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
+    <ClInclude Include="..\include\标头.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GLApplication.cpp" />
@@ -37,6 +38,7 @@
     <ClCompile Include="..\src\ShaderPack.cpp" />
     <ClCompile Include="..\src\UBOPack.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
+    <ClCompile Include="..\src\源.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\simpleFragment.glsl" />
@@ -71,7 +73,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\Demo;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\Demo;$(SolutionDir)\3rdParty\glm;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

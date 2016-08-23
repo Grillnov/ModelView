@@ -23,11 +23,17 @@ GLFW is used instead of GLUT.
 # include <GLFW\glfw3.h>
 
 /**
-Some standard headers.
+Some headers from standard library.
 */
 # include <iostream>
 # include <string>
 # include <fstream>
+
+/**
+GLM is used as client side BLAS.
+*/
+# include "glm/glm.hpp"
+# include "glm/ext.hpp"
 
 /**
 Customized headers.

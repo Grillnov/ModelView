@@ -61,6 +61,13 @@ public:
 	{
 		return fWindowSize[1];
 	}
+	/** @brief Get the screen aspect ratio.
+	 * 
+	 */
+	float GetAspectRatio()
+	{
+		return static_cast<float>(fWindowSize[0]) / fWindowSize[1];
+	}
 	/** @brief Gets the framebuffer width.
 	 * @see GetWindowFramebufferHeight().
 	 */
