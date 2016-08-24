@@ -26,22 +26,42 @@
 class GLApplication : public GLObject
 {
 public:
-	/** @brief default constructor */
+	/**
+	@brief default constructor.
+	*/
 	GLApplication();
-	/** @brief default destructor */
+
+	/**
+	@brief default destructor.
+	*/
 	virtual ~GLApplication();
 
-	/** @brief this method creates the GLUT window, also initializes the OpenGL context. */
-	void WindowCreation(const char* title, int width, int height);
-	/** @brief enter the main GLUT event loop. */
+	/**
+	@brief this method creates the GLFW window, and also initializes the OpenGL context.
+	*/
+	void StartWindow(const char* title, int width, int height);
+
+	/**
+	@brief create the window, yet it's gonna be a fullscreen one.
+	*/
+	void StartWindow(const char* title);
+
+	/**
+	@brief enter the main GLFW event loop.
+	*/
 	void RunMainLoop();
 
-	/** @brief Gets the key state. */
+	/**
+	@brief Gets the key state.
+	*/
 	bool IsKeyDown(unsigned char chr)
 	{
 		return fKeyState[chr] == 1;
 	}
-	/** @brief Gets the mouse key state. */
+
+	/**
+	@brief Gets the mouse key state.
+	*/
 	bool IsMouseKeyDown(int which)
 	{
 		return (which <= 2 && which >= 0) ? (fMouseState[which] == 1) : false;
@@ -54,6 +74,7 @@ public:
 	{
 		return fWindowSize[0];
 	}
+
 	/** @brief Gets the window height.
 	 * @see GetWindowWidth()
 	 */
@@ -61,13 +82,18 @@ public:
 	{
 		return fWindowSize[1];
 	}
+
 	/** @brief Get the screen aspect ratio.
 	 * 
 	 */
 	float GetAspectRatio()
 	{
-		return static_cast<float>(fWindowSize[0]) / fWindowSize[1];
+		if (fWindowSize[1] == 0)//avoid dividing by 0.
+			return 1.0f;
+		else
+			return static_cast<float>(fWindowSize[0]) / fWindowSize[1];
 	}
+
 	/** @brief Gets the framebuffer width.
 	 * @see GetWindowFramebufferHeight().
 	 */
@@ -75,6 +101,7 @@ public:
 	{
 		return fWindowFramebufferSize[0];
 	}
+
 	/** @brief Gets the framebuffer height.
 	 * @see GetWindowFramebufferWidth().
 	 */
@@ -82,6 +109,7 @@ public:
 	{
 		return fWindowFramebufferSize[1];
 	}
+
 	/** @brief Gets the pointer X coordinate.
 	 * @see GetPointerY()
 	 */
@@ -89,6 +117,7 @@ public:
 	{
 		return fMousePosition[0];
 	}
+
 	/** @brief Gets the pointer Y coordinate.
 	 * @see GetPointerX()
 	 */
@@ -122,11 +151,13 @@ protected:
 	 *  - WindowClosed()
 	 */
 	virtual void CreateApplication() = 0;
+
 	/** @brief Event callback of every frame draw event.
 	 *
 	 * Draw the framebuffer in this callback. But try not doing heavy works.
 	 */
 	virtual void RenderFrame() = 0;
+
 	/** @brief Event callback when the application is going to die.
 	 *
 	 * Free the objects created in CreateApplication() during this callback.
@@ -224,10 +255,14 @@ protected:
 	}
 
 private:
-	 /** @brief The singleton pointer of GLApplication. */
+	 /**
+	 @brief The singleton pointer of GLApplication.
+	 */
 	static GLApplication* fInstance;
 
-	 /** @brief Gets the unique GLApplication of this process. */
+	 /**
+	 @brief Gets the unique GLApplication of this process.
+	 */
 	static GLApplication* instance(){return fInstance;}
 
 	void Resize(GLFWwindow* window, int width, int height);
@@ -270,11 +305,15 @@ private:
 	{
 		instance()->WindowClosed(window);
 	}
+	
+	void WindowCreation(const char* title, int width, int height, bool isFullScreen);
+
 	GLFWwindow* fWindow;
+	unsigned char fKeyState[GLFW_KEY_LAST], fMouseState[3];
 	int fWindowSize[2];
 	int fWindowFramebufferSize[2];
-	unsigned char fKeyState[GLFW_KEY_LAST], fMouseState[3];
 	int fMousePosition[2];
+	const char* windowName;
 };
 
 # endif

@@ -60,22 +60,32 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 {	
 	Log(debugMsg, "Model %s is now being parsed!", Path.c_str());
 
-	std::string source;
-	source.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
+	//std::string source;
+	//source.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
 
 	std::vector<vec3> VertexAttribTemp[texCoord + 1];
 	std::vector<GLuint> ElementArrayTemp;
 	std::set<Vertex> Vertices;
 
-	std::stringstream objStream(source);
-	while (!objStream.eof())
+	size_t linesParsed = 0;
+
+	//std::stringstream objStream(source);
+	while (!fin.eof())
 	{
 		std::string line;
-		getline(objStream, line);
+		getline(fin, line);
+		linesParsed++;
+		if (linesParsed % 10000 == 0)
+		{
+			Info(debugMsg, "Already parsed: %u lines.", linesParsed);
+		}
 		std::stringstream lineStream(line);
+
 		char numb;
+		
 		if (line.empty())
 			continue;
+
 		switch (line.at(0))
 		{
 		case 'v':
@@ -155,13 +165,13 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
-		Coord[3 * counter] = a.vertexCoord[0] / scale;
+		Coord[3 * counter] = a.vertexCoord[0] * scale;
 		MassCenter[0] += Coord[3 * counter];
 
-		Coord[3 * counter + 1] = a.vertexCoord[1] / scale;
+		Coord[3 * counter + 1] = a.vertexCoord[1] * scale;
 		MassCenter[1] += Coord[3 * counter + 1];
 
-		Coord[3 * counter + 2] = a.vertexCoord[2] / scale;
+		Coord[3 * counter + 2] = a.vertexCoord[2] * scale;
 		MassCenter[2] += Coord[3 * counter + 2];
 
 		++counter;

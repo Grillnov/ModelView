@@ -46,27 +46,32 @@ GLApplication::~GLApplication()
 	glfwTerminate();
 }
 
-void GLApplication::WindowCreation(const char* title, int width, int height)
+void GLApplication::WindowCreation(const char* title, int width, int height, bool isFullScreen)
 {
-	Log(debugMsg, "Initializing now.");
-	if(width <= 0)
-		Error(debugMsg, "Width should not be %d", width);
-	if(height <= 0)
-		Error(debugMsg, "Height should not be %d", height);
+	Log(debugMsg, "Initialization may take some time. Please wait...");
+	if (width <= 0)
+		Error(debugMsg, "Attempting to create window %s with illegal width: %d", title, width);
+	if (height <= 0)
+		Error(debugMsg, "Attempting to create window %s with illegal height: %d", title, height);
 
 	fWindowSize[0] = width;
 	fWindowSize[1] = height;
+	windowName = title;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLMajorVer);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLMinorVer);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	fWindow = glfwCreateWindow(width, height, title, NULL, NULL);
+
+	if (isFullScreen)
+		fWindow = glfwCreateWindow(width, height, title, glfwGetPrimaryMonitor(), nullptr);
+	else
+		fWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
 
 	glfwGetFramebufferSize(fWindow, fWindowFramebufferSize, fWindowFramebufferSize + 1);
 
-	if(!fWindow)
-		Error(debugMsg, "Could not create window.");
+	if (!fWindow)
+		Error(debugMsg, "Failed to create window %s!", title);
 
 	glfwMakeContextCurrent(fWindow);
 	glfwSwapInterval(1);
@@ -82,7 +87,8 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 # ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 	std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-	/**
+
+	/*
 	An Intel integrated graphics device is detected.
 	Certain Intel drivers are not supported by glew, and null function pointers might be retrieved.
 	*/
@@ -90,7 +96,8 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 	{
 		Warning(debugMsg, "Running this framework on Windows platform with an Intel device may cause crashing due to glew support.");
 	}
-	/**
+
+	/*
 	It might be troublesome if a laptop video card is detected on windows platform.
 	Glew expects global flag glewExperimental to be on so that function pointers are retrieved properly.
 	*/
@@ -104,21 +111,34 @@ void GLApplication::WindowCreation(const char* title, int width, int height)
 		Error(debugMsg, "glew initialization failed");
 	}
 # endif
-	/**
+	/*
 	Initialization complete!
 	*/
-	is_initiated = true;
 	CheckStatus(__FUNCTION__);
+	is_initiated = true;
 
 	Info(debugMsg, "OpenGL version: %s", glGetString(GL_VERSION));
 	Info(debugMsg, "Running on rendering device: %s", device.c_str());
 	Info(debugMsg, "GPU Vendor: %s", vendor.c_str());
 }
 
+
+void GLApplication::StartWindow(const char* title)
+{
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* primaryVidMode = glfwGetVideoMode(primaryMonitor);
+	WindowCreation(title, primaryVidMode->width, primaryVidMode->height, true);
+}
+
+void GLApplication::StartWindow(const char* title, int width, int height)
+{
+	WindowCreation(title, width, height, false);
+}
+
 void GLApplication::RunMainLoop()
 {
 	if(!fWindow)
-		Error(debugMsg, "Window not created yet");
+		Error(debugMsg, "Window %s is not created yet!", windowName);
 
 	CreateApplication();
 	/**
@@ -127,7 +147,7 @@ void GLApplication::RunMainLoop()
 	*
 	*/
 	//glEnable(GL_DEPTH_TEST);
-	CheckStatus("InitializeApplication");
+	CheckStatus(__FUNCTION__);
 
 	while ((!glfwWindowShouldClose(fWindow))) 
 	{
@@ -214,7 +234,7 @@ void GLApplication::Mouse(GLFWwindow *window, int button, int action, int mods)
 		break;
 
 	default:
-		Warning(debugMsg, "Unknown moust button state %d from GLFW", action);
+		Warning(debugMsg, "Unknown mouse button state %d from GLFW", action);
 		return;
 	}
 }

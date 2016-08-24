@@ -161,25 +161,21 @@ void ProgramPack::Uniform1(std::string name, GLfloat val)
 {
 	glUniform1f(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a float type value %f.", this->AssetID, name.c_str(), val);
 }
 void ProgramPack::Uniform1(std::string name, GLdouble val)
 {
 	glUniform1d(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a double type value %f.", this->AssetID, name.c_str(), val);
 }
 void ProgramPack::Uniform1(std::string name, GLint val)
 {
 	glUniform1i(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with an int type value %d.", this->AssetID, name.c_str(), val);
 }
 void ProgramPack::Uniform1(std::string name, GLuint val)
 {
 	glUniform1ui(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with an unsigned int value %u.", this->AssetID, name.c_str(), val);
 }
 
 
@@ -188,25 +184,41 @@ void ProgramPack::Uniform2(std::string name, GLfloat* valLoc)
 {
 	glUniform2fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 2 float type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform2(std::string name, GLdouble* valLoc)
 {
 	glUniform2dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 2 double type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform2(std::string name, GLint* valLoc)
 {
 	glUniform2iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 2 int type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform2(std::string name, GLuint* valLoc)
 {
 	glUniform2uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 2 unsigned int type values.", this->AssetID, name.c_str());
+}
+void ProgramPack::Uniform2(std::string name, const glm::vec2& valLoc)
+{
+	glUniform2fv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform2(std::string name, const glm::dvec2& valLoc)
+{
+	glUniform2dv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform2(std::string name, const glm::ivec2& valLoc)
+{
+	glUniform2iv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform2(std::string name, const glm::u32vec2& valLoc)
+{
+	glUniform2uiv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
 }
 
 
@@ -215,25 +227,41 @@ void ProgramPack::Uniform3(std::string name, GLfloat* valLoc)
 {
 	glUniform3fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 3 float type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform3(std::string name, GLdouble* valLoc)
 {
 	glUniform3dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 3 double type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform3(std::string name, GLint* valLoc)
 {
 	glUniform3iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 3 int type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform3(std::string name, GLuint* valLoc)
 {
 	glUniform3uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 3 unsigned int type values.", this->AssetID, name.c_str());
+}
+void ProgramPack::Uniform3(std::string name, const glm::vec3& valLoc)
+{
+	glUniform3fv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform3(std::string name, const glm::dvec3& valLoc)
+{
+	glUniform3dv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform3(std::string name, const glm::ivec3& valLoc)
+{
+	glUniform3iv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform3(std::string name, const glm::u32vec3& valLoc)
+{
+	glUniform3uiv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
 }
 
 
@@ -242,25 +270,41 @@ void ProgramPack::Uniform4(std::string name, GLfloat* valLoc)
 {
 	glUniform4fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 4 float type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform4(std::string name, GLdouble* valLoc)
 {
 	glUniform4dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 4 double type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform4(std::string name, GLint* valLoc)
 {
 	glUniform4iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 4 int type values.", this->AssetID, name.c_str());
 }
 void ProgramPack::Uniform4(std::string name, GLuint* valLoc)
 {
 	glUniform4uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with 4 unsigned int type values.", this->AssetID, name.c_str());
+}
+void ProgramPack::Uniform4(std::string name, const glm::vec4& valLoc)
+{
+	glUniform4fv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform4(std::string name, const glm::dvec4& valLoc)
+{
+	glUniform4dv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform4(std::string name, const glm::ivec4& valLoc)
+{
+	glUniform4iv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::Uniform4(std::string name, const glm::u32vec4& valLoc)
+{
+	glUniform4uiv(Fetch(name), 1, &valLoc[0]);
+	CheckStatus(__FUNCTION__);
 }
 
 
@@ -269,13 +313,21 @@ void ProgramPack::UniformMat2(std::string name, GLfloat* valLoc, GLenum isTransp
 {
 	glUniformMatrix2fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a float type 2x2 matrix.", this->AssetID, name.c_str());
 }
 void ProgramPack::UniformMat2(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix2dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a double type 2x2 matrix.", this->AssetID, name.c_str());
+}
+void ProgramPack::UniformMat2(std::string name, const glm::mat2x2& valLoc)
+{
+	glUniformMatrix2fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::UniformMat2(std::string name, const glm::dmat2x2& valLoc)
+{
+	glUniformMatrix2dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
 }
 
 
@@ -284,13 +336,21 @@ void ProgramPack::UniformMat3(std::string name, GLfloat* valLoc, GLenum isTransp
 {
 	glUniformMatrix3fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a float type 3x3 matrix.", this->AssetID, name.c_str());
 }
 void ProgramPack::UniformMat3(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix3dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a double type 3x3 matrix.", this->AssetID, name.c_str());
+}
+void ProgramPack::UniformMat3(std::string name, const glm::mat3x3& valLoc)
+{
+	glUniformMatrix3fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::UniformMat3(std::string name, const glm::dmat3x3& valLoc)
+{
+	glUniformMatrix3dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
 }
 
 
@@ -299,11 +359,19 @@ void ProgramPack::UniformMat4(std::string name, GLfloat* valLoc, GLenum isTransp
 {
 	glUniformMatrix4fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a float type 4x4 matrix.", this->AssetID, name.c_str());
 }
 void ProgramPack::UniformMat4(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix4dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
-	//Log(debugMsg, "Program %u: Fed uniform %s with a double type 4x4 matrix.", this->AssetID, name.c_str());
+}
+void ProgramPack::UniformMat4(std::string name, const glm::mat4x4& valLoc)
+{
+	glUniformMatrix4fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
+}
+void ProgramPack::UniformMat4(std::string name, const glm::dmat4x4& valLoc)
+{
+	glUniformMatrix4dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	CheckStatus(__FUNCTION__);
 }

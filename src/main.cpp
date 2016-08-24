@@ -1,13 +1,13 @@
 # include "AllinGL.h"
 # include "GLApplication.h"
 # include "BufferPack.hpp"
-# include "Demo.hpp"
+# include "Phong.hpp"
 
 int main(void)
 {
 	Phong app = Phong();
 
-	app.WindowCreation("Demo", 640, 480);
+	app.StartWindow("Demo", 1280, 720);
 	app.RunMainLoop();
 
 	return 0;

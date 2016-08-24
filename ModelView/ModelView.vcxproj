@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Demo\Demo.hpp" />
+    <ClInclude Include="..\Demo\Phong.hpp" />
     <ClInclude Include="..\include\AllinGL.h" />
     <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
@@ -41,7 +41,10 @@
     <ClCompile Include="..\src\源.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\phong_normalMap.glsl" />
     <None Include="..\Shaders\simpleFragment.glsl" />
+    <None Include="..\Shaders\phongfrag.glsl" />
+    <None Include="..\Shaders\phongvert.glsl" />
     <None Include="..\Shaders\simpleVertex.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

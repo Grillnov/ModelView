@@ -33,7 +33,7 @@ bool is_initiated = false;
 
 void GLObject::CheckStatus(const char* function)
 {
-# ifdef RELEASEBUILD
+# ifndef DEBUGBUILD//Check errors during debug session only.
 	return;
 # endif
 	if (!is_initiated)
@@ -158,6 +158,14 @@ void GLObject::Error(const char* file, unsigned line, const char* function, cons
 	printf("\n");
 	va_end(ap);
 
-	//exit(-1);
-	// FIXME: Shall we do more than just exit?
+	char numb = 0;
+	
+	while (numb != 'y' && numb != 'Y')
+	{
+		Info(debugMsg, "\nContinue with this operation anyway? (y/n)\n");
+		std::cin >> numb;
+		if (numb == 'n' || numb == 'N')
+			exit(-1);
+	}
+	//FIXME: is this error checking function performing what it's supposed to perform?
 }

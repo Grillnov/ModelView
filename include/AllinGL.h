@@ -10,9 +10,40 @@
 # define ALLINGL
 
 /**
-Due to the botched OpenGL support provided by Microsoft Windows OS, 
-Glew has to be exploited to retrieve pointers to GL interfaces.
+Modify this macro below to modify OpenGL version.
+By default it's set as OpenGL 4.3.
+If your device has any difficulties supporting novel version of OpenGL,
+please try and modify this context version.
 */
+# define GLMajorVer 4
+# define GLMinorVer 3
+
+/**
+Comment this macro below to disable log message.
+*/
+# define LOGDEBUGMSG
+
+/**
+GL errors will not be checked if the macro definition below is commented.
+Comment this macro below during release build to boost performance.
+*/
+# define DEBUGBUILD
+
+/************DO NOT modify the content below this line************/
+
+/**
+Macro for debug message.
+*/
+# define debugMsg __FILE__, __LINE__, __FUNCTION__
+
+/**
+Due to the botched OpenGL support provided by Microsoft Windows OS, 
+Glew has to be initiated to retrieve function pointers to GL interfaces.
+Problems might arise if you are using an Intel graphic device(for instance, HD4000 series) on Windows platform.
+If so, try and run the executable with independent video cards(for instance, your ATI or NVIDIA card).
+Note that Glew has to be included before any gl headers are included.
+*/
+
 # ifdef _MSC_VER
 # include <GL\glew.h>
 # endif
@@ -23,40 +54,24 @@ GLFW is used instead of GLUT.
 # include <GLFW\glfw3.h>
 
 /**
-Some headers from standard library.
-*/
-# include <iostream>
-# include <string>
-# include <fstream>
-
-/**
 GLM is used as client side BLAS.
 */
 # include "glm/glm.hpp"
 # include "glm/ext.hpp"
 
 /**
-Customized headers.
+Headers from standard library.
+*/
+# include <iostream>
+# include <string>
+# include <fstream>
+
+/**
+Headers from this project.
 */
 
 # include "BenchmarkTimer.h"
 # include "GLObject.h"
 # include "GLAttachable.h"
-
-/**
-Macro for debug message.
-*/
-# define debugMsg __FILE__, __LINE__, __FUNCTION__
-
-/**
-Comment this macro definition below to disable log message.
-*/
-# define LOGDEBUGMSG
-
-/**
-GL errors will not be checked if the macro definition below is present.
-Uncomment this macro definition below during release build to boost performance.
-*/
-//# define RELEASEBUILD
 
 # endif

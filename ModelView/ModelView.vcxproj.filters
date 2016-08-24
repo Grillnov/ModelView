@@ -48,9 +48,6 @@
     <ClInclude Include="..\include\GLObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\Demo\Demo.hpp">
-      <Filter>Demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\GLAttachable.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -68,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="..\include\标头.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Demo\Phong.hpp">
+      <Filter>Demo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +107,15 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\Shaders\simpleVertex.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\phong_normalMap.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\phongvert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\phongfrag.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
