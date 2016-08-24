@@ -9,7 +9,7 @@ uniform mat4 ModelViewMatrix;
 
 uniform vec3 lightPosition;
 
-uniform float scale;
+const float scale = 0.0001f;
 
 smooth out vec3 vLightDir;
 smooth out vec3 normal_ES;

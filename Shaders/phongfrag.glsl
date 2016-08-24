@@ -3,7 +3,6 @@
 smooth in vec3 vLightDir;
 smooth in vec3 normal_ES;
 smooth in vec2 texCoord;
-smooth in vec3 tangentE;
 
 out vec4 color;
 
