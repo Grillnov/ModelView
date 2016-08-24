@@ -26,7 +26,7 @@
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\UBOPack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
-    <ClInclude Include="..\include\标头.h" />
+    <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GLApplication.cpp" />
@@ -38,7 +38,7 @@
     <ClCompile Include="..\src\ShaderPack.cpp" />
     <ClCompile Include="..\src\UBOPack.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
-    <ClCompile Include="..\src\源.cpp" />
+    <ClCompile Include="..\util\FPSApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\phong_normalMap.glsl" />
