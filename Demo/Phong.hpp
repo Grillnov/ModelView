@@ -3,43 +3,58 @@
 # include "GLApplication.h"
 # include "MeshPack.h"
 # include "ProgramPack.h"
-# include "CamPack.h"
+# include "CameraView.hpp"
 
 class Phong :public GLApplication
 {
 private:
 	MeshPack* Pack;
-	ProgramPack* Program;
-	CamPack camera;
+	ProgramPack* Program, *Program2;
+	CamStack camera;
 public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		Pack = new MeshPack("D:/ModelView/assets/A6M2N.obj");
+		Pack = new MeshPack("D:/ModelView/assets/Android.obj");
 		Pack->Attach();
 
 		Program = new ProgramPack();
 		Program->AddShader("D:/ModelView/Shaders/phongfrag.glsl", GL_FRAGMENT_SHADER);
 		Program->AddShader("D:/ModelView/Shaders/phongvert.glsl", GL_VERTEX_SHADER);
-
 		Program->Attach();
+		Program->Use();
+
 		Program->Uniform3("lightPosition", glm::vec3(0.0f, 0.0f, 1.0f));
-		
 		Program->Uniform4("lightColor", glm::vec4(1.0f));
-		Program->Uniform4("diffuseColor", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Program->Uniform4("diffuseColor", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		Program->Uniform4("ambientColor", glm::vec4(0.3f, 0.15f, 0.0f, 1.0f));
+
+		Program2 = new ProgramPack();
+		Program2->AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
+		Program2->AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
+		Program2->Attach();
 	}
 
 	virtual void RenderFrame()
 	{
-		glm::mat4 MVP = camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5, -0.5));
-		Program->UniformMat4("transformMatrix", camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5, -0.2f)));
-		Program->UniformMat4("ModelViewMatrix", camera.getMV(GetAspectRatio(), 1.0f, glm::vec2(-0.5, -0.2f)));
+		glm::mat4 MVP = camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.5f));
+		Program->Use();
+		Program->UniformMat4("transformMatrix", camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
+		Program->UniformMat4("ModelViewMatrix", camera.getMV(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		Pack->DrawMesh();
+
+		Program2->Use();
+		GLfloat color[3] = { 0.0, 0.0, 1.0 };
+		Program2->Uniform3("color", color);
+		Program2->UniformMat4("MVP", camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		Pack->DrawMesh();
 	}
 

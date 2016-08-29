@@ -1,5 +1,5 @@
 //
-//  CamPack.h
+//  CameraView.hpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 23, 2016.
@@ -8,11 +8,27 @@
 
 # include "AllinGL.h"
 
-
-class CamPack
+class CamStack
 {
 private:
+	glm::mat4 Model;
+	glm::mat4 View;
+	glm::mat4 Projection;
+
+	glm::vec4 CamLocation;
+	glm::vec4 CamOrientation;
+
+	glm::vec4 massCenter;
+	glm::vec4 rotateOrientation;
+	GLfloat scale;
 public:
+	CamStack() : Model(glm::mat4(1.0f)), View(glm::mat4(1.0f)),
+		Projection(glm::mat4(1.0f)), CamLocation(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)), 
+		CamOrientation(glm::vec4(0.0f, 0.0f, -1.0f, 1.0f))
+	{
+
+	}
+
 	glm::mat4 getMVP(float AspectRatio, float Translate, glm::vec2 const & Rotate)
 	{
 		glm::mat4 Projection = glm::perspective(glm::radians(45.0f), AspectRatio, 0.1f, 100.f);

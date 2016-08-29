@@ -28,32 +28,15 @@ CONSOLE_SCREEN_BUFFER_INFO csbInfo;
 # endif
 // TODO: Add color to these titles shown on the console
 
-bool is_exit = false;
-bool is_initiated = false;
-
 void GLObject::CheckStatus(const char* function)
 {
 # ifndef DEBUGBUILD//Check errors during debug session only.
 	return;
 # endif
-	if (!is_initiated)
-	{
-		Log(debugMsg, "OpenGL context not intiated yet, error checking skipped.");
-		return;
-	}
 	GLenum error = glGetError();
 	static bool firstCall = true;
 	if (error != GL_NO_ERROR)
 	{
-		if (error == 1280 && firstCall)
-		{
-			firstCall = false;
-			return;
-		}
-		if (error == 1282 && is_exit)
-		{
-			return;
-		}
 		Warning(debugMsg, "Error spotted during the execution of function: %s!", function);
 		Error(debugMsg, "Fatal OpenGL Error %d:\n %s", error, glewGetErrorString(error));
 	}

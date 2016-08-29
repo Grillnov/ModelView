@@ -12,8 +12,10 @@
 /**
 Modify this macro below to modify OpenGL version.
 By default it's set as OpenGL 4.3.
-If your device has any difficulties supporting novel version of OpenGL,
+If your device has any difficulties supporting novel versions of OpenGL,
 please try and modify this context version.
+Note that only OpenGL 3.2 or higher is supported by GLFW3, a value greater than
+3.2 is expected.
 */
 # define GLMajorVer 4
 # define GLMinorVer 3
@@ -43,15 +45,14 @@ Problems might arise if you are using an Intel graphic device(for instance, HD40
 If so, try and run the executable with independent video cards(for instance, your ATI or NVIDIA card).
 Note that Glew has to be included before any gl headers are included.
 */
-
 # ifdef _MSC_VER
-# include <GL\glew.h>
+# include <GL/glew.h>
 # endif
 
 /**
 GLFW is used instead of GLUT.
 */
-# include <GLFW\glfw3.h>
+# include <GLFW/glfw3.h>
 
 /**
 GLM is used as client side BLAS.
@@ -69,7 +70,6 @@ Headers from standard library.
 /**
 Headers from this project.
 */
-
 # include "BenchmarkTimer.h"
 # include "GLObject.h"
 # include "GLAttachable.h"

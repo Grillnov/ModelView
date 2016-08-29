@@ -64,7 +64,7 @@ private:
 	long esec;
 	long eusec;
 public:
-	BenchmarkTimer() : this->isTimerStarted(false)
+	BenchmarkTimer() : isTimerStarted(false)
 	{
 		
 	}

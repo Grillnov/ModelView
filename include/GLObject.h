@@ -101,7 +101,4 @@ protected:
 	virtual void DeleteObject() {}
 };
 
-extern bool is_exit;
-extern bool is_initiated;
-
 # endif

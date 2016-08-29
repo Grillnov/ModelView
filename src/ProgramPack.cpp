@@ -27,6 +27,8 @@ static const char* getShaderTypeStr(GLenum type)
 	}
 }
 
+GLuint ProgramPack::ProgramInUse = 0;
+
 void ProgramPack::AddShader(std::string Path, GLenum type)
 {
 	ShaderPack* shaderPtr = new ShaderPack(Path, type);
@@ -65,6 +67,18 @@ void ProgramPack::AddShader(std::string Path)
 		Error(debugMsg, "Unrecognized shader postfix: %s", Path.substr(Path.rfind("."), Path.size()).c_str());
 }
 
+void ProgramPack::Use()
+{
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is not attached yet, bailing.", this->AssetID);
+		return;
+	}
+	glUseProgram(this->AssetID);
+	CheckStatus(__FUNCTION__);
+	ProgramInUse = this->AssetID;
+}
+
 void ProgramPack::Attach()
 {
 	if (this->isAttached)
@@ -96,8 +110,7 @@ void ProgramPack::Attach()
 	else
 	{
 		CheckStatus(__FUNCTION__);
-		glUseProgram(this->AssetID);
-		Log(debugMsg, "Program %u was successfully linked and now using.", this->AssetID);
+		Log(debugMsg, "Program %u was successfully attached.", this->AssetID);
 		this->isAttached = true;
 	}
 }
@@ -147,6 +160,11 @@ GLint ProgramPack::Fetch(std::string name)
 	if (!this->isAttached)
 	{
 		Error(debugMsg, "Program is not linked yet. Unable to get the location of uniform %s.", name.c_str());
+		return -1;
+	}
+	if (ProgramInUse != this->AssetID)
+	{
+		Error(debugMsg, "Attempting to feed uniform %s to program %u who's not in use.", name.c_str(), this->AssetID);
 		return -1;
 	}
 	GLint location = glGetUniformLocation(this->AssetID, name.c_str());

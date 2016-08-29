@@ -15,7 +15,7 @@
     <ClInclude Include="..\include\AllinGL.h" />
     <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
-    <ClInclude Include="..\include\CamPack.h" />
+    <ClInclude Include="..\include\CameraView.hpp" />
     <ClInclude Include="..\include\EventPack.h" />
     <ClInclude Include="..\include\GLApplication.h" />
     <ClInclude Include="..\include\GLAttachable.h" />
@@ -26,7 +26,6 @@
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\UBOPack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
-    <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GLApplication.cpp" />
@@ -38,7 +37,7 @@
     <ClCompile Include="..\src\ShaderPack.cpp" />
     <ClCompile Include="..\src\UBOPack.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
-    <ClCompile Include="..\util\FPSApplication.cpp" />
+    <ClCompile Include="..\util\FPSApplication.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\phong_normalMap.glsl" />
@@ -79,6 +78,10 @@
     <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -107,6 +110,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

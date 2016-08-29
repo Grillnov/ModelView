@@ -18,6 +18,7 @@ class ProgramPack : public GLAttachable, public GLObject
 {
 private:
 	std::unordered_map<GLenum, ShaderPack*> ShaderTable;
+	static GLuint ProgramInUse;
 	GLint Fetch(std::string name);
 	//std::unordered_map<GLuint, UniformPack*> UniformMap;
 public:
@@ -35,10 +36,9 @@ public:
 	void Detach() override;
 
 	/**
-	Call glUseProgram.
-	Deprecated. Now it's merged with Attach().
+	Call glUseProgram to switch programs in effect between attached ones.
 	*/
-	//void Use();
+	void Use();
 
 	/**
 	Add some shaders to this program so that it knows where to start.
@@ -46,8 +46,8 @@ public:
 	*/
 	void AddShader(std::string Path, GLenum type);
 
-	/*
-	Add some shaders, type told by its postfix.
+	/**
+	Add some shaders, type told by its filename postfix.
 	*/
 	void AddShader(std::string Path);
 

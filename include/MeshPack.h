@@ -12,11 +12,11 @@
 # include "BufferPack.hpp"
 # include "VertexArrayPack.h"
 
+enum VertArrs{ Pos, Nor, Tex };
+
 class MeshPack : public GLAttachable, public GLObject
 {
 private:
-	const static enum VertArrs{ Pos, Nor, Tex };
-	
 	/**
 	Vertex array.
 	*/

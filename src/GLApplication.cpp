@@ -21,9 +21,11 @@ GLApplication* GLApplication::fInstance = nullptr;
 
 GLApplication::GLApplication() : fWindow(nullptr)
 {
+	Log(debugMsg, "Initialization may take some time. Please wait...");
+
 	// Set up OpenGL environment and do necessary stuff.
 
-	// TODO: we can't do this in initializer for a compiler bug of VS2013, 
+	// TODO: we can't do this in initializer due to a compiler bug of VS2013, 
 	// Maybe this will be fixed in the next generation of VS
 	fWindowSize[0] = 0; fWindowSize[1] = 0;
 	fMousePosition[0] = fMousePosition[1] = 0;
@@ -38,7 +40,7 @@ GLApplication::GLApplication() : fWindow(nullptr)
 	fInstance = this;
 	glfwSetErrorCallback(GLApplication::ErrorCallback);
 	if (!glfwInit())
-		Error(debugMsg, "Can't initialize GLFW");
+		Error(debugMsg, "GLFW initialization failed!");
 }
 
 GLApplication::~GLApplication()
@@ -48,7 +50,6 @@ GLApplication::~GLApplication()
 
 void GLApplication::WindowCreation(const char* title, int width, int height, bool isFullScreen)
 {
-	Log(debugMsg, "Initialization may take some time. Please wait...");
 	if (width <= 0)
 		Error(debugMsg, "Attempting to create window %s with illegal width: %d", title, width);
 	if (height <= 0)
@@ -84,10 +85,9 @@ void GLApplication::WindowCreation(const char* title, int width, int height, boo
 	glfwSetFramebufferSizeCallback(fWindow, GLApplication::FramebufferSizeCallback);
 	glfwSetWindowCloseCallback(fWindow, GLApplication::WindowClosedCallback);
 
-# ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 	std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-
+# ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	/*
 	An Intel integrated graphics device is detected.
 	Certain Intel drivers are not supported by glew, and null function pointers might be retrieved.
@@ -108,14 +108,13 @@ void GLApplication::WindowCreation(const char* title, int width, int height, boo
 	}
 	if (GLEW_OK != glewInit())
 	{
-		Error(debugMsg, "glew initialization failed");
+		Error(debugMsg, "Glew initialization failed!");
 	}
 # endif
 	/*
 	Initialization complete!
 	*/
 	CheckStatus(__FUNCTION__);
-	is_initiated = true;
 
 	Info(debugMsg, "OpenGL version: %s", glGetString(GL_VERSION));
 	Info(debugMsg, "Running on rendering device: %s", device.c_str());
@@ -161,8 +160,8 @@ void GLApplication::RunMainLoop()
 
 	ShutdownApplication();
 	glfwDestroyWindow(fWindow);
-	is_exit = true;
-	CheckStatus("ShutdownApplication");
+	//is_exit = true;
+	//CheckStatus("ShutdownApplication");
 }
 
 void GLApplication::Resize(GLFWwindow *window, int width, int height)
