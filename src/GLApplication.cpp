@@ -150,18 +150,19 @@ void GLApplication::RunMainLoop()
 
 	while ((!glfwWindowShouldClose(fWindow))) 
 	{
+		UpdateFromController();
 		RenderFrame();
-
 		glfwSwapBuffers(fWindow);
 		glfwPollEvents();
-
 		CheckStatus(__FUNCTION__);
+		if (IsKeyDown('Q'))//GLFW_KEY_ESCAPE))
+		{
+			break;
+		}
 	}
 
 	ShutdownApplication();
 	glfwDestroyWindow(fWindow);
-	//is_exit = true;
-	//CheckStatus("ShutdownApplication");
 }
 
 void GLApplication::Resize(GLFWwindow *window, int width, int height)
@@ -174,18 +175,20 @@ void GLApplication::Resize(GLFWwindow *window, int width, int height)
 
 void GLApplication::Keyboard(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-	fKeyState[key] = GLFW_PRESS;
 	switch (action) 
 	{
 	case GLFW_PRESS:
-	case GLFW_REPEAT:
+		fKeyState[key] = GLFW_PRESS;
 		KeyDown(key);
 		break;
-
+	case GLFW_REPEAT:
+		fKeyState[key] = GLFW_REPEAT;
+		KeyDown(key);
+		break;
 	case GLFW_RELEASE:
+		fKeyState[key] = GLFW_RELEASE;
 		KeyUp(key);
 		break;
-
 	default:
 		break;
 	}

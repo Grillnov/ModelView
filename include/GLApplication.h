@@ -16,9 +16,9 @@
 /**
  * @brief GLApplication class is the base class of a complete OpenGL application. 
  *
- * GLApplication registers the OpenGL context and GLUT, installs callbacks, and 
- * dispachs every call of drawing of a frame. There should always be only one
- * GLApplication instance during the lifecycle of application.
+ * GLApplication deploys the OpenGL context and GLUT, sets callbacks, and 
+ * dispatches every call of drawing of a frame. There should always be only one
+ * GLApplication instance present during the lifecycle of application.
  *
  * GLApplication also has a reference to the window created by GLUT. Also the input
  * events will be received by GLApplication and send to client codes.
@@ -49,14 +49,14 @@ public:
 	/**
 	@brief enter the main GLFW event loop.
 	*/
-	void RunMainLoop();
+	virtual void RunMainLoop();
 
 	/**
 	@brief Gets the key state.
 	*/
 	bool IsKeyDown(unsigned char chr)
 	{
-		return fKeyState[chr] == 1;
+		return fKeyState[chr] == GLFW_PRESS || fKeyState[chr] == GLFW_REPEAT;
 	}
 
 	/**
@@ -200,6 +200,14 @@ protected:
 		return;
 	}
 
+	/**
+	Update the status based on controller (e.g. mouse and keyboard) status.
+	*/
+	virtual void UpdateFromController()
+	{
+		return;
+	}
+
 	 /** @brief Event callback when a mouse key is pressed.
 	 * @param[in] which the key id, 0 stands for left button, and 1 the
 	 * middle button, 2 the right button.
@@ -228,7 +236,7 @@ protected:
 		return;
 	}
 
-	 /** @brief Event callback when a keyboard key is release.
+	 /** @brief Event callback when a keyboard key is released.
 	 * @param[in] which the key char.
 	 * @see KeyDown()
 	 */
@@ -254,6 +262,13 @@ protected:
 		return;
 	}
 
+	GLFWwindow* fWindow;
+	unsigned char fKeyState[GLFW_KEY_LAST], fMouseState[3];
+	int fWindowSize[2];
+	int fWindowFramebufferSize[2];
+	int fMousePosition[2];
+	const char* windowName;
+
 private:
 	 /**
 	 @brief The singleton pointer of GLApplication.
@@ -275,7 +290,7 @@ private:
 	// static callbacks
 	static void ErrorCallback(int err, const char* desc)
 	{
-		instance()->Info(debugMsg, "GLFW callback error at %s", desc);
+		instance()->Warning(debugMsg, "GLFW callback error at %s", desc);
 	}
 	static void ResizeCallback(GLFWwindow* window, int width, int height)
 	{
@@ -307,13 +322,6 @@ private:
 	}
 	
 	void WindowCreation(const char* title, int width, int height, bool isFullScreen);
-
-	GLFWwindow* fWindow;
-	unsigned char fKeyState[GLFW_KEY_LAST], fMouseState[3];
-	int fWindowSize[2];
-	int fWindowFramebufferSize[2];
-	int fMousePosition[2];
-	const char* windowName;
 };
 
 # endif

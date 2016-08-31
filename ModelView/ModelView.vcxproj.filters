@@ -66,8 +66,11 @@
     <ClInclude Include="..\Demo\Phong.hpp">
       <Filter>demo</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CameraView.hpp">
+    <ClInclude Include="..\include\CameraView.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\util\FPSApplication.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +101,10 @@
     <ClCompile Include="..\src\UBOPack.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\util\FPSApplication.hpp">
+    <ClCompile Include="..\src\CameraView.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\FPSApplication.cpp">
       <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>

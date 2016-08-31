@@ -3,14 +3,14 @@
 # include "GLApplication.h"
 # include "MeshPack.h"
 # include "ProgramPack.h"
-# include "CameraView.hpp"
+# include "CameraView.h"
+# include <FPSApplication.h>
 
-class Phong :public GLApplication
+class Phong :public FPSApplication
 {
 private:
 	MeshPack* Pack;
 	ProgramPack* Program, *Program2;
-	CamStack camera;
 public:
 	virtual void CreateApplication()
 	{
@@ -37,10 +37,10 @@ public:
 
 	virtual void RenderFrame()
 	{
-		glm::mat4 MVP = camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.5f));
+		glm::mat4 MVP = FPSCamera.GetModelViewProjection(GetAspectRatio());
 		Program->Use();
-		Program->UniformMat4("transformMatrix", camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
-		Program->UniformMat4("ModelViewMatrix", camera.getMV(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
+		Program->UniformMat4("transformMatrix", MVP);
+		Program->UniformMat4("ModelViewMatrix", FPSCamera.GetModelView());
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -52,7 +52,7 @@ public:
 		Program2->Use();
 		GLfloat color[3] = { 0.0, 0.0, 1.0 };
 		Program2->Uniform3("color", color);
-		Program2->UniformMat4("MVP", camera.getMVP(GetAspectRatio(), 1.0f, glm::vec2(-0.5f, -0.2f)));
+		Program2->UniformMat4("MVP", MVP);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		Pack->DrawMesh();
