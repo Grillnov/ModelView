@@ -27,9 +27,29 @@ namespace ModelView
 
 		void Move(glm::vec3 offset);
 
+		void MoveForward(float distance);
+
+		void MoveBackward(float distance);
+
+		void MoveLeft(float distance);
+
+		void MoveRight(float distance);
+
+		void MoveUp(float distance);
+
+		void MoveDown(float distance);
+
 		void Up(glm::vec3 Up);
 
 		void Look(glm::vec3 lookat);
+
+		void Swivel(glm::vec3 rotation);
+
+		void Zoom(float scale);
+
+		void ZoomIn(float scale);
+
+		void ZoomOut(float scale);
 
 		void SetFOV(float FOVinDegrees);
 

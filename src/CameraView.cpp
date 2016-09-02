@@ -9,29 +9,21 @@
 # include <AllinGL.h>
 # include <CameraView.h>
 
-ModelView::Cam::Cam() : FOV(65.0f)
+ModelView::Cam::Cam() : FOV(45.0f)
 {
 	Location = glm::vec3(0.0f, 0.0f, 1.0f);
 	UpOrientation = glm::vec3(0.0f, 1.0f, 0.0f);
 	LookAtOrientation = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
-void Move(glm::vec3 offset);
-
-void Up(glm::vec3 Up);
-
-void Look(glm::vec3 lookat);
-
-void SetFOV(float FOVinDegrees);
-
-glm::mat4 GetModelView(glm::mat4 Model = glm::mat4(1.0f));
-
-glm::mat4 GetModelViewProjection(float AspectRatio = 16.0f / 9.0f, glm::mat4 Model = glm::mat4(1.0f),
-	float nearP = 0.1f, float farP = 100.0f);
-
 void ModelView::Cam::Move(glm::vec3 offset)
 {
 	this->Location += offset;
+}
+
+void ModelView::Cam::MoveForward(float distance)
+{
+
 }
 
 void ModelView::Cam::Up(glm::vec3 up)
@@ -44,14 +36,34 @@ void ModelView::Cam::Look(glm::vec3 lookat)
 	this->LookAtOrientation = lookat;
 }
 
+void ModelView::Cam::Swivel(glm::vec3 rotation)
+{
+	this->LookAtOrientation += rotation;
+}
+
 void ModelView::Cam::SetFOV(float FOV)
 {
 	this->FOV = FOV;
 }
 
+void ModelView::Cam::Zoom(float scale)
+{
+	this->FOV *= scale;
+}
+
+void ModelView::Cam::ZoomIn(float scale)
+{
+	this->FOV *= 1.0f - scale;
+}
+
+void ModelView::Cam::ZoomOut(float scale)
+{
+	this->FOV *= 1.0f + scale;
+}
+
 glm::mat4 ModelView::Cam::GetModelView(glm::mat4 Model)
 {
-	glm::mat4 View = glm::lookAt(this->Location, this->LookAtOrientation, this->UpOrientation) * Model;
+	glm::mat4 View = glm::lookAt(Location, glm::normalize(LookAtOrientation), glm::normalize(UpOrientation)) * Model;
 	return View;
 }
 

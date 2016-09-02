@@ -16,11 +16,11 @@
 /**
  * @brief GLApplication class is the base class of a complete OpenGL application. 
  *
- * GLApplication deploys the OpenGL context and GLUT, sets callbacks, and 
+ * GLApplication deploys the OpenGL context, initializes GLFW, sets callbacks, and 
  * dispatches every call of drawing of a frame. There should always be only one
  * GLApplication instance present during the lifecycle of application.
  *
- * GLApplication also has a reference to the window created by GLUT. Also the input
+ * GLApplication also has a reference to the window created by GLFW. Also the input
  * events will be received by GLApplication and send to client codes.
  */
 class GLApplication : public GLObject
@@ -203,7 +203,7 @@ protected:
 	/**
 	Update the status based on controller (e.g. mouse and keyboard) status.
 	*/
-	virtual void UpdateFromController()
+	virtual void HandleController()
 	{
 		return;
 	}

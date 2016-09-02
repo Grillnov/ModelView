@@ -77,6 +77,8 @@ void GLApplication::WindowCreation(const char* title, int width, int height, boo
 	glfwMakeContextCurrent(fWindow);
 	glfwSwapInterval(1);
 
+	glfwSetInputMode(fWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 	glfwSetMouseButtonCallback(fWindow, GLApplication::MouseCallback);
 	glfwSetWindowSizeCallback(fWindow, GLApplication::ResizeCallback);
 	glfwSetKeyCallback(fWindow, GLApplication::KeyboardCallback);
@@ -150,7 +152,7 @@ void GLApplication::RunMainLoop()
 
 	while ((!glfwWindowShouldClose(fWindow))) 
 	{
-		UpdateFromController();
+		HandleController();
 		RenderFrame();
 		glfwSwapBuffers(fWindow);
 		glfwPollEvents();

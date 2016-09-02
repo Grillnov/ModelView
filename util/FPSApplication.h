@@ -15,5 +15,9 @@ class FPSApplication : public GLApplication
 public:
 	ModelView::Cam FPSCamera;
 
-	void UpdateFromController() override;
+	void HandleController() override;
+
+	void MouseMove(int x, int y) override;
+
+	void MouseScroll(double xoffset, double yoffset) override;
 };
