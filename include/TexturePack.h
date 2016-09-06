@@ -1,24 +1,41 @@
 //
-//  TexturePack.h
-//  ModelView
+//  GLTexture.h
+//  libOOGL
 //
-//  Created by Bowen Yang on Aug 4, 2016.
-//  Copyright (c) 2016 Bowen Yang. All rights reserved.
+//  Created by Haoyan Huo on 3/20/15.
+//  Copyright (c) 2015 Haoyan Huo. All rights reserved.
 //
 
 # ifndef TEXTUREPACK
 # define TEXTUREPACK
 
-# include "AllinGL.h"
-# include "BufferPack.hpp"
-// OpenCV support
+# include <AllinGL.h>
 
-class TexturePack : public GLAttachable, public GLObject
+class TexturePack : public GLObject, public GLAttachable
 {
-private:
-	BufferPack<GLfloat> *Texel;
 public:
-	GLboolean LoadFromFile(std::string InputFile);
+	virtual GLuint GetSampler() = 0;
+protected:
+	virtual void Bind(GLenum target) = 0;
 };
 
+class TexturePack2D : public TexturePack
+{
+
+};
+
+class TexturePackArray : public TexturePack
+{
+
+};
+
+class TexturePackTable : public TexturePack
+{
+	
+};
+
+class TexturePackRect : public TexturePack
+{
+
+};
 # endif

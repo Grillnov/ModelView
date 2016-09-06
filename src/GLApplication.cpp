@@ -198,9 +198,9 @@ void GLApplication::Keyboard(GLFWwindow *window, int key, int scancode, int acti
 
 void GLApplication::Motion(GLFWwindow *window, double x, double y)
 {
-	fMousePosition[0] = x;
-	fMousePosition[1] = y;
-	MouseMove(x, y);
+	fMousePosition[0] = static_cast<int>(x);
+	fMousePosition[1] = static_cast<int>(y);
+	MouseMove(static_cast<int>(x), static_cast<int>(y));
 }
 
 void GLApplication::Mouse(GLFWwindow *window, int button, int action, int mods)

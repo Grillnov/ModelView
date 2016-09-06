@@ -107,6 +107,9 @@
     <ClCompile Include="..\util\FPSApplication.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TexturePack.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\simpleFragment.glsl">

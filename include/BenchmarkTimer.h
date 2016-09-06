@@ -15,7 +15,7 @@
 class BenchmarkTimer
 {
 private:
-	double frequency;
+	long long frequency;
 	__int64 startTime;
 	__int64 endTime;
 	bool isTimerStarted;
@@ -47,7 +47,7 @@ public:
 	}
 	double getDeltaTimeInms()
 	{
-		return 1000.0 * ((this->endTime - this->startTime) / this->frequency);
+		return 1000.0 * (static_cast<double>(this->endTime - this->startTime) / this->frequency);
 	}
 };
 # else

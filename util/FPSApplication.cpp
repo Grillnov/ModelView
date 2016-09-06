@@ -42,8 +42,8 @@ void FPSApplication::HandleController()
 
 void FPSApplication::MouseMove(int x, int y)
 {
-	float deltaX = isXAxisReversed ? GetWindowWidth() / 2 - x : x - GetWindowWidth() / 2;
-	float deltaY = isYAxisReversed ? y - GetWindowHeight() / 2 : GetWindowHeight() / 2 - y;
+	float deltaX = static_cast<float>(isXAxisReversed ? GetWindowWidth() / 2 - x : x - GetWindowWidth() / 2);
+	float deltaY = static_cast<float>(isYAxisReversed ? y - GetWindowHeight() / 2 : GetWindowHeight() / 2 - y);
 	FPSCamera.Swivel(glm::vec3(VelocitySwivel * static_cast<float>(deltaX),
 		VelocitySwivel * static_cast<float>(deltaY), 0.0f));
 	glfwSetCursorPos(this->fWindow, GetWindowWidth() / 2, GetWindowHeight() / 2);
@@ -52,5 +52,5 @@ void FPSApplication::MouseMove(int x, int y)
 void FPSApplication::MouseScroll(double xoffset, double yoffset)
 {
 	//Log(debugMsg, "x : %f, y : %f", xoffset, yoffset);
-	FPSCamera.ZoomIn(yoffset * 0.1f);
+	FPSCamera.ZoomIn(static_cast<float>(yoffset)* 0.1f);
 }
