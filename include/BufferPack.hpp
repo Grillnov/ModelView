@@ -23,7 +23,7 @@ private:
 	/**
 	Amount of elements.
 	*/
-	size_t num_of_elements;
+	GLsizei num_of_elements;
 
 	/**
 	The target the buffer is binded to.
@@ -35,12 +35,10 @@ private:
 	*/
 	GLclientside* LocalPtr;
 public:
-	
-
 	/**
 	Returns the amount of elements.
 	*/
-	size_t Size()
+	GLsizei Size()
 	{
 		return num_of_elements;
 	}
@@ -48,12 +46,12 @@ public:
 	/**
 	Constructor that sets the local pointer to Ptr, with size specified.
 	*/
-	BufferPack(GLclientside* Ptr, size_t num_of_elements);
+	BufferPack(GLclientside* Ptr, GLsizei num_of_elements);
 
 	/**
 	Constructor that allocates memory space on the client side.
 	*/
-	BufferPack(size_t num_of_elements);
+	BufferPack(GLsizei num_of_elements);
 
 	/**
 	A naiver version of Attach().
@@ -99,7 +97,7 @@ public:
 	@ params
 	@ index the index of the element
 	*/
-	GLclientside& operator[](size_t index);
+	GLclientside& operator[](GLsizei index);
 
 	/**
 	Get the client side local pointer to the buffer.
@@ -108,10 +106,18 @@ public:
 	{
 		return this->LocalPtr;
 	}
+
+	/**
+	Converter to GLuint.
+	*/
+	operator GLuint()
+	{
+		return this->AssetID;
+	}
 };
 
 template<typename GLclientside>
-BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, size_t num_of_elements)
+BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, GLsizei num_of_elements)
 	: LocalPtr(Ptr), num_of_elements(num_of_elements), CurrentBindedTarget(-1)
 {
 	if (num_of_elements == 0)
@@ -119,7 +125,7 @@ BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, size_t num_of_elements)
 }
 
 template<typename GLclientside>
-BufferPack<GLclientside>::BufferPack(size_t num_of_elements)
+BufferPack<GLclientside>::BufferPack(GLsizei num_of_elements)
 	: num_of_elements(num_of_elements), CurrentBindedTarget(-1)
 {
 	if (num_of_elements == 0)
@@ -145,7 +151,7 @@ void BufferPack<GLclientside>::Attach()
 	}
 	glCreateBuffers(1, &this->AssetID);
 
-	size_t bufferSize = this->num_of_elements * sizeof(GLclientside);
+	GLsizei bufferSize = this->num_of_elements * sizeof(GLclientside);
 
 	glBindBuffer(GL_COPY_WRITE_BUFFER, this->AssetID);
 	glBufferData(GL_COPY_WRITE_BUFFER, bufferSize, this->LocalPtr, GL_STATIC_DRAW);
@@ -169,7 +175,7 @@ void BufferPack<GLclientside>::Attach(GLenum hintBindingPoint, GLenum hintUsage)
 	}
 	glCreateBuffers(1, &this->AssetID);
 
-	size_t bufferSize = this->num_of_elements * sizeof(GLclientside);
+	GLsizei bufferSize = this->num_of_elements * sizeof(GLclientside);
 
 	glBindBuffer(hintBindingPoint, this->AssetID);
 	glBufferData(hintBindingPoint, bufferSize, this->LocalPtr, hintUsage);
@@ -232,7 +238,7 @@ BufferPack<GLclientside>::~BufferPack()
 }
 
 template<typename GLclientside>
-GLclientside& BufferPack<GLclientside>::operator[](size_t index)
+GLclientside& BufferPack<GLclientside>::operator[](GLsizei index)
 {
 	if (index > this->num_of_elements)
 	{

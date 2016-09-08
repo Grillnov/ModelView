@@ -15,7 +15,7 @@ public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		Pack = new MeshPack("D:/ModelView/assets/Android.obj");
+		Pack = new MeshPack("D:/ModelView/assets/test.obj");
 		Pack->Attach();
 
 		Program = new ProgramPack();

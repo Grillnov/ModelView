@@ -90,7 +90,7 @@ void ProgramPack::Attach()
 	for (auto shader : this->ShaderTable)
 	{
 		shader.second->Attach();
-		glAttachShader(this->AssetID, shader.second->getID());
+		glAttachShader(this->AssetID, *shader.second);
 		Log(debugMsg, "Attached a %s to program with ID %u.",
 			getShaderTypeStr(shader.second->getType()), this->AssetID);
 	}
@@ -123,7 +123,7 @@ void ProgramPack::Detach()
 	}
 	for (auto shader : this->ShaderTable)
 	{
-		glDetachShader(this->AssetID, shader.second->getID());
+		glDetachShader(this->AssetID, *shader.second);
 		shader.second->Detach();
 	}
 	glDeleteProgram(this->AssetID);
@@ -133,19 +133,10 @@ void ProgramPack::Detach()
 	this->isAttached = false;
 }
 
-/*void ProgramPack::Use()
+ProgramPack::operator GLuint()
 {
-	if (!IsAttached())
-	{
-		Warning(debugMsg, "Program is not attached yet, bailing.");
-		return;
-	}
-	else
-	{
-		glUseProgram(this->AssetID);
-		CheckStatus(__FUNCTION__);
-	}
-}*/
+	return this->AssetID;
+}
 
 ProgramPack::~ProgramPack()
 {

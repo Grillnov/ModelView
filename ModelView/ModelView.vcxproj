@@ -16,7 +16,6 @@
     <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CameraView.h" />
-    <ClInclude Include="..\include\EventPack.h" />
     <ClInclude Include="..\include\GLApplication.h" />
     <ClInclude Include="..\include\GLAttachable.h" />
     <ClInclude Include="..\include\GLObject.h" />
@@ -24,6 +23,7 @@
     <ClInclude Include="..\include\ProgramPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />
+    <ClInclude Include="..\include\TextureTable.hpp" />
     <ClInclude Include="..\include\UBOPack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
     <ClInclude Include="..\util\FPSApplication.h" />
@@ -32,6 +32,8 @@
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
+    <ClCompile Include="..\src\LoadBMP.cpp" />
+    <ClCompile Include="..\src\SamplerPack.cpp" />
     <ClCompile Include="..\src\TexturePack.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />

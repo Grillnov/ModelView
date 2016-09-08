@@ -74,6 +74,11 @@ public:
 	Just an utility function.
 	*/
 	void* operator[](GLuint index);
+
+	/**
+	Convert to GLuint.
+	*/
+	operator GLuint();
 };
 
 # endif

@@ -70,10 +70,7 @@ public:
 	*/
 	void Detach() override;
 
-	GLuint getID()
-	{
-		return this->AssetID;
-	}
+	operator GLuint();
 
 	GLenum getType()
 	{

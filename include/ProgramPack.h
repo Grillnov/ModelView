@@ -112,8 +112,9 @@ public:
 	void UniformMat4(std::string name, const glm::dmat4x4& valLoc);
 
 	/**
-	Feed the program with uniform blocks. Time to make them global.
+	Convert to GLuint.
 	*/
+	operator GLuint();
 };
 
 # endif

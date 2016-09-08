@@ -104,3 +104,8 @@ void ShaderPack::Detach()
 	Log(debugMsg, "Shader %s was successfully detached.", this->Path.c_str());
 	this->isAttached = false;
 }
+
+ShaderPack::operator GLuint()
+{
+	return this->AssetID;
+}

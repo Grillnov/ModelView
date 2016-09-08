@@ -123,3 +123,8 @@ void VertexArrayPack::UnBind()
 	glBindVertexArray(0);
 	CheckStatus(__FUNCTION__);
 }
+
+VertexArrayPack::operator GLuint()
+{
+	return this->AssetID;
+}
