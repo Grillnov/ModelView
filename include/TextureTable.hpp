@@ -15,6 +15,7 @@ Textures that are used for 'tables', that is to say, they are accessed as arrays
 not pictures.
 It's preferred to use this instead of UBOs as tables, to create global variables acress all primitives.
 */
+template<typename GLclientside, typename GLserverside>
 class TextureTable : public TexturePack
 {
 public:
@@ -25,29 +26,5 @@ private:
 	GLsizei xWidth;
 	GLsizei yHeight;
 	int Channel;
-	char *Buffer;
-};
-
-template<typename GLclientside>
-class Texture1DArray : public TextureTable
-{
-public:
-	void Attach() override;
-	void Detach() override;
-private:
-	void Bind(GLenum target);
-	GLsizei size;
-	GLclientside* Buffer;
-};
-
-template<typename GLclientside>
-class Texture2DArray : public TextureTable
-{
-public:
-	void Attach() override;
-	void Detach() override;
-private:
-	void Bind(GLenum target);
-	GLsizei size;
-	GLclientside* Buffer;
+	GLclientside *Buffer;
 };

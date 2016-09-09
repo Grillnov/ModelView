@@ -22,6 +22,9 @@
     <Filter Include="demo">
       <UniqueIdentifier>{7920de1a-f124-4288-a5bc-79d02dc9e7ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="entrance">
+      <UniqueIdentifier>{303af348-7a05-4fc3-a5b3-76854cab9aee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AllinGL.h">
@@ -74,9 +77,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GLApplication.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -115,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\src\LoadBMP.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>entrance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

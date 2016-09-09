@@ -31,7 +31,31 @@ Comment this macro below during release build to boost performance.
 */
 # define DEBUGBUILD
 
+/**
+Try modifying this to USEGL3W if glew initialization failed or you found out that
+some nullptr is invoked as a function pointer.
+*/
+# define USEGLEW
+
+
+
+
+
+
+
+
+
+
 /************DO NOT modify the content below this line************/
+
+
+
+
+
+
+
+
+
 
 /**
 Macro for debug message.
@@ -44,9 +68,14 @@ Glew has to be initiated to retrieve function pointers to GL interfaces.
 Problems might arise if you are using an Intel graphic device(for instance, HD4000 series) on Windows platform.
 If so, try and run the executable with independent video cards(for instance, your ATI or NVIDIA card).
 Note that Glew has to be included before any gl headers are included.
+
+TODO: GL3W may work if we fail to initiate glew.
 */
-# ifdef _MSC_VER
+# ifdef USEGLEW
 # include <GL/glew.h>
+# endif
+# ifdef USEGL3W
+# include <GL/GL3W.h>
 # endif
 
 /**

@@ -14,7 +14,7 @@ const float scale = 0.007f;
 smooth out vec3 vLightDir;
 smooth out vec3 normal_ES;
 smooth out vec2 texCoord;
-smooth out vec3 tangentE;
+//smooth out vec3 tangentE;
 
 mat3 normal_Matrix = mat3(ModelViewMatrix);
 vec3 viewLightPosition = mat3(ModelViewMatrix) * lightPosition;
@@ -30,4 +30,5 @@ void main()
 	vec3 vPosition3 = vPosition4.rgb / vPosition4.a;
 
 	vLightDir = normalize(viewLightPosition - vPosition3);
+	texCoord = TextureCoord.xy;
 }

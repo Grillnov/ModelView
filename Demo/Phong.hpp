@@ -1,22 +1,27 @@
 # ifndef PHONG
 # define PHONG
-# include "GLApplication.h"
-# include "MeshPack.h"
-# include "ProgramPack.h"
-# include "CameraView.h"
+# include <GLApplication.h>
+# include <MeshPack.h>
+# include <ProgramPack.h>
+# include <CameraView.h>
 # include <FPSApplication.h>
+# include <TexturePack.h>
 
 class Phong :public FPSApplication
 {
 private:
 	MeshPack* Pack;
 	ProgramPack* Program, *Program2;
+	Texture2D* White;
 public:
 	virtual void CreateApplication()
 	{
 		glEnable(GL_DEPTH_TEST);
-		Pack = new MeshPack("D:/ModelView/assets/test.obj");
+		Pack = new MeshPack("D:/ModelView/assets/BasePlain.obj");
 		Pack->Attach();
+
+		White = new Texture2D("D:/ModelView/assets/trial.bmp", 0);
+		White->Attach();
 
 		Program = new ProgramPack();
 		Program->AddShader("D:/ModelView/Shaders/phongfrag.glsl", GL_FRAGMENT_SHADER);
@@ -28,6 +33,7 @@ public:
 		Program->Uniform4("lightColor", glm::vec4(1.0f));
 		Program->Uniform4("diffuseColor", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		Program->Uniform4("ambientColor", glm::vec4(0.3f, 0.15f, 0.0f, 1.0f));
+		Program->Uniform1("tex", 0);
 
 		Program2 = new ProgramPack();
 		Program2->AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);

@@ -140,7 +140,7 @@ void GLObject::Error(const char* file, unsigned line, const char* function, cons
 	vprintf(msg, ap);
 	printf("\n");
 	va_end(ap);
-
+	/*
 	char numb = 0;
 	
 	while (numb != 'y' && numb != 'Y')
@@ -150,5 +150,6 @@ void GLObject::Error(const char* file, unsigned line, const char* function, cons
 		if (numb == 'n' || numb == 'N')
 			exit(-1);
 	}
+	*/
 	//FIXME: is this error checking function performing what it's supposed to perform?
 }

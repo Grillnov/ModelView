@@ -160,7 +160,9 @@ GLint ProgramPack::Fetch(std::string name)
 	}
 	GLint location = glGetUniformLocation(this->AssetID, name.c_str());
 	if (location == -1)
-		Error(debugMsg, "Unable to fetch location for uniform %s. Does this uniform variable really exist?", name.c_str());
+		Error(debugMsg, "Unable to fetch location for uniform %s. "
+		"Does this uniform variable actually exist in program %u?"
+		, name.c_str(), this->AssetID);
 	return location;
 }
 

@@ -29,7 +29,7 @@ public:
 	void Param(GLenum target, GLfloat* param);
 	void Param(GLenum target, GLint* param);
 private:
-	GLuint bindedTarget;
+	GLuint BindedSlot;
 };
 
 /**
@@ -46,14 +46,14 @@ protected:
 	GLuint layout;
 
 	/**
-	Do not bind two texture objects to one binding point.
+	Do not bind two texture objects to one binding slot.
 	*/
-	static std::set<GLenum> bindedTextures;
+	static std::set<GLenum> OccupiedLayouts;
 
 	/**
 	Query which texture binding point is active right now.
 	*/
-	static GLenum currentActiveTex;
+	//static GLenum currentActiveTex;
 };
 
 /**
@@ -62,7 +62,7 @@ not arrays or tables.
 */
 class TexturePic : public TexturePack
 {
-public:
+protected:
 	/**
 	Load the texture from a BMP file.
 	*/
@@ -75,7 +75,9 @@ public:
 	void Param(GLenum target, GLint param);
 	void Param(GLenum target, GLfloat* param);
 	void Param(GLenum target, GLint* param);
-private:
+
+	~TexturePic();
+
 	/**
 	The default sampler.
 	*/
@@ -84,7 +86,7 @@ private:
 	GLsizei xWidth;
 	GLsizei yHeight;
 	int Channel;
-	int *Buffer;
+	char *Buffer;
 };
 
 /**
@@ -111,6 +113,7 @@ public:
 	Texture2D(std::string Path, GLenum layout);
 
 	void Attach() override;
+	void Attach(GLint internalFormat, GLboolean generateMipMap);
 	void Detach() override;
 };
 
@@ -120,6 +123,7 @@ public:
 	TextureRect(std::string Path, GLenum layout);
 
 	void Attach() override;
+	void Attach(GLint internalFormat, GLboolean generateMipMap);
 	void Detach() override;
 };
 
@@ -129,6 +133,7 @@ public:
 	TextureCube(std::string Path, GLenum layout);
 
 	void Attach() override;
+	void Attach(GLint internalFormat, GLboolean generateMipMap);
 	void Detach() override;
 };
 
@@ -138,6 +143,31 @@ public:
 	TextureMultiSamp(std::string Path, GLenum layout);
 
 	void Attach() override;
+	void Attach(GLint internalFormat, GLboolean generateMipMap);
 	void Detach() override;
 };
+
+/*
+class Texture1DArray : public TexturePic
+{
+public:
+	void Attach() override;
+	void Detach() override;
+private:
+	void Bind(GLenum target);
+	GLsizei size;
+	int* Buffer;
+};
+
+class Texture2DArray : public TexturePic
+{
+public:
+	void Attach() override;
+	void Detach() override;
+private:
+	void Bind(GLenum target);
+	GLsizei size;
+	int* Buffer;
+};
+*/
 # endif

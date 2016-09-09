@@ -11,7 +11,7 @@ void SamplerPack::Attach()
 	glGenSamplers(1, &this->AssetID);
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Sampler %s was successfully attached.", this->AssetID);
+	Log(debugMsg, "Sampler %u was successfully attached.", this->AssetID);
 	this->isAttached = true;
 }
 
@@ -32,7 +32,13 @@ void SamplerPack::Detach()
 
 SamplerPack::operator GLuint()
 {
-	return this->AssetID;
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Sampler %u is not attached yet, illegal parameter for GL interface.");
+		return 0;
+	}
+	else
+		return this->AssetID;
 }
 
 void SamplerPack::Param(GLenum target, GLfloat param)

@@ -6,6 +6,8 @@ smooth in vec2 texCoord;
 
 out vec4 color;
 
+uniform sampler2D tex;
+
 uniform vec4 lightColor;
 uniform vec4 diffuseColor;
 uniform vec4 ambientColor;
@@ -24,5 +26,7 @@ void main()
 	float specFactor = pow(reflectAngle, 128);
 	specular = specFactor * lightColor;
 
-	color = specular + diffuse + ambientColor;
+	vec4 texcolor = texture(tex, texCoord);
+
+	color = 0.000001*specular + 0.000001*diffuse + 0.000001*ambientColor + texcolor;
 }
