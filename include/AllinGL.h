@@ -86,8 +86,8 @@ GLFW is used instead of GLUT.
 /**
 GLM is used as client side BLAS.
 */
-# include "glm/glm.hpp"
-# include "glm/ext.hpp"
+# include <glm/glm.hpp>
+# include <glm/ext.hpp>
 
 /**
 Headers from standard library.
@@ -99,8 +99,8 @@ Headers from standard library.
 /**
 Headers from this project.
 */
-# include "BenchmarkTimer.h"
-# include "GLObject.h"
-# include "GLAttachable.h"
+# include <BenchmarkTimer.h>
+# include <GLObject.h>
+# include <GLAttachable.h>
 
 # endif

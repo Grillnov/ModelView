@@ -17,7 +17,7 @@ smooth out vec2 texCoord;
 //smooth out vec3 tangentE;
 
 mat3 normal_Matrix = mat3(ModelViewMatrix);
-vec3 viewLightPosition = mat3(ModelViewMatrix) * lightPosition;
+vec3 viewLightPosition = normal_Matrix * lightPosition;
 
 void main()
 {

@@ -1,7 +1,8 @@
-# include "AllinGL.h"
-# include "GLApplication.h"
-# include "BufferPack.hpp"
-# include "Phong.hpp"
+# include <AllinGL.h>
+# include <GLApplication.h>
+# include <BufferPack.hpp>
+# include <TexPlain.hpp>
+# include <Phong.hpp>
 
 int main(void)
 {

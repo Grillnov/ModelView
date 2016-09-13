@@ -76,12 +76,12 @@ void Texture2D::Attach(GLint GLinternalformat, GLboolean generateMipMap)
 	if (generateMipMap)
 	{
 		glGenerateTextureMipmap(*this);
-
-		Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		Param(GL_TEXTURE_WRAP_S, GL_REPEAT);
-		Param(GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
+
+	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	Param(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	Param(GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	CheckStatus(__FUNCTION__);
 

@@ -10,6 +10,8 @@
 # include "GLObject.h"
 # include "GLApplication.h"
 
+extern void printStackTrace();
+
 # ifdef _MSC_VER
 
 # include <Windows.h>
@@ -117,6 +119,9 @@ void GLObject::Warning(const char* file, unsigned line, const char* function, co
 	vprintf(msg, ap);
 	printf("\n");
 	va_end(ap);
+
+	printf("Dumped callstack:\n");
+	printStackTrace();
 }
 
 void GLObject::Error(const char* file, unsigned line, const char* function, const char* msg, ...)
@@ -140,16 +145,8 @@ void GLObject::Error(const char* file, unsigned line, const char* function, cons
 	vprintf(msg, ap);
 	printf("\n");
 	va_end(ap);
-	/*
-	char numb = 0;
 	
-	while (numb != 'y' && numb != 'Y')
-	{
-		Info(debugMsg, "\nContinue with this operation anyway? (y/n)\n");
-		std::cin >> numb;
-		if (numb == 'n' || numb == 'N')
-			exit(-1);
-	}
-	*/
+	printf("Dumped callstack:\n");
+	printStackTrace();
 	//FIXME: is this error checking function performing what it's supposed to perform?
 }

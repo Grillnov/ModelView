@@ -6,6 +6,9 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
+# ifndef FPSAPPLICATION
+# define FPSAPPLICATION
+
 # include <AllinGL.h>
 # include <GLApplication.h>
 # include <CameraView.h>
@@ -21,3 +24,5 @@ public:
 
 	void MouseScroll(double xoffset, double yoffset) override;
 };
+
+# endif
