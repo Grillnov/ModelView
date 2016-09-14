@@ -17,7 +17,7 @@ Chunks of continuous memory as buffer objects.
 Generic class for all kinds of buffers.
 */
 template<typename GLclientside>
-class BufferPack : public GLAttachable, public GLObject
+class BufferPack : public GLObject, public GLAttachable
 {
 private:
 	/**
@@ -26,14 +26,14 @@ private:
 	GLsizei num_of_elements;
 
 	/**
-	The target the buffer is binded to.
+	Local pointer to server side memory.
 	*/
-	GLenum CurrentBindedTarget;
+	GLclientside* MappedPtr;
 
 	/**
-	Local pointer to client side memory.
+	Is there any pointer on the client side mapped to this buffer?
 	*/
-	GLclientside* LocalPtr;
+	bool isMapped;
 public:
 	/**
 	Returns the amount of elements.
@@ -46,7 +46,7 @@ public:
 	/**
 	Constructor that sets the local pointer to Ptr, with size specified.
 	*/
-	BufferPack(GLclientside* Ptr, GLsizei num_of_elements);
+	//BufferPack(GLclientside* Ptr, GLsizei num_of_elements);
 
 	/**
 	Constructor that allocates memory space on the client side.
@@ -56,14 +56,17 @@ public:
 	/**
 	A naiver version of Attach().
 	Effective, yet may cause some performance issues.
-	Simply register the asset, allocating memory on the server side and upload
-	local memory.
+	Simply register the asset, allocate memory on the server side and upload
+	local memory, with target hint set as GL_COPY_WRITE_BUFFER, and usage hint
+	set as GL_STATIC_DRAW.
 	*/
 	void Attach() override;
 
 	/**
-	When glBufferData is invoked, current binding target and usage will affect
-	the memory location allocated to this buffer.
+	When glBufferData is invoked, specified binding target and usage will affect
+	the memory location allocated for this buffer.
+	Use naiver Attach() is recommended when you're not so sure how to boost memory
+	access performance by designating target and usage.
 	*/
 	void Attach(GLenum hintBindtarget, GLenum hintUsage);
 
@@ -75,12 +78,7 @@ public:
 	/**
 	Bind the buffer to some target
 	*/
-	void Bind(GLenum target);
-
-	/**
-	Restore binded target to its default status
-	*/
-	void UnBind();
+	//void Bind(GLenum target);
 
 	/**
 	It's always a bad idea to include OpenGL invokes in destructing functions
@@ -93,19 +91,20 @@ public:
 	*/
 	~BufferPack();
 
-	/** Access client side memory
+	/** Modify the server side memory on the fly.
 	@ params
 	@ index the index of the element
 	*/
 	GLclientside& operator[](GLsizei index);
+	GLclientside& at(GLsizei index);
+
+	void* getPtr();
 
 	/**
-	Get the client side local pointer to the buffer.
+	When you are done with the buffer changing on the fly, invoke this
+	to unmap the buffer and save your changes.
 	*/
-	GLclientside* GetLocalPtr()
-	{
-		return this->LocalPtr;
-	}
+	void SyncMem();
 
 	/**
 	Converter to GLuint.
@@ -117,52 +116,17 @@ public:
 };
 
 template<typename GLclientside>
-BufferPack<GLclientside>::BufferPack(GLclientside* Ptr, GLsizei num_of_elements)
-	: LocalPtr(Ptr), num_of_elements(num_of_elements), CurrentBindedTarget(-1)
-{
-	if (num_of_elements == 0)
-		Error(debugMsg, "Illegal size of elements: %u", num_of_elements);
-}
-
-template<typename GLclientside>
 BufferPack<GLclientside>::BufferPack(GLsizei num_of_elements)
-	: num_of_elements(num_of_elements), CurrentBindedTarget(-1)
+	: num_of_elements(num_of_elements), isMapped(false)
 {
 	if (num_of_elements == 0)
-		Error(debugMsg, "Illegal size of elements: %u", num_of_elements);
-	try
-	{
-		this->LocalPtr = new GLclientside[num_of_elements];
-	}
-	catch (std::bad_alloc exception)
-	{
-		Error(debugMsg, "Unable to allocate %u bytes of memory for client side buffer."
-			, this->num_of_elements*sizeof(GLclientside));
-	}
+		Error(debugMsg, "Illegal size of elements: %d", num_of_elements);
 }
 
 template<typename GLclientside>
 void BufferPack<GLclientside>::Attach()
 {
-	if (this->isAttached)
-	{
-		Warning(debugMsg, "Buffer %u is already attached, bailing.", this->AssetID);
-		return;
-	}
-	glCreateBuffers(1, &this->AssetID);
-
-	GLsizei bufferSize = this->num_of_elements * sizeof(GLclientside);
-
-	glBindBuffer(GL_COPY_WRITE_BUFFER, this->AssetID);
-	glBufferData(GL_COPY_WRITE_BUFFER, bufferSize, this->LocalPtr, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
-
-	CheckStatus(__FUNCTION__);
-	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
-
-	Log(debugMsg, "Buffer %u was successfully attached.", this->AssetID);
-	this->isAttached = true;
+	Attach(GL_COPY_WRITE_BUFFER, GL_STATIC_DRAW);
 }
 
 template<typename GLclientside>
@@ -173,17 +137,17 @@ void BufferPack<GLclientside>::Attach(GLenum hintBindingPoint, GLenum hintUsage)
 		Warning(debugMsg, "Buffer %u is already attached, bailing.", this->AssetID);
 		return;
 	}
-	glCreateBuffers(1, &this->AssetID);
+	glGenBuffers(1, &this->AssetID);
 
 	GLsizei bufferSize = this->num_of_elements * sizeof(GLclientside);
 
 	glBindBuffer(hintBindingPoint, this->AssetID);
-	glBufferData(hintBindingPoint, bufferSize, this->LocalPtr, hintUsage);
+	glBufferData(hintBindingPoint, bufferSize, nullptr, hintUsage);
 
 	glBindBuffer(hintBindingPoint, 0);
 
 	CheckStatus(__FUNCTION__);
-	Log(debugMsg, "Successfully uploaded %u bytes of data to buffer %u.", bufferSize, this->AssetID);
+	Log(debugMsg, "Successfully allocated %d bytes of data on server side for buffer %u.", bufferSize, this->AssetID);
 
 	Log(debugMsg, "Buffer %u was successfully attached.", this->AssetID);
 	this->isAttached = true;
@@ -205,7 +169,7 @@ void BufferPack<GLclientside>::Detach()
 	this->isAttached = false;
 }
 
-template<typename GLclientside>
+/*template<typename GLclientside>
 void BufferPack<GLclientside>::Bind(GLenum target)
 {
 	if (!this->isAttached)
@@ -216,25 +180,16 @@ void BufferPack<GLclientside>::Bind(GLenum target)
 	this->CurrentBindedTarget = target;
 	glBindBuffer(target, this->AssetID);
 	CheckStatus(__FUNCTION__);
-}
-
-template<typename GLclientside>
-void BufferPack<GLclientside>::UnBind()
-{
-	if (this->CurrentBindedTarget == -1)
-		Error(debugMsg, "Buffer %u hasn't been binded to any target yet, bailing.", this->AssetID);
-	glBindBuffer(this->CurrentBindedTarget, this->AssetID);
-	CheckStatus(__FUNCTION__);
-}
+}*/
 
 template<typename GLclientside>
 BufferPack<GLclientside>::~BufferPack()
 {
 	if (this->isAttached)
 	{
-		Warning(debugMsg, "Buffer %u isn't detached before destruction, risk of causing memory leakage on server side.", this->AssetID);
+		Warning(debugMsg, "Buffer %u isn't detached before destruction, "
+			"risk of causing memory leakage on server side.", this->AssetID);
 	}
-	delete[] this->LocalPtr;
 }
 
 template<typename GLclientside>
@@ -242,9 +197,57 @@ GLclientside& BufferPack<GLclientside>::operator[](GLsizei index)
 {
 	if (index > this->num_of_elements)
 	{
-		Warning(debugMsg, "Index %u is out of boundary!", index);
+		Error(debugMsg, "Cannot access %dth element in buffer %u, out of boundary!", index, this->AssetID);
 	}
-	return this->LocalPtr[index];
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Buffer %u is not attached yet!", this->AssetID);
+	}
+	if (this->isMapped)
+	{
+		return *(this->MappedPtr + index);
+	}
+	else
+	{
+		glBindBuffer(GL_COPY_WRITE_BUFFER, this->AssetID);
+		this->MappedPtr = reinterpret_cast<GLclientside*>(glMapBuffer(GL_COPY_WRITE_BUFFER, GL_READ_WRITE));
+
+		if (MappedPtr == nullptr)
+			Error(debugMsg, "Cannot map buffer %u.", this->AssetID);
+
+		CheckStatus(__FUNCTION__);
+
+		this->isMapped = true;
+		return *(this->MappedPtr + index);
+	}
+}
+template<typename GLclientside>
+GLclientside& BufferPack<GLclientside>::at(GLsizei index)
+{
+	return (*this)[index];
+}
+
+template<typename GLclientside>
+void* BufferPack<GLclientside>::getPtr()
+{
+	return &(*this)[0];
+}
+
+template<typename GLclientside>
+void BufferPack<GLclientside>::SyncMem()
+{
+	if (!this->isMapped)
+	{
+		Warning(debugMsg, "Buffer %u is not mapped yet, bailing.", this->AssetID);
+		return;
+	}
+	glBindBuffer(GL_COPY_WRITE_BUFFER, this->AssetID);
+	glUnmapBuffer(GL_COPY_WRITE_BUFFER);
+
+	CheckStatus(__FUNCTION__);
+	Log(debugMsg, "Synchorized memory for buffer %u", this->AssetID);
+
+	this->isMapped = false;
 }
 
 # endif

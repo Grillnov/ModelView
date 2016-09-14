@@ -161,66 +161,79 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		MassCenter[i] = 0.0f;
 	}
 
-	GLfloat* Coord = new GLfloat[3 * SizeInVertices];
+	BufferPack<GLfloat>* Ptr1 = new BufferPack<GLfloat>(3 * SizeInVertices);//TODO:Mem leakage!
+	BufferPack<GLfloat>& VertexCoord = *Ptr1;
+	VertexCoord.Attach();
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
-		Coord[3 * counter] = a.vertexCoord[0] * scale;
-		MassCenter[0] += Coord[3 * counter];
+		GLfloat x = a.vertexCoord[0];
+		GLfloat y = a.vertexCoord[1];
+		GLfloat z = a.vertexCoord[2];
 
-		Coord[3 * counter + 1] = a.vertexCoord[1] * scale;
-		MassCenter[1] += Coord[3 * counter + 1];
+		VertexCoord[3 * counter] = x;
+		MassCenter[0] += x;
 
-		Coord[3 * counter + 2] = a.vertexCoord[2] * scale;
-		MassCenter[2] += Coord[3 * counter + 2];
+		VertexCoord[3 * counter + 1] = y;
+		MassCenter[1] += y;
+
+		VertexCoord[3 * counter + 2] = z;
+		MassCenter[2] += z;
 
 		++counter;
 	}
-
+	VertexCoord.SyncMem();
 	for (unsigned i = 0; i != 3; ++i)
 	{
 		MassCenter[i] = MassCenter[i] / Vertices.size();
 	}
+	this->Vertices.AddAttribAt(&VertexCoord, GL_FLOAT, Pos, 3);
 
-	BufferPack<GLfloat>* VertexCoord = new BufferPack<GLfloat>(Coord, 3 * SizeInVertices);
-	this->Vertices.AddBufferWithIndex(VertexCoord, Pos, 3);
 
-	GLfloat* Norm = new GLfloat[3 * SizeInVertices];
+	BufferPack<GLfloat>* Ptr2 = new BufferPack<GLfloat>(3 * SizeInVertices);
+	BufferPack<GLfloat>& NormalCoord = *Ptr2;
+	NormalCoord.Attach();
 	counter = 0;
 	for (auto a : Vertices)
 	{
-		Norm[3 * counter] = a.normalDir[0];
-		Norm[3 * counter + 1] = a.normalDir[1];
-		Norm[3 * counter + 2] = a.normalDir[2];
+		NormalCoord[3 * counter] = a.normalDir[0];
+		NormalCoord[3 * counter + 1] = a.normalDir[1];
+		NormalCoord[3 * counter + 2] = a.normalDir[2];
 		++counter;
 	}
-	BufferPack<GLfloat>* NormalCoord = new BufferPack<GLfloat>(Norm, 3 * SizeInVertices);
-	this->Vertices.AddBufferWithIndex(NormalCoord, Nor, 3);
+	NormalCoord.SyncMem();
+	this->Vertices.AddAttribAt(&NormalCoord, GL_FLOAT, Nor, 3);
 
-	GLfloat* Texture = new GLfloat[3 * SizeInVertices];
+
+	BufferPack<GLfloat>* Ptr3 = new BufferPack<GLfloat>(3 * SizeInVertices);
+	BufferPack<GLfloat>& TextureCoord = *Ptr3;
+	TextureCoord.Attach();
 	counter = 0;
 	for (auto a : Vertices)
 	{
-		Texture[3 * counter] = a.texCoord[0];
-		Texture[3 * counter + 1] = a.texCoord[1];
-		Texture[3 * counter + 2] = a.texCoord[2];
+		TextureCoord[3 * counter] = a.texCoord[0];
+		TextureCoord[3 * counter + 1] = a.texCoord[1];
+		TextureCoord[3 * counter + 2] = a.texCoord[2];
 		++counter;
 	}
-	BufferPack<GLfloat>* TextureCoord = new BufferPack<GLfloat>(Texture, 3 * SizeInVertices);
-	this->Vertices.AddBufferWithIndex(TextureCoord, Tex, 3);
-	
+	TextureCoord.SyncMem();
+	this->Vertices.AddAttribAt(&TextureCoord, GL_FLOAT, Tex, 3);
+
+
 	Vertices.clear();
 
-	GLuint* EleArr = new GLuint[IndexSum];
+
+	this->ElementArr = new BufferPack<GLuint>(IndexSum);
+	BufferPack<GLuint>& Elements = *ElementArr;
+	Elements.Attach();
 	counter = 0;
 	for (auto a : ElementArrayTemp)
 	{
-		EleArr[counter] = a;
+		Elements[counter] = a;
 		counter++;
 	}
-	this->ElementArr = new BufferPack<GLuint>(EleArr, IndexSum);
-
-	AlignCenter();
+	Elements.SyncMem();
+	//AlignCenter();
 
 	ElementArrayTemp.clear();
 }

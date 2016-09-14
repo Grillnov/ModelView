@@ -18,23 +18,27 @@ void VertexArrayPack::Attach()
 	glGenVertexArrays(1, &this->AssetID);
 	glBindVertexArray(this->AssetID);
 
-	for (auto i : this->FloatAttribs)
+	for (auto i : this->Attribs)
 	{
-		i.second.bufferptr->Attach();
-		i.second.bufferptr->Bind(GL_ARRAY_BUFFER);
-		glVertexAttribPointer(i.first, i.second.components, GL_FLOAT, GL_FALSE, 0, nullptr);
-		glEnableVertexAttribArray(i.first);
-	}
+		glBindBuffer(GL_ARRAY_BUFFER, *(reinterpret_cast<BufferPack<GLfloat>*>(i.second.bufferptr)));
 
-	for (auto i : this->IntAttribs)
-	{
-		i.second.bufferptr->Attach();
-		i.second.bufferptr->Bind(GL_ARRAY_BUFFER);
-		glVertexAttribIPointer(i.first, i.second.components, GL_INT, GL_FALSE, nullptr);
+		if (
+			i.second.type == GL_FLOAT ||
+			i.second.type == GL_DOUBLE
+			)
+			//TODO: There are still many types out there
+		{
+			glVertexAttribPointer(i.first, i.second.components, i.second.type, GL_FALSE, 0, nullptr);
+		}
+		else
+		{
+			glVertexAttribIPointer(i.first, i.second.components, i.second.type, GL_FALSE, nullptr);
+		}
 		glEnableVertexAttribArray(i.first);
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(this->AssetID);
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Vertexarray %u was successfully attached.", this->AssetID);
@@ -51,15 +55,10 @@ void VertexArrayPack::Detach()
 
 	glDeleteVertexArrays(1, &this->AssetID);
 
-	for (auto i : this->FloatAttribs)
+	for (auto i : this->Attribs)
 	{
-		i.second.bufferptr->Detach();
+		reinterpret_cast<BufferPack<GLfloat>*>(i.second.bufferptr)->Detach();
 	}
-
-	for (auto i : this->IntAttribs)
-	{
-		i.second.bufferptr->Detach();
-	};
 
 	CheckStatus(__FUNCTION__);
 
@@ -67,23 +66,22 @@ void VertexArrayPack::Detach()
 	this->isAttached = false;
 }
 
-void VertexArrayPack::AddBufferWithIndex(BufferPack<GLfloat>* buffer, GLuint index, GLuint components)
+void VertexArrayPack::AddAttribAt(void* buffer, GLenum type, GLuint index, GLuint components)
 {
 	if (components > 4 || components == 0)
 	{
 		Error(debugMsg, "Invalid number of components: %u. A component amount of 1-4 is expected.", components);
 		return;
 	}
-	if (FloatAttribs.find(index) != FloatAttribs.end()
-		|| IntAttribs.find(index) != IntAttribs.end())
+	if (Attribs.find(index) != Attribs.end())
 	{
-		Error(debugMsg, "For vertexarray %u, index %u is already occupied by another buffer.", this->AssetID, index);
+		Error(debugMsg, "For vertexarray %u, index %u is already occupied by another attribute.", this->AssetID, index);
 		return;
 	}
-	FloatAttribs[index] = VertAttribf(buffer, components);
+	Attribs[index] = Attrib(buffer, components, type);
 }
 
-void VertexArrayPack::AddBufferWithIndex(BufferPack<GLint>* buffer, GLuint index, GLuint components)
+/*void VertexArrayPack::AddAttribAt(BufferPack<GLint> buffer, GLuint index, GLuint components)
 {
 	if (components > 4 || components == 0)
 	{
@@ -97,14 +95,11 @@ void VertexArrayPack::AddBufferWithIndex(BufferPack<GLint>* buffer, GLuint index
 		return;
 	}
 	IntAttribs[index] = VertAttribi(buffer, components);
-}
+}*/
 
 void* VertexArrayPack::operator[](GLuint index)
 {
-	if (FloatAttribs.find(index) != FloatAttribs.end())
-		return FloatAttribs.at(index).bufferptr;
-	else
-		return IntAttribs.at(index).bufferptr;
+	return Attribs.at(index).bufferptr;
 }
 
 void VertexArrayPack::Bind()

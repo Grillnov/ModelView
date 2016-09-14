@@ -14,7 +14,7 @@
 
 enum VertArrs{ Pos, Nor, Tex };
 
-class MeshPack : public GLAttachable, public GLObject
+class MeshPack : public GLObject
 {
 private:
 	/**
@@ -45,13 +45,17 @@ private:
 	/**
 	Sometimes 3D models in plain text can't fit into NDS coordinates and we have to scale them down.
 	*/
-	GLfloat scale;
+	//GLfloat scale;
 
 	/**
 	How many triangles and how many vertices are there in the mesh?
 	*/
 	size_t SizeInTriangles;
 	size_t SizeInVertices;
+
+	/**
+	*/
+	bool isAttached;
 
 	/**
 	Parse a plain text 3D model into blobs.
@@ -81,26 +85,26 @@ private:
 	/**
 	Move the mesh so that it's centered on the origin.
 	*/
-	void AlignCenter();
+	//void AlignCenter();
 public:
 	/** 
 	@brief Constructor.
 	@params
 	@Path specifies the path to the designated asset, can be plain text 3D Model or blob.
 	*/
-	MeshPack(std::string Path, float scale = 1.0f);
+	MeshPack(std::string Path);
 
 	~MeshPack();
 
 	/**
 	Attach this mesh, creating GLVertexArray, AttribPointer and stuff.
 	*/
-	void Attach() override;
+	void Attach();
 
 	/**
 	Detach this mesh.
 	*/
-	void Detach() override;
+	void Detach();
 
 	/**
 	GLDraw. Invoking drawcalls to render the mesh.
