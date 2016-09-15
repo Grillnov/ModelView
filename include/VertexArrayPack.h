@@ -9,48 +9,28 @@
 # ifndef VERTEXARRAYPACK
 # define VERTEXARRAYPACK
 
-# include "AllinGL.h"
-# include "BufferPack.hpp"
+# include <AllinGL.h>
+# include <BufferPack.hpp>
 # include <unordered_map>
-
-/*struct VertAttribf
-{
-	BufferPack<GLfloat>* bufferptr;
-	GLuint components;
-	VertAttribf(){}
-	VertAttribf(BufferPack<GLfloat>* bufferptr, GLuint components)
-		:bufferptr(bufferptr), components(components){}
-};*/ 
-
-/*struct VertAttribi
-{
-	BufferPack<GLint>* bufferptr;
-	GLuint components;
-	VertAttribi(){}
-	VertAttribi(BufferPack<GLint>* bufferptr, GLuint components)
-		:bufferptr(bufferptr), components(components){}
-};*/
 
 struct Attrib
 {
-	void* bufferptr;
+	GLuint bufferHandle;
 	GLuint components;
 	GLenum type;
 	Attrib() {}
-	Attrib(void* buf, GLuint comp, GLenum type) :bufferptr(buf), components(comp), type(type) {}
+	Attrib(GLuint buf, GLuint comp, GLenum type) : bufferHandle(buf), components(comp), type(type) {}
 };
 
 class VertexArrayPack : public GLObject, public GLAttachable
 {
 private:
 	/**
-	Due to the botched GL interface design, we'll have to
-	include two sets of map, one corresponding to floating
-	point attributes, one corresponding to integer attributes.
+	Attributes are stored here, ready for attaching.
 	*/
-	//std::map<GLuint, VertAttribf> FloatAttribs;
-	//std::map<GLuint, VertAttribi> IntAttribs;
 	std::unordered_map<GLuint, Attrib> Attribs;
+
+	void AddAttribute(GLuint buffer, GLuint index, GLuint components, GLenum type);
 
 public:
 	/**
@@ -67,7 +47,14 @@ public:
 	Register a buffer object as an vertex attribute with index(layout location = index).
 	Rejects the operation if the index is already occupied.
 	*/
-	void AddAttribAt(void* buffer, GLenum type, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLint>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLuint>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLshort>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLbyte>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLubyte>& buffer, GLuint index, GLuint components);
 
 	/**
 	Bind the vertex array.
@@ -77,12 +64,12 @@ public:
 	/**
 	Restore the vertexarray binding point to its default state.
 	*/
-	void UnBind();
+	//void UnBind();
 
 	/**
 	Just an utility function.
 	*/
-	void* operator[](GLuint index);
+	GLuint operator[](GLuint index);
 
 	/**
 	Convert to GLuint.

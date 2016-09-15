@@ -44,9 +44,9 @@ public:
 	}
 
 	/**
-	Constructor that sets the local pointer to Ptr, with size specified.
+	Constructor that returns a dummy buffer.
 	*/
-	//BufferPack(GLclientside* Ptr, GLsizei num_of_elements);
+	BufferPack() = default;
 
 	/**
 	Constructor that allocates memory space on the client side.
@@ -98,13 +98,11 @@ public:
 	GLclientside& operator[](GLsizei index);
 	GLclientside& at(GLsizei index);
 
-	void* getPtr();
-
 	/**
 	When you are done with the buffer changing on the fly, invoke this
 	to unmap the buffer and save your changes.
 	*/
-	void SyncMem();
+	void Done();
 
 	/**
 	Converter to GLuint.
@@ -228,13 +226,7 @@ GLclientside& BufferPack<GLclientside>::at(GLsizei index)
 }
 
 template<typename GLclientside>
-void* BufferPack<GLclientside>::getPtr()
-{
-	return &(*this)[0];
-}
-
-template<typename GLclientside>
-void BufferPack<GLclientside>::SyncMem()
+void BufferPack<GLclientside>::Done()
 {
 	if (!this->isMapped)
 	{

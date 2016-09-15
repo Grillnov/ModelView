@@ -18,19 +18,31 @@ class MeshPack : public GLObject
 {
 private:
 	/**
-	Vertex array.
+	The vertex array.
 	*/
-	VertexArrayPack Vertices;
+	VertexArrayPack VertexArray;
 
+	/**
+	Vertex Coordinates.
+	*/
+	BufferPack<GLfloat> VertexCoord;
+	/**
+	Vertex normal directions.
+	*/
+	BufferPack<GLfloat> NormalCoord;
+	/**
+	Texture coordinates.
+	*/
+	BufferPack<GLfloat> TextureCoord;
 	/**
 	Buffer storing indices of vertex, defining how triangles are assembled.
 	*/
-	BufferPack<GLuint>* ElementArr;
+	BufferPack<GLuint> ElementArr;
 
 	/**
 	Buffer storing tangent coordinates for normal mapping
 	*/
-	//BufferPack TangentCoord; //Wait...Do we actually need this?
+	//BufferPack<GLfloat>* TangentCoord; //Wait...Do we actually need this?
 
 	/**
 	We may need this path later as a designator to the mesh.
@@ -54,6 +66,8 @@ private:
 	size_t SizeInVertices;
 
 	/**
+	Mesh object is not a GLAttachable, for there's no such thing as
+	glGenMesh(), and literally
 	*/
 	bool isAttached;
 
@@ -94,8 +108,6 @@ public:
 	*/
 	MeshPack(std::string Path);
 
-	~MeshPack();
-
 	/**
 	Attach this mesh, creating GLVertexArray, AttribPointer and stuff.
 	*/
@@ -114,9 +126,12 @@ public:
 	/**
 	Add customized buffers as new vertex attrib arrays.
 	*/
-	void AddAttribWithIndex(BufferPack<GLfloat>* buffer, GLuint index, GLuint components);
-
-	void AddAttribWithIndex(BufferPack<GLint>* buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLint>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLuint>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLshort>& buffer, GLuint index, GLuint components);
+	void AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components);
 };
 
 # endif

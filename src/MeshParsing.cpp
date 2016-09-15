@@ -161,8 +161,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		MassCenter[i] = 0.0f;
 	}
 
-	BufferPack<GLfloat>* Ptr1 = new BufferPack<GLfloat>(3 * SizeInVertices);//TODO:Mem leakage!
-	BufferPack<GLfloat>& VertexCoord = *Ptr1;
+	this->VertexCoord = BufferPack<GLfloat>(3 * SizeInVertices);
 	VertexCoord.Attach();
 	unsigned counter = 0;
 	for (auto a : Vertices)
@@ -182,16 +181,15 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 
 		++counter;
 	}
-	VertexCoord.SyncMem();
+	VertexCoord.Done();
 	for (unsigned i = 0; i != 3; ++i)
 	{
 		MassCenter[i] = MassCenter[i] / Vertices.size();
 	}
-	this->Vertices.AddAttribAt(&VertexCoord, GL_FLOAT, Pos, 3);
+	this->VertexArray.AddAttribAt(VertexCoord, Pos, 3);
 
 
-	BufferPack<GLfloat>* Ptr2 = new BufferPack<GLfloat>(3 * SizeInVertices);
-	BufferPack<GLfloat>& NormalCoord = *Ptr2;
+	this->NormalCoord = BufferPack<GLfloat>(3 * SizeInVertices);
 	NormalCoord.Attach();
 	counter = 0;
 	for (auto a : Vertices)
@@ -201,12 +199,11 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		NormalCoord[3 * counter + 2] = a.normalDir[2];
 		++counter;
 	}
-	NormalCoord.SyncMem();
-	this->Vertices.AddAttribAt(&NormalCoord, GL_FLOAT, Nor, 3);
+	NormalCoord.Done();
+	this->VertexArray.AddAttribAt(NormalCoord, Nor, 3);
 
 
-	BufferPack<GLfloat>* Ptr3 = new BufferPack<GLfloat>(3 * SizeInVertices);
-	BufferPack<GLfloat>& TextureCoord = *Ptr3;
+	this->TextureCoord = BufferPack<GLfloat>(3 * SizeInVertices);
 	TextureCoord.Attach();
 	counter = 0;
 	for (auto a : Vertices)
@@ -216,23 +213,22 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		TextureCoord[3 * counter + 2] = a.texCoord[2];
 		++counter;
 	}
-	TextureCoord.SyncMem();
-	this->Vertices.AddAttribAt(&TextureCoord, GL_FLOAT, Tex, 3);
+	TextureCoord.Done();
+	this->VertexArray.AddAttribAt(TextureCoord, Tex, 3);
 
 
 	Vertices.clear();
 
 
-	this->ElementArr = new BufferPack<GLuint>(IndexSum);
-	BufferPack<GLuint>& Elements = *ElementArr;
-	Elements.Attach();
+	this->ElementArr = BufferPack<GLuint>(IndexSum);
+	ElementArr.Attach();
 	counter = 0;
 	for (auto a : ElementArrayTemp)
 	{
-		Elements[counter] = a;
+		ElementArr[counter] = a;
 		counter++;
 	}
-	Elements.SyncMem();
+	ElementArr.Done();
 	//AlignCenter();
 
 	ElementArrayTemp.clear();
