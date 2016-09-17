@@ -37,11 +37,6 @@ void TexturePic::Param(GLenum target, GLint* param)
 	this->defaultSampler.Param(target, param);
 }
 
-TexturePic::~TexturePic()
-{
-	delete[] this->Buffer;
-}
-
 Texture2D::Texture2D(std::string Path, GLenum layout)
 {
 	if (OccupiedLayouts.find(layout) != OccupiedLayouts.end())
@@ -80,7 +75,7 @@ void Texture2D::Attach(GLint GLinternalformat, GLboolean generateMipMap)
 
 	if (generateMipMap)
 	{
-		glGenerateTextureMipmap(*this);
+		glGenerateTextureMipmap(this->AssetID);
 	}
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -92,6 +87,7 @@ void Texture2D::Attach(GLint GLinternalformat, GLboolean generateMipMap)
 
 	Log(debugMsg, "Texture %u was successfully attached at layout slot %u.", this->AssetID, this->layout);
 	this->isAttached = true;
+	delete[] this->Buffer;
 }
 
 void Texture2D::Detach()

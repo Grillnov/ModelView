@@ -81,7 +81,7 @@ protected:
 	void Param(GLenum target, GLfloat* param);
 	void Param(GLenum target, GLint* param);
 
-	~TexturePic();
+	//~TexturePic();
 
 	/**
 	@brief The default sampler.

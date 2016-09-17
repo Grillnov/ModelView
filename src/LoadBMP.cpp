@@ -7,6 +7,7 @@
 //
 
 # include <TexturePack.h>
+# include <exception>
 
 # ifndef _MSC_VER
 typedef unsigned short WORD;
