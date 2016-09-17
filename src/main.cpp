@@ -6,7 +6,7 @@
 
 int main(void)
 {
-	Phong app = Phong();
+	Phong app;
 
 	app.StartWindow("Demo", 640, 480);
 	app.RunMainLoop();

@@ -35,14 +35,14 @@ void printStackTrace()
 		SymFromAddr(process, address, NULL, symbol);
 		if (SymGetLineFromAddr64(process, address, &displacement, line))
 		{
-			printf("\tat %s in %s: line: %lu: address: 0x%0X\n", symbol->Name, line->FileName, line->LineNumber, symbol->Address);
+			printf("\tat [Function: ");
+			consoleWarningYellow();
+			printf("%s", symbol->Name);
+			consoleDefaultWhite();
+			printf("][Source file: %s][Line: %lu]\n", line->FileName, line->LineNumber);
 		}
-		/*else
-		{
-			printf("\tSymGetLineFromAddr64 returned error code %lu.\n", GetLastError());
-			printf("\tat %s, address 0x%0X.\n", symbol->Name, symbol->Address);
-		}*/
 	}
+	free(symbol); free(line);
 # else
 	printf("Callstack not available during release build on Visual Studio platform.\n");
 # endif

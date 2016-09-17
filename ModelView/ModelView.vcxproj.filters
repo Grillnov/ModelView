@@ -113,9 +113,6 @@
     <ClCompile Include="..\src\LoadBMP.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>entrance</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\LogCallStack.cpp">
       <Filter>src</Filter>
     </ClCompile>

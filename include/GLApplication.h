@@ -7,8 +7,8 @@
 //
 //  Modified by Bowen Yang
 
-# ifndef GLAPPLICATION
-# define GLAPPLICATION
+# ifndef __ModelView__GLApplication__
+# define __ModelView__GLApplication__
 
 # include "AllinGL.h"
 # include "GLObject.h"

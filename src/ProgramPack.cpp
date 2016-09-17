@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include "ProgramPack.h"
+# include <ProgramPack.h>
 
 static const char* getShaderTypeStr(GLenum type)
 {
@@ -135,6 +135,11 @@ void ProgramPack::Detach()
 
 ProgramPack::operator GLuint()
 {
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Program %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+		return -1;
+	}
 	return this->AssetID;
 }
 

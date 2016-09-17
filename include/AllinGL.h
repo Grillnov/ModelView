@@ -103,4 +103,9 @@ Headers from this project.
 # include <GLObject.h>
 # include <GLAttachable.h>
 
+/**
+Entrance definition.
+*/
+# define RunInstance(Class, width, height) int main(int argc, char** argv) { Class app; app.StartWindow("Class", width, height); app.RunMainLoop(); }
+
 # endif

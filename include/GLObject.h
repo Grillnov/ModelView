@@ -7,8 +7,8 @@
 //
 //  Modified by Bowen Yang
 
-# ifndef GLOBJECT
-# define GLOBJECT
+# ifndef __ModelView__GLObject__
+# define __ModelView__GLObject__
 
 /*!
  * @brief The root class for all GL objects.
@@ -31,7 +31,9 @@
 class GLObject
 {
 public:
-	/*! Default destructor */
+	/**!
+	* @brief Default destructor.
+	*/
 	~GLObject()
 	{
 		DeleteObject();
@@ -100,5 +102,13 @@ protected:
 	*/
 	virtual void DeleteObject() {}
 };
+
+extern void printStackTrace();
+
+void consoleLogGreen();
+void consoleInfoPink();
+void consoleWarningYellow();
+void consoleErrorRed();
+void consoleDefaultWhite();
 
 # endif
