@@ -13,14 +13,14 @@
 # include <BufferPack.hpp>
 # include <unordered_map>
 
-struct Attrib
+/**struct Attrib
 {
 	GLuint bufferHandle;
 	GLuint components;
 	GLenum type;
 	Attrib() {}
 	Attrib(GLuint buf, GLuint comp, GLenum type) : bufferHandle(buf), components(comp), type(type) {}
-};
+};*/
 
 class VertexArrayPack : public GLAttachable
 {
@@ -28,7 +28,7 @@ private:
 	/**
 	Attributes are stored here, ready for attaching.
 	*/
-	std::unordered_map<GLuint, Attrib> Attribs;
+	std::unordered_map<GLuint, GLuint> Attribs;
 
 	void AddAttribute(GLuint buffer, GLuint index, GLuint components, GLenum type);
 

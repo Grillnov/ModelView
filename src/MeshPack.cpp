@@ -30,21 +30,21 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 
 	//Vertex positions
 	this->VertexCoord = BufferPack<GLfloat>(SizeInVertices * 3);
-	VertexCoord.Attach();
+	VertexCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	fin.read(reinterpret_cast<char*>(&VertexCoord[0]), temp);
 	VertexCoord.Done();
 	VertexArray.AddAttribAt(VertexCoord, Pos, 3);
 
 	//Normal positions
 	this->NormalCoord = BufferPack<GLfloat>(SizeInVertices * 3);
-	NormalCoord.Attach();
+	NormalCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	fin.read(reinterpret_cast<char*>(&NormalCoord[0]), SizeInVertices * 3 * sizeof(GLfloat));
 	NormalCoord.Done();
 	VertexArray.AddAttribAt(NormalCoord, Nor, 3);
 
 	//Texture coordinates
 	this->TextureCoord = BufferPack<GLfloat>(SizeInVertices * 3);
-	TextureCoord.Attach();
+	TextureCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	fin.read(reinterpret_cast<char*>(&TextureCoord[0]), SizeInVertices * 3 * sizeof(GLfloat));
 	TextureCoord.Done();
 	VertexArray.AddAttribAt(TextureCoord, Tex, 3);
@@ -54,7 +54,7 @@ void MeshPack::LoadFromBinary(std::string binaryPath, std::fstream& fin)
 	this->SizeInTriangles = temp / 3 / sizeof(GLuint);
 	//Element array
 	this->ElementArr = BufferPack<GLuint>(SizeInTriangles * 3);
-	ElementArr.Attach();
+	ElementArr.Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 	fin.read(reinterpret_cast<char*>(&ElementArr[0]), temp);
 	ElementArr.Done();
 
@@ -109,6 +109,7 @@ void MeshPack::Attach()
 	{
 		if (!fin.is_open())
 			Error(debugMsg, "Cannot open binary model file %s", Path.c_str());
+		VertexArray.Attach();
 		LoadFromBinary(Path, fin);
 		fin.close();
 	}
@@ -124,20 +125,20 @@ void MeshPack::Attach()
 			if (!fin.is_open())
 				Error(debugMsg, "Cannot open model file %s", Path.c_str());
 			Warning(debugMsg, "Loading from plain text model %s. Conversion may take some time.", Path.c_str());
+			VertexArray.Attach();
 			LoadFromModel(Path, fin);
 			fin.close();
 		}
 		else//Correspondent blob was found.
 		{
 			Log(debugMsg, "Correspondent binary blob for %s was found, loading from binary now.", Path.c_str());
+			VertexArray.Attach();
 			LoadFromBinary(binaryPath, fin);
 			fin.close();
 		}
 	}
 	else
 		Error(debugMsg, "%s is neither a .obj nor a .bin, incompatible model file format.", Path.c_str());
-
-	VertexArray.Attach();
 
 	//ElementArr->Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 

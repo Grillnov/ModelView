@@ -18,40 +18,6 @@ void VertexArrayPack::Attach()
 	glGenVertexArrays(1, &this->AssetID);
 	glBindVertexArray(this->AssetID);
 
-	for (auto i : this->Attribs)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, i.second.bufferHandle);
-
-		if
-			(
-			i.second.type == GL_FLOAT ||
-			i.second.type == GL_DOUBLE
-			)
-			//TODO: There are still many floating types out there
-		{
-			glVertexAttribPointer(i.first, i.second.components, i.second.type, GL_FALSE, 0, nullptr);
-		}
-		else if 
-			(
-			i.second.type == GL_INT ||
-			i.second.type == GL_UNSIGNED_INT ||
-			i.second.type == GL_SHORT ||
-			i.second.type == GL_UNSIGNED_SHORT ||
-			i.second.type == GL_BYTE ||
-			i.second.type == GL_UNSIGNED_BYTE
-			)
-		{
-			glVertexAttribIPointer(i.first, i.second.components, i.second.type, GL_FALSE, nullptr);
-		}
-		else
-		{
-			Error(debugMsg, "Unrecognized type!");
-		}
-		glEnableVertexAttribArray(i.first);
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(this->AssetID);
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Vertexarray %u was successfully attached.", this->AssetID);
@@ -67,11 +33,6 @@ void VertexArrayPack::Detach()
 	}
 
 	glDeleteVertexArrays(1, &this->AssetID);
-
-	/*for (auto i : this->Attribs)
-	{
-		reinterpret_cast<BufferPack<GLfloat>*>(i.second.bufferptr)->Detach();
-	}*/
 
 	CheckStatus(__FUNCTION__);
 
@@ -91,7 +52,40 @@ void VertexArrayPack::AddAttribute(GLuint buffer, GLuint index, GLuint component
 		Error(debugMsg, "For vertexarray %u, index %u is already occupied by another attribute.", this->AssetID, index);
 		return;
 	}
-	Attribs[index] = Attrib(buffer, components, type);
+
+	Attribs[index] = buffer;
+
+	glBindVertexArray(this->AssetID);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
+	if
+		(
+		type == GL_FLOAT ||
+		type == GL_DOUBLE
+		)
+		//TODO: There are still many floating types out there
+	{
+		glVertexAttribPointer(index, components, type, GL_FALSE, 0, nullptr);
+	}
+	else if
+		(
+		type == GL_INT ||
+		type == GL_UNSIGNED_INT ||
+		type == GL_SHORT ||
+		type == GL_UNSIGNED_SHORT ||
+		type == GL_BYTE ||
+		type == GL_UNSIGNED_BYTE
+		)
+	{
+		glVertexAttribIPointer(index, components, type, GL_FALSE, nullptr);
+	}
+	else
+	{
+		Error(debugMsg, "Unrecognized type!");
+	}
+	glEnableVertexAttribArray(index);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void VertexArrayPack::AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components)
@@ -134,11 +128,6 @@ void VertexArrayPack::AddAttribAt(BufferPack<GLubyte>& buffer, GLuint index, GLu
 	AddAttribute(buffer, index, components, GL_UNSIGNED_BYTE);
 }
 
-GLuint VertexArrayPack::operator[](GLuint index)
-{
-	return Attribs.at(index).bufferHandle;
-}
-
 void VertexArrayPack::Bind()
 {
 	if (!this->isAttached)
@@ -150,13 +139,12 @@ void VertexArrayPack::Bind()
 	CheckStatus(__FUNCTION__);
 }
 
-/*void VertexArrayPack::UnBind()
-{
-	glBindVertexArray(0);
-	CheckStatus(__FUNCTION__);
-}*/
-
 VertexArrayPack::operator GLuint()
 {
 	return this->AssetID;
+}
+
+GLuint VertexArrayPack::operator[](GLuint index)
+{
+	return this->Attribs[index];
 }

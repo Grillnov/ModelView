@@ -8,7 +8,7 @@
 
 # include <TexturePack.h>
 
-std::set<GLenum> TexturePack::OccupiedLayouts = std::set<GLenum>();
+std::unordered_set<GLenum> TexturePack::OccupiedLayouts = std::unordered_set<GLenum>();
 
 TexturePack::operator GLuint()
 {

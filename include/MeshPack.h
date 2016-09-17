@@ -109,7 +109,7 @@ public:
 	void Detach();
 
 	/**
-	@brief GLDraw. Invoking drawcalls to render the mesh.
+	@brief Invoking drawcalls to render the mesh.
 	*/
 	void DrawMesh(GLenum mode = GL_TRIANGLES);
 

@@ -35,7 +35,6 @@
     <ClCompile Include="..\src\LoadBMP.cpp" />
     <ClCompile Include="..\src\SamplerPack.cpp" />
     <ClCompile Include="..\src\TexturePack.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />

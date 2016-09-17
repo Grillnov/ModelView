@@ -10,7 +10,7 @@
 # define __ModelView__TexturePack__
 
 # include <AllinGL.h>
-# include <set>
+# include <unordered_set>
 
 /**
 Samplers. You may want to add samplers for textures yourself, or just
@@ -35,6 +35,10 @@ Virtual base class for all kinds of textures.
 class TexturePack : public GLAttachable
 {
 public:
+	/**
+	@brief Default constructor.
+	*/
+	TexturePack() = default;
 protected:
 	/**
 	Layout index for the sampler in GLSL.
@@ -44,10 +48,10 @@ protected:
 	/**
 	Do not bind two texture objects to one binding slot.
 	*/
-	static std::set<GLenum> OccupiedLayouts;
+	static std::unordered_set<GLenum> OccupiedLayouts;
 
 	/**
-	@brief Convert to GLuint.
+	Convert to GLuint.
 	*/
 	operator GLuint() override;
 };
@@ -58,14 +62,19 @@ not arrays or tables.
 */
 class TexturePic : public TexturePack
 {
+public:
+	/**
+	@brief Default constructor.
+	*/
+	TexturePic() = default;
 protected:
 	/**
-	Load the texture from a BMP file.
+	@brief Load the texture from a BMP file.
 	*/
 	void LoadFromBMP(std::string Path);
 
 	/**
-	Set its access parameters.
+	@brief Set its parameters.
 	*/
 	void Param(GLenum target, GLfloat param);
 	void Param(GLenum target, GLint param);
@@ -75,7 +84,7 @@ protected:
 	~TexturePic();
 
 	/**
-	The default sampler.
+	@brief The default sampler.
 	*/
 	SamplerPack defaultSampler;
 
@@ -87,7 +96,6 @@ protected:
 
 /**
 1D textures.
-Wait... Do we actually need this?
 */
 /*
 class Texture1D : public TexturePic
@@ -106,6 +114,7 @@ public:
 class Texture2D : public TexturePic
 {
 public:
+	Texture2D() = default;
 	Texture2D(std::string Path, GLenum layout);
 
 	void Attach() override;
@@ -116,6 +125,7 @@ public:
 class TextureRect : public TexturePic
 {
 public:
+	TextureRect() = default;
 	TextureRect(std::string Path, GLenum layout);
 
 	void Attach() override;
@@ -126,6 +136,7 @@ public:
 class TextureCube : public TexturePic
 {
 public:
+	TextureCube() = default;
 	TextureCube(std::string Path, GLenum layout);
 
 	void Attach() override;
@@ -136,6 +147,7 @@ public:
 class TextureMultiSamp : public TexturePic
 {
 public:
+	TextureMultiSamp() = default;
 	TextureMultiSamp(std::string Path, GLenum layout);
 
 	void Attach() override;
