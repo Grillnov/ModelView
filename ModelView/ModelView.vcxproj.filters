@@ -60,9 +60,6 @@
     <ClInclude Include="..\include\VertexArrayPack.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\Demo\Phong.hpp">
-      <Filter>demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\CameraView.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -71,9 +68,6 @@
     </ClInclude>
     <ClInclude Include="..\include\TextureTable.hpp">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\demo\TexPlain.hpp">
-      <Filter>demo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="..\src\LogCallStack.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\Phong.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\TexPlain.cpp">
+      <Filter>demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
