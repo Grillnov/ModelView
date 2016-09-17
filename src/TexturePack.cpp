@@ -39,7 +39,8 @@ void TexturePic::Param(GLenum target, GLint* param)
 
 TexturePic::~TexturePic()
 {
-	delete[] this->Buffer;
+	if (isFromFile)
+		delete[] this->Buffer;
 }
 
 Texture2D::Texture2D(std::string Path, GLenum layout)
@@ -51,6 +52,7 @@ Texture2D::Texture2D(std::string Path, GLenum layout)
 	LoadFromBMP(Path);
 	OccupiedLayouts.emplace(layout);
 	this->layout = layout;
+	this->isFromFile = true;
 	Log(debugMsg, "Texture at layout slot %u is now ready for attaching.", layout);
 }
 
