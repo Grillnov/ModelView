@@ -8,8 +8,8 @@
 
 # include <AllinGL.h>
 
-# ifndef CAMERAVIEW
-# define CAMERAVIEW
+# ifndef __ModelView__Cam__
+# define __ModelView__Cam__
 
 namespace ModelView
 {

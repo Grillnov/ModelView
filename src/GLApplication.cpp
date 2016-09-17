@@ -7,9 +7,9 @@
 //
 //  Modified by Bowen Yang
 
-# include "GLApplication.h"
+# include <GLApplication.h>
 
-# include "BenchmarkTimer.h"
+# include <BenchmarkTimer.h>
 
 BenchmarkTimer GlobalTimer;// A global timer, for performance benchmarking.
 GLApplication* GLApplication::fInstance = nullptr;

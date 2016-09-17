@@ -6,14 +6,14 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef PROGRAMPACK
-# define PROGRAMPACK
+# ifndef __ModelView__ProgramPack__
+# define __ModelView__ProgramPack__
 
-# include "AllinGL.h"
-# include "ShaderPack.h"
+# include <AllinGL.h>
+# include <ShaderPack.h>
 # include <unordered_map>
 
-class ProgramPack : public GLAttachable, public GLObject
+class ProgramPack : public GLAttachable
 {
 private:
 	std::unordered_map<GLenum, ShaderPack*> ShaderTable;
@@ -113,7 +113,7 @@ public:
 	/**
 	Convert to GLuint.
 	*/
-	operator GLuint();
+	operator GLuint() override;
 };
 
 # endif

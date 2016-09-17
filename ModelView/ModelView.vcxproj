@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Demo\Phong.hpp" />
-    <ClInclude Include="..\demo\TexPlain.hpp" />
     <ClInclude Include="..\include\AllinGL.h" />
     <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
@@ -29,13 +27,14 @@
     <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\demo\Phong.cpp" />
+    <ClCompile Include="..\demo\TexPlain.cpp" />
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
     <ClCompile Include="..\src\LoadBMP.cpp" />
     <ClCompile Include="..\src\SamplerPack.cpp" />
     <ClCompile Include="..\src\TexturePack.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />

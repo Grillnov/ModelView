@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef BENCHMARKTIMER
-# define BENCHMARKTIMER
+# ifndef __ModelView__BenchmarkTimer__
+# define __ModelView__BenchmarkTimer__
 
 # ifdef _MSC_VER
 # include <Windows.h>
