@@ -75,7 +75,7 @@ void Texture2D::Attach(GLint GLinternalformat, GLboolean generateMipMap)
 
 	if (generateMipMap)
 	{
-		glGenerateTextureMipmap(*this);
+		glGenerateTextureMipmap(this->AssetID);
 	}
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
