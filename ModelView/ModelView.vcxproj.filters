@@ -110,9 +110,6 @@
     <ClCompile Include="..\src\LogCallStack.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\demo\Phong.cpp">
-      <Filter>demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\demo\TexPlain.cpp">
       <Filter>demo</Filter>
     </ClCompile>

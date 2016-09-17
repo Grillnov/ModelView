@@ -62,4 +62,6 @@ public:
 		Program.Detach();
 	}
 };
+
+RunInstance(Phong, 640, 480)
 # endif

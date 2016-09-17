@@ -27,7 +27,6 @@
     <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\demo\Phong.cpp" />
     <ClCompile Include="..\demo\TexPlain.cpp" />
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
@@ -75,13 +74,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\util;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\util;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
