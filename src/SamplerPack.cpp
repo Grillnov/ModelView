@@ -1,3 +1,11 @@
+//
+//  ProgramPack.cpp
+//  ModelView
+//
+//  Created by Bowen Yang on Aug 17, 2016.
+//  Copyright (c) 2016 Bowen Yang. All rights reserved.
+//
+
 # include <TexturePack.h>
 
 void SamplerPack::Attach()
@@ -34,8 +42,8 @@ SamplerPack::operator GLuint()
 {
 	if (!this->isAttached)
 	{
-		Warning(debugMsg, "Sampler %u is not attached yet, illegal parameter for GL interface.");
-		return 0;
+		Error(debugMsg, "Sampler %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+		return -1;
 	}
 	else
 		return this->AssetID;

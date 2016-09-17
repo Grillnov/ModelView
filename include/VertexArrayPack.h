@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef VERTEXARRAYPACK
-# define VERTEXARRAYPACK
+# ifndef __ModelView__VertexArrayPack__
+# define __ModelView__VertexArrayPack__
 
 # include <AllinGL.h>
 # include <BufferPack.hpp>
@@ -22,7 +22,7 @@ struct Attrib
 	Attrib(GLuint buf, GLuint comp, GLenum type) : bufferHandle(buf), components(comp), type(type) {}
 };
 
-class VertexArrayPack : public GLObject, public GLAttachable
+class VertexArrayPack : public GLAttachable
 {
 private:
 	/**
@@ -60,11 +60,6 @@ public:
 	Bind the vertex array.
 	*/
 	void Bind();
-
-	/**
-	Restore the vertexarray binding point to its default state.
-	*/
-	//void UnBind();
 
 	/**
 	Just an utility function.

@@ -34,7 +34,7 @@ ShaderPack::ShaderPack(std::string Path, GLenum type) :Path(Path), ShaderType(ty
 void ShaderPack::LoadFromText(std::string Path, std::fstream& fin)
 {
 	SrcCode.assign(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
-	Log(debugMsg, "Shader source code loaded to memory, length: %u", Path.size());
+	Info(debugMsg, "Shader source code loaded to memory, length: %u", Path.size());
 	fin.close();
 }
 

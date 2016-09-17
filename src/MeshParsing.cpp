@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include "MeshPack.h"
+# include <MeshPack.h>
 # include <vector>
 # include <set>
 # include <sstream>

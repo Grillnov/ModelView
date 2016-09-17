@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef TEXTUREPACK
-# define TEXTUREPACK
+# ifndef __ModelView__TexturePack__
+# define __ModelView__TexturePack__
 
 # include <AllinGL.h>
 # include <set>
@@ -16,29 +16,25 @@
 Samplers. You may want to add samplers for textures yourself, or just
 use the default sampler and modify its parameters.
 */
-class SamplerPack : public GLObject, public GLAttachable
+class SamplerPack : public GLAttachable
 {
 public:
 	void Attach() override;
 	void Detach() override;
-
-	operator GLuint();
+	operator GLuint() override;
 
 	void Param(GLenum target, GLfloat param);
 	void Param(GLenum target, GLint param);
 	void Param(GLenum target, GLfloat* param);
 	void Param(GLenum target, GLint* param);
-private:
-	GLuint BindedSlot;
 };
 
 /**
 Virtual base class for all kinds of textures.
 */
-class TexturePack : public GLObject, public GLAttachable
+class TexturePack : public GLAttachable
 {
 public:
-	operator GLuint();
 protected:
 	/**
 	Layout index for the sampler in GLSL.
@@ -51,9 +47,9 @@ protected:
 	static std::set<GLenum> OccupiedLayouts;
 
 	/**
-	Query which texture binding point is active right now.
+	@brief Convert to GLuint.
 	*/
-	//static GLenum currentActiveTex;
+	operator GLuint() override;
 };
 
 /**

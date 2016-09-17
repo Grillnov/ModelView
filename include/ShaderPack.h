@@ -11,7 +11,7 @@
 
 # include "AllinGL.h"
 
-class ShaderPack : public GLAttachable, public GLObject
+class ShaderPack : public GLAttachable
 {
 private:
 	std::string Path;//Where do the asset sleep?

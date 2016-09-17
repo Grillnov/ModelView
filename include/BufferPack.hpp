@@ -6,18 +6,17 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef BUFFERPACK
-# define BUFFERPACK
+# ifndef __ModelView__BufferPack__
+# define __ModelView__BufferPack__
 
 # include "AllinGL.h"
-# include <exception>
 
 /**
 Chunks of continuous memory as buffer objects.
 Generic class for all kinds of buffers.
 */
 template<typename GLclientside>
-class BufferPack : public GLObject, public GLAttachable
+class BufferPack : public GLAttachable
 {
 private:
 	/**
@@ -107,10 +106,7 @@ public:
 	/**
 	Converter to GLuint.
 	*/
-	operator GLuint()
-	{
-		return this->AssetID;
-	}
+	operator GLuint() override;
 };
 
 template<typename GLclientside>
@@ -219,6 +215,7 @@ GLclientside& BufferPack<GLclientside>::operator[](GLsizei index)
 		return *(this->MappedPtr + index);
 	}
 }
+
 template<typename GLclientside>
 GLclientside& BufferPack<GLclientside>::at(GLsizei index)
 {
@@ -240,6 +237,17 @@ void BufferPack<GLclientside>::Done()
 	Log(debugMsg, "Synchorized memory for buffer %u", this->AssetID);
 
 	this->isMapped = false;
+}
+
+template<typename GLclientside>
+BufferPack<GLclientside>::operator GLuint()
+{
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Buffer %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+		return -1;
+	}
+	return this->AssetID;
 }
 
 # endif

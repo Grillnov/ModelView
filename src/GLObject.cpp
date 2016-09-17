@@ -7,28 +7,102 @@
 //
 //  Modified by Bowen Yang
 
-# include "GLObject.h"
-# include "GLApplication.h"
-
-extern void printStackTrace();
+# include <GLObject.h>
+# include <GLApplication.h>
 
 # ifdef _MSC_VER
 
-# include <Windows.h>
 HANDLE consoleH = nullptr;
 WORD defaultAttr;
 CONSOLE_SCREEN_BUFFER_INFO csbInfo;
 
+void consoleLogGreen()
+{
+	if (!consoleH)
+	{
+		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
+		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
+		defaultAttr = csbInfo.wAttributes;
+	}
+	SetConsoleTextAttribute(consoleH, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+}
+
+void consoleInfoPink()
+{
+	if (!consoleH)
+	{
+		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
+		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
+		defaultAttr = csbInfo.wAttributes;
+	}
+	SetConsoleTextAttribute(consoleH, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+}
+
+void consoleWarningYellow()
+{
+	if (!consoleH)
+	{
+		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
+		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
+		defaultAttr = csbInfo.wAttributes;
+	}
+	SetConsoleTextAttribute(consoleH, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+}
+
+void consoleErrorRed()
+{
+	if (!consoleH)
+	{
+		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
+		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
+		defaultAttr = csbInfo.wAttributes;
+	}
+	SetConsoleTextAttribute(consoleH, FOREGROUND_RED | FOREGROUND_INTENSITY);
+}
+
+void consoleDefaultWhite()
+{
+	if (!consoleH)
+	{
+		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
+		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
+		defaultAttr = csbInfo.wAttributes;
+	}
+	SetConsoleTextAttribute(consoleH, defaultAttr);
+}
+
 # else
 
-# define RESET_F "\033[0m"
-# define PURPLE_F "\033[0;35m"
-# define RED_F "\033[0;31m"
-# define YELLOW_F "\033[0;33m"
-# define GREEN_F "\033[0;32m"
+void consoleLogGreen()
+{
+	printf("\033[0;32m");
+}
+
+void consoleInfoPink()
+{
+	printf("\033[0;35m");
+}
+
+void consoleWarningYellow()
+{
+	printf("\033[0;33m");
+}
+
+void consoleErrorRed()
+{
+	printf("\033[0;31m");
+}
+
+void consoleContentWhite()
+{
+	printf("\033[0m");
+}
 
 # endif
-// TODO: Add color to these titles shown on the console
+
+
+
+
 
 void GLObject::CheckStatus(const char* function)
 {
@@ -39,8 +113,8 @@ void GLObject::CheckStatus(const char* function)
 	static bool firstCall = true;
 	if (error != GL_NO_ERROR)
 	{
-		Warning(debugMsg, "Error spotted during the execution of function: %s!", function);
-		Error(debugMsg, "Fatal OpenGL Error %d:\n %s", error, glewGetErrorString(error));
+		Error(debugMsg, "Error spotted during the execution of function: %s!\n"
+			"Fatal OpenGL Error %d:\n %s", function, error, glewGetErrorString(error));
 	}
 }
 
@@ -51,20 +125,12 @@ void GLObject::Log(const char* file, unsigned line, const char* function, const 
 # endif
 
 	va_list ap;
-# ifndef _MSC_VER
-	printf(GREEN_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);
-# else
-	if (!consoleH)
-	{
-		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
-		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
-		defaultAttr = csbInfo.wAttributes;
-	}
-	SetConsoleTextAttribute(consoleH, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+	consoleLogGreen();
 	printf("[LOG]");
-	SetConsoleTextAttribute(consoleH, defaultAttr);
+	consoleDefaultWhite();
 	printf("[File: %s][Line: %u][Function: %s]: ", file, line, function);
-# endif
+
 	va_start(ap, msg);
 	vprintf(msg, ap);
 	printf("\n");
@@ -78,20 +144,12 @@ void GLObject::Info(const char* file, unsigned line, const char* function, const
 # endif
 
 	va_list ap;
-# ifndef _MSC_VER
-	printf(PURPLE_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);
-# else
-	if (!consoleH)
-	{
-		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
-		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
-		defaultAttr = csbInfo.wAttributes;
-	}
-	SetConsoleTextAttribute(consoleH, FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+	consoleInfoPink();
 	printf("[INFO]");
-	SetConsoleTextAttribute(consoleH, defaultAttr);
+	consoleDefaultWhite();
 	printf("[File: %s][Line: %u][Function: %s]: ", file, line, function);
-# endif
+
 	va_start(ap, msg);
 	vprintf(msg, ap);
 	printf("\n");
@@ -101,20 +159,12 @@ void GLObject::Info(const char* file, unsigned line, const char* function, const
 void GLObject::Warning(const char* file, unsigned line, const char* function, const char* msg, ...)
 {
 	va_list ap;
-# ifndef _MSC_VER
-	printf(YELLOW_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);
-# else
-	if (!consoleH)
-	{
-		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
-		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
-		defaultAttr = csbInfo.wAttributes;
-	}
-	SetConsoleTextAttribute(consoleH, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+	consoleWarningYellow();
 	printf("[WARNING]");
-	SetConsoleTextAttribute(consoleH, defaultAttr);
+	consoleDefaultWhite();
 	printf("[File: %s][Line: %u][Function: %s]: ", file, line, function);
-# endif
+
 	va_start(ap, msg);
 	vprintf(msg, ap);
 	printf("\n");
@@ -127,20 +177,12 @@ void GLObject::Warning(const char* file, unsigned line, const char* function, co
 void GLObject::Error(const char* file, unsigned line, const char* function, const char* msg, ...)
 {
 	va_list ap;
-# ifndef _MSC_VER
-	printf(RED_F"[LOG]"RESET_F"[file: %s][at line: %u][at function: %s]: ", file, line, function);
-# else
-	if (!consoleH)
-	{
-		consoleH = GetStdHandle(STD_OUTPUT_HANDLE);
-		GetConsoleScreenBufferInfo(consoleH, &csbInfo);
-		defaultAttr = csbInfo.wAttributes;
-	}
-	SetConsoleTextAttribute(consoleH, FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+	consoleErrorRed();
 	printf("[ERROR]");
-	SetConsoleTextAttribute(consoleH, defaultAttr);
+	consoleDefaultWhite();
 	printf("[File: %s][Line: %u][Function: %s]: ", file, line, function);
-# endif
+
 	va_start(ap, msg);
 	vprintf(msg, ap);
 	printf("\n");

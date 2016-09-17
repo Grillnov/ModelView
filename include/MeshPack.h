@@ -6,8 +6,9 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef MESHPACK
-# define MESHPACK
+# ifndef __ModelView__MeshPack__
+# define __ModelView__MeshPack__
+
 # include "AllinGL.h"
 # include "BufferPack.hpp"
 # include "VertexArrayPack.h"
@@ -35,14 +36,13 @@ private:
 	*/
 	BufferPack<GLfloat> TextureCoord;
 	/**
+	Tangent coordinates.
+	*/
+	BufferPack<GLfloat> Tangent;
+	/**
 	Buffer storing indices of vertex, defining how triangles are assembled.
 	*/
 	BufferPack<GLuint> ElementArr;
-
-	/**
-	Buffer storing tangent coordinates for normal mapping
-	*/
-	//BufferPack<GLfloat>* TangentCoord; //Wait...Do we actually need this?
 
 	/**
 	We may need this path later as a designator to the mesh.
@@ -55,11 +55,6 @@ private:
 	GLfloat MassCenter[3];
 
 	/**
-	Sometimes 3D models in plain text can't fit into NDS coordinates and we have to scale them down.
-	*/
-	//GLfloat scale;
-
-	/**
 	How many triangles and how many vertices are there in the mesh?
 	*/
 	size_t SizeInTriangles;
@@ -67,7 +62,7 @@ private:
 
 	/**
 	Mesh object is not a GLAttachable, for there's no such thing as
-	glGenMesh(), and literally
+	glGenMesh(), and assetID has literally zero meaning.
 	*/
 	bool isAttached;
 
@@ -91,16 +86,11 @@ private:
 	*/
 	void LoadFromBinary(std::string Path, std::fstream& fout);
 
-	/**
-	Generate tangent for normal mapping.
-	*/
-	void GenTangent();
-
-	/**
-	Move the mesh so that it's centered on the origin.
-	*/
-	//void AlignCenter();
 public:
+	/**
+	@brief Default constructor.
+	*/
+	MeshPack() = default;
 	/** 
 	@brief Constructor.
 	@params
@@ -109,22 +99,27 @@ public:
 	MeshPack(std::string Path);
 
 	/**
-	Attach this mesh, creating GLVertexArray, AttribPointer and stuff.
+	@brief Attach this mesh, creating GLVertexArray, AttribPointer and stuff.
 	*/
 	void Attach();
 
 	/**
-	Detach this mesh.
+	@brief Detach this mesh.
 	*/
 	void Detach();
 
 	/**
-	GLDraw. Invoking drawcalls to render the mesh.
+	@brief GLDraw. Invoking drawcalls to render the mesh.
 	*/
 	void DrawMesh(GLenum mode = GL_TRIANGLES);
 
 	/**
-	Add customized buffers as new vertex attrib arrays.
+	@brief Generate tangent for normal mapping.
+	*/
+	void GenTangent();
+
+	/**
+	@brief Add customized buffers as new vertex attrib arrays.
 	*/
 	void AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components);
 	void AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components);

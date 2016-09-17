@@ -7,10 +7,11 @@
 //
 //  Modified by Bowen Yang
 
-# include "AllinGL.h"
+# include <AllinGL.h>
+# include <GLObject.h>
 
-# ifndef GLATTACHABLE
-# define GLATTACHABLE
+# ifndef __ModelView__GLAttachable__
+# define __ModelView__GLAttachable__
 
 /**
  * @brief Interface of a OpenGL attachable resource.
@@ -23,31 +24,52 @@
  * is forbidden, but resources like meshes, textures could have buffer
  * prepared in memory, to reduce OpenGL object init time.
  */
-class GLAttachable
+class GLAttachable : public GLObject
 {
 protected:
 	/**
+	@brief
 	Its asset name on the server side.
 	*/
 	GLuint AssetID;
 	/**
+	@brief
 	To tell whether it's attached or not.
 	*/
 	bool isAttached;
 public:
+	/**
+	@brief Default constructor.
+	*/
 	GLAttachable() : AssetID(0), isAttached(false) {}
 	/**
-	Attach the asset, so that GL object is created on the server side
+	@brief Attach the asset, so that GL object is created on the server side
 	*/
 	virtual void Attach() = 0;
 	/**
-	Detach the asset, so that GL object ID is recycled.
+	@brief Detach the asset, so that GL object ID can be reused.
 	*/
 	virtual void Detach() = 0;
 	/**
-	Telling whether it's attached.
+	@brief Telling whether it's attached.
 	*/
-	virtual bool IsAttached() { return this->isAttached; }
+	virtual bool IsAttached()
+	{
+		return this->isAttached;
+	}
+	/**
+	@brief Transformation to GLuint so that assets can be directly used as 
+	parameters to invoke raw GL interfaces.
+	*/
+	virtual operator GLuint()
+	{
+		if (!this->isAttached)
+		{
+			Error(debugMsg, "Buffer %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+			return -1;
+		}
+		return this->AssetID;
+	}
 };
 
 # endif

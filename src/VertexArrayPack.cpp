@@ -150,11 +150,11 @@ void VertexArrayPack::Bind()
 	CheckStatus(__FUNCTION__);
 }
 
-void VertexArrayPack::UnBind()
+/*void VertexArrayPack::UnBind()
 {
 	glBindVertexArray(0);
 	CheckStatus(__FUNCTION__);
-}
+}*/
 
 VertexArrayPack::operator GLuint()
 {

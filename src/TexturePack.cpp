@@ -12,6 +12,11 @@ std::set<GLenum> TexturePack::OccupiedLayouts = std::set<GLenum>();
 
 TexturePack::operator GLuint()
 {
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Texture %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+		return -1;
+	}
 	return this->AssetID;
 }
 
