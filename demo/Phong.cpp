@@ -63,5 +63,5 @@ public:
 	}
 };
 
-RunInstance(Phong, 640, 480)
+//RunInstance(Phong, 640, 480)
 # endif

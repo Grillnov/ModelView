@@ -11,7 +11,7 @@ class TexPlain : public FPSApplication
 private:
 	MeshPack Pack;
 	ProgramPack Program, Program2;
-	Texture2D White;
+	Texture1D White;
 public:
 	virtual void CreateApplication()
 	{
@@ -19,7 +19,16 @@ public:
 		Pack = MeshPack("D:/ModelView/assets/BasePlain.obj");
 		Pack.Attach();
 
-		White = Texture2D("D:/ModelView/assets/trial.bmp", 0);
+		unsigned char simpleTex[12] =
+		{
+			23, 134, 32,
+			45, 23, 155,
+			144, 23, 12,
+			2, 4, 255
+		};
+
+		White = Texture1D("D:/ModelView/assets/trial.bmp", 0);
+		//White = Texture1D(&simpleTex[0], 2, 0);
 		White.Attach();
 
 		Program.AddShader("D:/ModelView/shaders/texvert.glsl", GL_VERTEX_SHADER);

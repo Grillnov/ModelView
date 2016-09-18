@@ -57,8 +57,7 @@ protected:
 };
 
 /**
-Textures that are used for 'textures', that is to say, they are sampled as pictures,
-not arrays or tables.
+Base class for singular textures, initialized from BMPs or local pointers.
 */
 class TexturePic : public TexturePack
 {
@@ -66,13 +65,61 @@ public:
 	/**
 	@brief Default constructor.
 	*/
-	TexturePic() = default;
+	TexturePic();
 protected:
 	/**
 	@brief Load the texture from a BMP file.
 	*/
 	void LoadFromBMP(std::string Path);
+	/**
+	@brief Set the way the texture is sampled.
+	*/
+	void Param(GLenum target, GLfloat param);
+	void Param(GLenum target, GLint param);
+	void Param(GLenum target, GLfloat* param);
+	void Param(GLenum target, GLint* param);
 
+	/**
+	@brief The default sampler.
+	*/
+	SamplerPack defaultSampler;
+	/**
+	Width.
+	*/
+	GLsizei xWidth;
+	/**
+	Height.
+	*/
+	GLsizei yHeight;
+	/**
+	Number of channels.
+	*/
+	int Channel;
+	/**
+	The BMP pixel buffer.
+	*/
+	unsigned char *Buffer;
+	/**
+	Is the texture from a file? If so we have to recycle the buffer memory by ourselves...
+	*/
+	bool isFromFile;
+};
+
+/**
+Base class for array textures, grouping multiple textures into an array.
+*/
+class TextureArr : public TexturePack
+{
+public:
+	/**
+	@brief Default constructor.
+	*/
+	TextureArr() = default;
+protected:
+	/**
+	@brief Load the texture from a BMP file.
+	*/
+	void LoadFromBMP(std::string Path);
 	/**
 	@brief Set its parameters.
 	*/
@@ -81,32 +128,51 @@ protected:
 	void Param(GLenum target, GLfloat* param);
 	void Param(GLenum target, GLint* param);
 
-	//~TexturePic();
-
 	/**
 	@brief The default sampler.
 	*/
 	SamplerPack defaultSampler;
-
+	/**
+	Width.
+	*/
 	GLsizei xWidth;
+	/**
+	Height.
+	*/
 	GLsizei yHeight;
+	/**
+	Number of channels.
+	*/
 	int Channel;
+	/**
+	The BMP pixel buffer.
+	*/
 	char *Buffer;
 };
 
 /**
 1D textures.
 */
-/*
 class Texture1D : public TexturePic
 {
 public:
+	/**
+	@brief The default constructor
+	*/
+	Texture1D() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	Texture1D(unsigned char* Buffer, size_t width, GLenum layout);
+	/**
+	@brief Initialize the texture from pictures.
+	*/
 	Texture1D(std::string Path, GLenum layout);
 
 	void Attach() override;
+	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
 	void Detach() override;
 };
-*/
 
 /**
 2D textures.
@@ -114,29 +180,97 @@ public:
 class Texture2D : public TexturePic
 {
 public:
+	/**
+	@brief The default constructor
+	*/
 	Texture2D() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	Texture2D(unsigned char* pixels, size_t width, size_t height, GLenum layout);
+	/**
+	@brief Initialize the texture from pictures.
+	*/
 	Texture2D(std::string Path, GLenum layout);
 
 	void Attach() override;
-	void Attach(GLint internalFormat, GLboolean generateMipMap);
+	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
 	void Detach() override;
 };
 
+/**
+Rectangular textures.
+*/
 class TextureRect : public TexturePic
 {
 public:
+	/**
+	@brief The default constructor
+	*/
 	TextureRect() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	TextureRect(unsigned char* pixels, size_t width, size_t height, GLenum layout);
+	/**
+	@brief Initialize the texture from pictures.
+	*/
 	TextureRect(std::string Path, GLenum layout);
 
 	void Attach() override;
-	void Attach(GLint internalFormat, GLboolean generateMipMap);
+	void Attach(GLint clientsideFormat, GLint internalFormat);
 	void Detach() override;
 };
 
-class TextureCube : public TexturePic
+/**
+Multisampling textures.
+*/
+class TextureMultiSamp : public TexturePic
 {
 public:
+	/**
+	@brief The default constructor
+	*/
+	TextureMultiSamp() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	TextureMultiSamp(unsigned char* Buffer, size_t width, size_t height, GLenum layout);
+	/**
+	@brief Initialize the texture from pictures.
+	*/
+	TextureMultiSamp(std::string Path, GLenum layout);
+
+	void Attach() override;
+	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
+	void Detach() override;
+};
+
+/**
+3D textures.
+*/
+class Texture3D : public TexturePic
+{
+
+};
+
+/**
+Cube maps.
+*/
+class TextureCube : public TextureArr
+{
+public:
+	/**
+	@brief The default constructor
+	*/
 	TextureCube() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	TextureCube(unsigned char* Buffer, size_t width, size_t height);
+	/**
+	@brief Initialize the texture from pictures.
+	*/
 	TextureCube(std::string Path, GLenum layout);
 
 	void Attach() override;
@@ -144,18 +278,9 @@ public:
 	void Detach() override;
 };
 
-class TextureMultiSamp : public TexturePic
-{
-public:
-	TextureMultiSamp() = default;
-	TextureMultiSamp(std::string Path, GLenum layout);
-
-	void Attach() override;
-	void Attach(GLint internalFormat, GLboolean generateMipMap);
-	void Detach() override;
-};
-
-/*
+/**
+1D texture arrays.
+*/
 class Texture1DArray : public TexturePic
 {
 public:
@@ -167,6 +292,9 @@ private:
 	int* Buffer;
 };
 
+/**
+2D texture arrays.
+*/
 class Texture2DArray : public TexturePic
 {
 public:
@@ -177,5 +305,5 @@ private:
 	GLsizei size;
 	int* Buffer;
 };
-*/
+
 # endif

@@ -66,9 +66,6 @@
     <ClInclude Include="..\util\FPSApplication.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\TextureTable.hpp">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GLApplication.cpp">
@@ -112,6 +109,24 @@
     </ClCompile>
     <ClCompile Include="..\demo\TexPlain.cpp">
       <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\Phong.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture1D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PrintGLErrorStr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture2D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureRect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureCube.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
