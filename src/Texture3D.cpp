@@ -26,7 +26,7 @@ Texture3D::Texture3D(unsigned char* pixel, size_t width, size_t height, size_t d
 	this->layout = layout;
 }
 
-Texture3D::Texture3D(std::string Path, GLenum layout)
+/*Texture3D::Texture3D(std::string Path, GLenum layout)
 {
 	if (layout > GL_TEXTURE0)
 		layout -= GL_TEXTURE0;
@@ -41,7 +41,7 @@ Texture3D::Texture3D(std::string Path, GLenum layout)
 	OccupiedLayouts.emplace(layout);
 	this->layout = layout;
 	Log(debugMsg, "Texture at layout slot %u is now ready for attaching.", layout);
-}
+}*/
 
 void Texture3D::Attach()
 {
