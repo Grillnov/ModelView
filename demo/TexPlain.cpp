@@ -71,5 +71,5 @@ public:
 	}
 };
 
-RunInstance(TexPlain, 640, 480)
+//RunInstance(TexPlain, 640, 480)
 # endif
