@@ -251,7 +251,21 @@ public:
 */
 class Texture3D : public TexturePic
 {
+public:
+	/**
+	@brief The default constructor
+	*/
+	Texture3D() = default;
+	/**
+	@brief Initialize the texture from local pointers.
+	*/
+	Texture3D(unsigned char* pixels, size_t width, size_t height, size_t depth, GLenum layout);
 
+	void Attach() override;
+	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
+	void Detach() override;
+private:
+	GLsizei dDepth;
 };
 
 /**

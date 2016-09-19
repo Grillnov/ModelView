@@ -45,6 +45,7 @@
     <ClCompile Include="..\src\LogCallStack.cpp" />
     <ClCompile Include="..\src\TextureRect.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
+    <ClCompile Include="..\src\Texture3D.cpp" />
     <ClCompile Include="..\util\FPSApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
