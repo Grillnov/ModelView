@@ -1,5 +1,5 @@
 //
-//  CameraView.hpp
+//  CameraView.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 23, 2016.
@@ -9,137 +9,135 @@
 # include <AllinGL.h>
 # include <CameraView.h>
 
-using namespace ModelView;
-
-Cam::Cam() : FOV(45.0f)
+CameraView::CameraView() : FOV(45.0f)
 {
 	Location = glm::vec3(0.0f, 0.0f, 1.0f);
 	UpOrientation = glm::vec3(0.0f, 1.0f, 0.0f);
 	LookAtOrientation = glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
-glm::vec3 Cam::getOrientation()
+glm::vec3 CameraView::getOrientation()
 {
 	return glm::normalize(this->LookAtOrientation);
 }
 
-glm::vec3 Cam::getHorizontalOrientation()
+glm::vec3 CameraView::getHorizontalOrientation()
 {
 	return glm::normalize(glm::vec3(LookAtOrientation[0], 0.0f, LookAtOrientation[2]));
 }
 
-glm::vec3 Cam::getVerticalOrientation()
+glm::vec3 CameraView::getVerticalOrientation()
 {
 	return glm::normalize(this->UpOrientation);
 }
 
-glm::vec3 Cam::getLeftOrientation()
+glm::vec3 CameraView::getLeftOrientation()
 {
 	return glm::normalize(glm::cross(getVerticalOrientation(), getOrientation()));
 }
 
-glm::vec3 Cam::getHorizontalLeftOrientation()
+glm::vec3 CameraView::getHorizontalLeftOrientation()
 {
 	return glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), getHorizontalOrientation()));
 }
 
-void Cam::Move(glm::vec3 offset)
+void CameraView::Move(glm::vec3 offset)
 {
 	this->Location += offset;
 }
 
-void Cam::MoveForward(float distance)
+void CameraView::MoveForward(float distance)
 {
 	Move(distance*getOrientation());
 }
 
-void Cam::MoveBackward(float distance)
+void CameraView::MoveBackward(float distance)
 {
 	Move(-distance*getOrientation());
 }
 
-void Cam::MoveHorizontalForward(float distance)
+void CameraView::MoveHorizontalForward(float distance)
 {
 	Move(distance*getHorizontalOrientation());
 }
 
-void Cam::MoveHorizontalBackward(float distance)
+void CameraView::MoveHorizontalBackward(float distance)
 {
 	Move(-distance*getHorizontalOrientation());
 }
 
-void Cam::MoveHorizontalLeft(float distance)
+void CameraView::MoveHorizontalLeft(float distance)
 {
 	Move(distance*getHorizontalLeftOrientation());
 }
 
-void Cam::MoveHorizontalRight(float distance)
+void CameraView::MoveHorizontalRight(float distance)
 {
 	Move(-distance*getHorizontalLeftOrientation());
 }
 
-void Cam::MoveLeft(float distance)
+void CameraView::MoveLeft(float distance)
 {
 	Move(distance*getLeftOrientation());
 }
 
-void Cam::MoveRight(float distance)
+void CameraView::MoveRight(float distance)
 {
 	Move(-distance*getLeftOrientation());
 }
 
-void Cam::MoveUp(float distance)
+void CameraView::MoveUp(float distance)
 {
 	Move(distance*getVerticalOrientation());
 }
 
-void Cam::MoveDown(float distance)
+void CameraView::MoveDown(float distance)
 {
 	Move(-distance*getVerticalOrientation());
 }
 
-void Cam::Up(glm::vec3 up)
+void CameraView::Up(glm::vec3 up)
 {
 	this->UpOrientation = up;
 }
 
-void Cam::Look(glm::vec3 lookat)
+void CameraView::Look(glm::vec3 lookat)
 {
 	this->LookAtOrientation = lookat;
 }
 
-void Cam::Swivel(glm::vec3 rotation)
+void CameraView::Swivel(glm::vec3 rotation)
 {
 	this->LookAtOrientation += rotation;
 }
 
-void Cam::SetFOV(float FOV)
+void CameraView::SetFOV(float FOV)
 {
 	this->FOV = FOV;
 }
 
-void Cam::Zoom(float scale)
+void CameraView::Zoom(float scale)
 {
 	this->FOV *= scale;
 }
 
-void Cam::ZoomIn(float scale)
+void CameraView::ZoomIn(float scale)
 {
 	this->FOV *= 1.0f - scale;
 }
 
-void Cam::ZoomOut(float scale)
+void CameraView::ZoomOut(float scale)
 {
 	this->FOV *= 1.0f + scale;
 }
 
-glm::mat4 Cam::GetModelView(glm::mat4 Model)
+glm::mat4 CameraView::GetModelView(glm::mat4 Model)
 {
 	glm::mat4 View = glm::lookAt(Location, getOrientation(), getVerticalOrientation()) * Model;
 	return View;
 }
 
-glm::mat4 Cam::GetModelViewProjection(float AspectRatio, glm::mat4 Model, float nearP, float farP)
+glm::mat4 CameraView::GetModelViewProjection(float AspectRatio, glm::mat4 Model, float nearP, float farP)
 {
 	glm::mat4 Projection = glm::perspective(glm::radians(this->FOV), AspectRatio, nearP, farP);
 	glm::mat4 View = glm::lookAt(this->Location, getOrientation(), getVerticalOrientation()) * Model;

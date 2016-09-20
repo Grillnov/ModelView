@@ -1,5 +1,5 @@
 //
-//  VertexArrayPack.h
+//  FPSApplication.h
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 24, 2016.
@@ -16,7 +16,7 @@
 class FPSApplication : public GLApplication
 {
 public:
-	ModelView::Cam FPSCamera;
+	CameraView FPSCamera;
 
 	void HandleController() override;
 

@@ -1,5 +1,5 @@
 //
-//  BufferPack.h
+//  BufferPack.hpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 4, 2016.
@@ -16,31 +16,30 @@
 Generic class for all kinds of buffers.
 Note that this buffer class only serves as a shell injecting data into server side.
 There's not a copy at client side.
-@template params GLclientside the client side types defined by OpenGL standard.
+@param GLclientside the client side types defined by OpenGL standard.
 Such as GLint, GLuint, GLfloat, GLdouble, etc.
 */
 template<typename GLclientside>
 class BufferPack : public GLAttachable
 {
 private:
-	/**
+	/*
 	Amount of elements.
 	*/
 	GLsizei num_of_elements;
 
-	/**
+	/*
 	Local pointer to server side memory.
 	*/
 	GLclientside* MappedPtr;
 
-	/**
+	/*
 	Is there any pointer on the client side mapped to this buffer?
 	*/
 	bool isMapped;
 public:
 	/**
-	@brief
-	Returns how many elements there are in this buffer.
+	@brief Returns how many elements there are in this buffer.
 	*/
 	GLsizei Size()
 	{
@@ -48,22 +47,18 @@ public:
 	}
 
 	/**
-	@brief
-	Default constructor that returns a dummy buffer.
+	@brief Default constructor that returns a dummy buffer.
 	*/
 	BufferPack() = default;
 
 	/**
-	@brief
-	Constructing a buffer object ready for elements.
-	@params
-	num_of_elements: the number of elements you need.
+	@brief Constructing a buffer object ready for elements.
+	@param num_of_elements The number of elements you need.
 	*/
 	BufferPack(GLsizei num_of_elements);
 
 	/**
-	@brief
-	A naiver version of Attach().
+	@brief A naiver version of Attach().
 	Effective, yet may cause some performance issues.
 	Simply register the asset, allocate memory on the server side so that you can assign its data
 	via operator[] from local memory, with target hint set as GL_COPY_WRITE_BUFFER, and usage hint
@@ -72,69 +67,59 @@ public:
 	void Attach() override;
 
 	/**
-	@brief
-	When glBufferData is invoked, specified binding target and usage will affect
+	@brief When glBufferData is invoked, specified binding target and usage will affect
 	the memory location allocated for this buffer on the server side.
 	Use naiver Attach() is recommended when you're not so sure how to boost memory
 	access performance by designating target and usage.
-	@params
-	hintBindedtarget: the GLenum target the buffer will be binded to when it's created.
+	@param hintBindedtarget The GLenum target the buffer will be binded to when it's created.
 	for example, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER, etc.
-	hintUsage: the GLenum usage the buffer will be used.
+	@param hintUsage The GLenum usage the buffer will be used.
 	for example, GL_STATIC_DRAW, GL_DYNAMIC_DRAW, etc.
 	*/
 	void Attach(GLenum hintBindtarget, GLenum hintUsage);
 
 	/**
-	@brief
-	Unregister the asset from OpenGL, recycling its name for further use.
+	@brief Unregister the asset from OpenGL, recycling its name for further use.
 	*/
 	void Detach() override;	
 
 	/**
-	@brief
-	Bind the buffer to some target.
+	@brief Bind the buffer to some target.
 	*/
 	void Bind(GLenum target);
 
 	/**
-	@brief
-	Deprecated.
+	@brief Deprecated.
 	It's always a bad idea to include OpenGL invokes in destructing functions
 	So we just simply detach this in this function.
 	*/
 	void DeleteObject() override;
 
 	/**
-	@brief
-	Free its memory space allocated on the client side, and destroy the buffer pack.
+	@brief Free its memory space allocated on the client side, and destroy the buffer pack.
 	*/
 	~BufferPack();
 
 	/**
 	@brief Modify the server side memory on the fly.
-	@params
-	index: the index of the element
+	@param index The index of the element.
 	*/
 	GLclientside& operator[](GLsizei index);
 
 	/**
 	@brief Modify the server side memory on the fly.
-	@params
-	index: the index of the element
+	@param index The index of the element.
 	*/
 	GLclientside& at(GLsizei index);
 
 	/**
-	@brief
-	When you are done with the buffer changing on the fly, invoke this
+	@brief When you are done with the buffer changing on the fly, invoke Done()
 	to unmap the buffer and save your changes.
 	*/
 	void Done();
 
 	/**
-	@brief
-	Converter to GLuint.
+	@brief Converter to GLuint.
 	*/
 	operator GLuint() override;
 };

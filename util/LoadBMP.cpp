@@ -1,5 +1,5 @@
 //
-//  TexturePack.cpp
+//  LoadBMP.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Sept 8, 2016.

@@ -31,8 +31,6 @@
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
-    <ClCompile Include="..\src\LoadBMP.cpp" />
-    <ClCompile Include="..\src\PrintGLErrorStr.cpp" />
     <ClCompile Include="..\src\SamplerPack.cpp" />
     <ClCompile Include="..\src\Texture1D.cpp" />
     <ClCompile Include="..\src\Texture2D.cpp" />
@@ -42,11 +40,13 @@
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />
     <ClCompile Include="..\src\ShaderPack.cpp" />
-    <ClCompile Include="..\src\LogCallStack.cpp" />
     <ClCompile Include="..\src\TextureRect.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
     <ClCompile Include="..\src\Texture3D.cpp" />
     <ClCompile Include="..\util\FPSApplication.cpp" />
+    <ClCompile Include="..\util\LoadBMP.cpp" />
+    <ClCompile Include="..\util\LogCallStack.cpp" />
+    <ClCompile Include="..\util\PrintGLErrorStr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\phong_normalMap.glsl" />

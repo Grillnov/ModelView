@@ -1,5 +1,5 @@
 //
-//  ProgramPack.cpp
+//  SamplerPack.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 17, 2016.

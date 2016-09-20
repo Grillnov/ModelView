@@ -98,12 +98,6 @@
     <ClCompile Include="..\src\SamplerPack.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\LoadBMP.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LogCallStack.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\demo\TexPlain.cpp">
       <Filter>demo</Filter>
     </ClCompile>
@@ -111,9 +105,6 @@
       <Filter>demo</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture1D.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PrintGLErrorStr.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture2D.cpp">
@@ -127,6 +118,15 @@
     </ClCompile>
     <ClCompile Include="..\src\Texture3D.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\LoadBMP.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\LogCallStack.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\PrintGLErrorStr.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

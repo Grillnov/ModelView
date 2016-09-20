@@ -9,37 +9,35 @@
 # ifndef __ModelView__BenchmarkTimer__
 # define __ModelView__BenchmarkTimer__
 
+# ifdef _MSC_VER//On windows platform.
+# include <Windows.h>
+
 /**
 @brief An utility benchmark timer. Call GlobalTimer.startTimer() to start timer, GlobalTImer.endTimer()
 to end timer, and GlobalTimer.getDeltaTimeInms() to tell the time elapsed.
 */
-
-# ifdef _MSC_VER//On windows platform.
-# include <Windows.h>
-
 class BenchmarkTimer
 {
 private:
-	/**
+	/*
 	CPU frequency.
 	*/
 	long long frequency;
-	/**
+	/*
 	Start time.
 	*/
 	__int64 startTime;
-	/**
+	/*
 	End time.
 	*/
 	__int64 endTime;
-	/**
+	/*
 	Has the timer been started yet?
 	*/
 	bool isTimerStarted;
 public:
 	/**
-	@brief
-	Default constructor.
+	@brief Default constructor.
 	*/
 	BenchmarkTimer() : isTimerStarted(false)
 	{
@@ -48,8 +46,7 @@ public:
 		this->frequency = temp.QuadPart;
 	}
 	/**
-	@brief
-	Start the benchmark timer.
+	@brief Start the benchmark timer.
 	*/
 	void startTimer()
 	{
@@ -59,8 +56,7 @@ public:
 		this->startTime = temp.QuadPart;
 	}
 	/**
-	@brief
-	End the benchmark timer.
+	@brief End the benchmark timer.
 	*/
 	void endTimer()
 	{
@@ -75,8 +71,7 @@ public:
 		this->endTime = temp.QuadPart;
 	}
 	/**
-	@brief
-	Get the time elapsed in milliseconds.
+	@brief Get the time elapsed in milliseconds.
 	*/
 	double getDeltaTimeInms()
 	{

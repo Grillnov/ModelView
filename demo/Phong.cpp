@@ -15,8 +15,8 @@ public:
 		Pack = MeshPack("D:/ModelView/assets/Android.obj");
 		Pack.Attach();
 
-		Program.AddShader("D:/ModelView/shaders/phongfrag.glsl", GL_FRAGMENT_SHADER);
-		Program.AddShader("D:/ModelView/shaders/phongvert.glsl", GL_VERTEX_SHADER);
+		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/phongvert.glsl";
+		Program[GL_FRAGMENT_SHADER] = "D:/ModelView/shaders/phongfrag.glsl";
 		Program.Attach();
 
 		Program["lightPosition"] = glm::vec3(1.0f, 0.0f, 0.0f);

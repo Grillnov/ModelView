@@ -1,5 +1,5 @@
 //
-//  VertexArrayPack.h
+//  FPSApplication.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 24, 2016.

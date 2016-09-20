@@ -27,45 +27,37 @@ class GLApplication : public GLObject
 {
 public:
 	/**
-	@brief
-	Default constructor.
+	@brief Default constructor.
 	*/
 	GLApplication();
 
 	/**
-	@brief
-	Default destructor.
+	@brief Default destructor.
 	*/
 	virtual ~GLApplication();
 
 	/**
-	@brief
-	This method creates the GLFW window, and also initializes the OpenGL context.
-	@params
-	title: The title name of the window.
-	width: The width of the window in pixels.
-	height: The height of the window in pixels.
+	@brief This method creates the GLFW window, and also initializes the OpenGL context.
+	@param title The title of the window.
+	@param width The width of the window in pixels.
+	@param height The height of the window in pixels.
 	*/
 	void StartWindow(const char* title, int width, int height);
 
 	/**
-	@brief
-	Create the window, yet it's gonna be a fullscreen one.
-	@params
-	title: The title name of the window.
+	@brief Create the window, yet it's gonna be a fullscreen one.
+	@param title The title of the window.
 	*/
 	void StartWindow(const char* title);
 
 	/**
-	@brief
-	Enter the main GLFW event loop.
+	@brief Enter the main GLFW event loop.
 	*/
 	virtual void RunMainLoop();
 
 	/**
-	@brief
-	Gets the state of the keyboard.
-	@params
+	@brief Gets the state of the keyboard.
+	@param chr The character of the keyboard key.
 	*/
 	bool IsKeyDown(unsigned char chr)
 	{
@@ -73,8 +65,8 @@ public:
 	}
 
 	/**
-	@brief
-	Gets the state of the mouse buttons.
+	@brief Gets the state of the mouse buttons.
+	@param which The mouse button.
 	*/
 	bool IsMouseButtonDown(int which)
 	{
@@ -82,8 +74,7 @@ public:
 	}
 
 	/**
-	@brief 
-	Gets the window width.
+	@brief Gets the window width.
 	@see GetWindowHeight()
 	*/
 	int GetWindowWidth()
@@ -101,8 +92,7 @@ public:
 	}
 
 	/**
-	@brief
-	Gets the screen aspect ratio.
+	@brief Gets the screen aspect ratio.
 	*/
 	float GetAspectRatio()
 	{
@@ -113,8 +103,7 @@ public:
 	}
 
 	/**
-	@brief
-	Gets the framebuffer width.
+	@brief Gets the framebuffer width.
 	@see GetWindowFramebufferHeight().
 	*/
 	int GetWindowFramebufferWidth()
