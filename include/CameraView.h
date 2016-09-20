@@ -12,10 +12,8 @@
 # define __ModelView__CameraView__
 
 /**
-@brief An utility camera.
-To prevent identifier collision it's encapsuled inside namespace ModelView.
+@brief Camera object serving as an utility camera.
 */
-
 class CameraView
 {
 private:

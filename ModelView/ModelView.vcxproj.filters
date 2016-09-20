@@ -27,9 +27,6 @@
     <ClInclude Include="..\include\AllinGL.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\BenchmarkTimer.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\MeshPack.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -61,6 +58,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\util\FPSApplication.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\util\BenchmarkTimer.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>

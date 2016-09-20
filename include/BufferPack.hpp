@@ -12,7 +12,7 @@
 # include "AllinGL.h"
 
 /**
-@brief Managing chunks of continuous memory on the server side as buffer objects.
+@brief Buffer object managing chunks of continuous memory on the server side as buffer objects.
 Generic class for all kinds of buffers.
 Note that this buffer class only serves as a shell injecting data into server side.
 There's not a copy at client side.

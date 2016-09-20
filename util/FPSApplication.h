@@ -13,6 +13,9 @@
 # include <GLApplication.h>
 # include <CameraView.h>
 
+/**
+@brief Variant of GLApplication with a FPS camera implemented in advance.
+*/
 class FPSApplication : public GLApplication
 {
 public:

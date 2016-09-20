@@ -15,6 +15,9 @@
 
 class ProgramPack;
 
+/**
+@brief Uniform injector.
+*/
 class UniformFeeder : public GLObject
 {
 public:
@@ -57,6 +60,9 @@ public:
 	glm::dmat4x4 operator=(const glm::dmat4x4& val);
 };
 
+/**
+@brief Shader injector.
+*/
 class ShaderFeeder : public GLObject
 {
 private:
@@ -67,6 +73,9 @@ public:
 	const char* operator=(const char* Path);
 };
 
+/**
+@brief Program object that loads, compiles and links several shaders into a GLSL program.
+*/
 class ProgramPack : public GLAttachable
 {
 private:

@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AllinGL.h" />
-    <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CameraView.h" />
     <ClInclude Include="..\include\GLApplication.h" />
@@ -23,6 +22,7 @@
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
+    <ClInclude Include="..\util\BenchmarkTimer.h" />
     <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>

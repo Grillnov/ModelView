@@ -15,6 +15,9 @@
 
 enum VertArrs{ Pos, Nor, Tex };
 
+/**
+@brief Mesh object that loads mesh from models and render them.
+*/
 class MeshPack : public GLObject
 {
 private:

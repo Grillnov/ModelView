@@ -15,6 +15,9 @@ typedef unsigned int DWORD;
 typedef int LONG;
 # endif
 
+/**
+@brief Standard BMP file header.
+*/
 struct bmpHeader
 {
 	WORD	bfType;
@@ -24,6 +27,9 @@ struct bmpHeader
 	DWORD	bfOffsetToData;
 };
 
+/**
+@brief BMP file info header.
+*/
 struct bmpInfo
 {
 	DWORD	biSize;

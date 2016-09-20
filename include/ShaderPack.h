@@ -11,6 +11,9 @@
 
 # include "AllinGL.h"
 
+/**
+@brief Shader object that loads source code and compile it into a shader.
+*/
 class ShaderPack : public GLAttachable
 {
 private:

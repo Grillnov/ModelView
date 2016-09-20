@@ -13,6 +13,9 @@
 # include <BufferPack.hpp>
 # include <unordered_map>
 
+/**
+@brief VertexArray object that loads and activates several vertex attributes as a vertex array.
+*/
 class VertexArrayPack : public GLAttachable
 {
 private:

@@ -13,8 +13,7 @@
 # include <Windows.h>
 
 /**
-@brief An utility benchmark timer. Call GlobalTimer.startTimer() to start timer, GlobalTImer.endTimer()
-to end timer, and GlobalTimer.getDeltaTimeInms() to tell the time elapsed.
+@brief Timer object serving as an utility benchmark timer. 
 */
 class BenchmarkTimer
 {
