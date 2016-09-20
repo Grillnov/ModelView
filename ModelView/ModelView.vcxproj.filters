@@ -22,9 +22,6 @@
     <Filter Include="demo">
       <UniqueIdentifier>{7920de1a-f124-4288-a5bc-79d02dc9e7ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="entrance">
-      <UniqueIdentifier>{303af348-7a05-4fc3-a5b3-76854cab9aee}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AllinGL.h">

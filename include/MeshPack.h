@@ -9,9 +9,9 @@
 # ifndef __ModelView__MeshPack__
 # define __ModelView__MeshPack__
 
-# include "AllinGL.h"
-# include "BufferPack.hpp"
-# include "VertexArrayPack.h"
+# include <AllinGL.h>
+# include <BufferPack.hpp>
+# include <VertexArrayPack.h>
 
 enum VertArrs{ Pos, Nor, Tex };
 

@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef FPSAPPLICATION
-# define FPSAPPLICATION
+# ifndef __ModelView__FPSApplication__
+# define __ModelView__FPSApplication__
 
 # include <AllinGL.h>
 # include <GLApplication.h>

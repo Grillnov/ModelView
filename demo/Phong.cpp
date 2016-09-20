@@ -1,6 +1,3 @@
-# ifndef PHONG
-# define PHONG
-
 # include <MeshPack.h>
 # include <ProgramPack.h>
 # include <FPSApplication.h>
@@ -15,17 +12,14 @@ private:
 public:
 	virtual void CreateApplication()
 	{
-		glEnable(GL_DEPTH_TEST);
 		Pack = MeshPack("D:/ModelView/assets/Android.obj");
 		Pack.Attach();
 
 		Program.AddShader("D:/ModelView/shaders/phongfrag.glsl", GL_FRAGMENT_SHADER);
 		Program.AddShader("D:/ModelView/shaders/phongvert.glsl", GL_VERTEX_SHADER);
 		Program.Attach();
-		//Program.Use();
+
 		Program["lightPosition"] = glm::vec3(1.0f, 0.0f, 0.0f);
-		//Program.Uniform3("lightPosition", glm::vec3(0.0f, 0.0f, 1.0f));
-		//Program.Uniform4("lightColor", glm::vec4(1.0f));
 		Program["lightColor"] = glm::vec4(1.0f);
 		Program["diffuseColor"] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		Program["ambientColor"] = glm::vec4(0.3f, 0.1f, 0.0f, 1.0f);
@@ -33,8 +27,7 @@ public:
 		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
 		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
 		Program2.Attach();
-		//Program2.Use();
-		Program2.Uniform3("color", glm::vec3(0.0f, 0.0f, 1.0f));
+		Program2["color"] = glm::vec3(1.0f, 0.0f, 1.0f);
 	}
 
 	virtual void RenderFrame()
@@ -67,4 +60,3 @@ public:
 };
 
 RunInstance(Phong, 640, 480)
-# endif

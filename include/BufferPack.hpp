@@ -12,8 +12,12 @@
 # include "AllinGL.h"
 
 /**
-Chunks of continuous memory as buffer objects.
+@brief Managing chunks of continuous memory on the server side as buffer objects.
 Generic class for all kinds of buffers.
+Note that this buffer class only serves as a shell injecting data into server side.
+There's not a copy at client side.
+@template params GLclientside the client side types defined by OpenGL standard.
+Such as GLint, GLuint, GLfloat, GLdouble, etc.
 */
 template<typename GLclientside>
 class BufferPack : public GLAttachable
@@ -35,7 +39,8 @@ private:
 	bool isMapped;
 public:
 	/**
-	Returns the amount of elements.
+	@brief
+	Returns how many elements there are in this buffer.
 	*/
 	GLsizei Size()
 	{
@@ -43,67 +48,92 @@ public:
 	}
 
 	/**
-	Constructor that returns a dummy buffer.
+	@brief
+	Default constructor that returns a dummy buffer.
 	*/
 	BufferPack() = default;
 
 	/**
-	Constructor that allocates memory space on the client side.
+	@brief
+	Constructing a buffer object ready for elements.
+	@params
+	num_of_elements: the number of elements you need.
 	*/
 	BufferPack(GLsizei num_of_elements);
 
 	/**
+	@brief
 	A naiver version of Attach().
 	Effective, yet may cause some performance issues.
-	Simply register the asset, allocate memory on the server side and upload
-	local memory, with target hint set as GL_COPY_WRITE_BUFFER, and usage hint
-	set as GL_STATIC_DRAW.
+	Simply register the asset, allocate memory on the server side so that you can assign its data
+	via operator[] from local memory, with target hint set as GL_COPY_WRITE_BUFFER, and usage hint
+	set as GL_STATIC_DRAW by default.
 	*/
 	void Attach() override;
 
 	/**
+	@brief
 	When glBufferData is invoked, specified binding target and usage will affect
-	the memory location allocated for this buffer.
+	the memory location allocated for this buffer on the server side.
 	Use naiver Attach() is recommended when you're not so sure how to boost memory
 	access performance by designating target and usage.
+	@params
+	hintBindedtarget: the GLenum target the buffer will be binded to when it's created.
+	for example, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER, etc.
+	hintUsage: the GLenum usage the buffer will be used.
+	for example, GL_STATIC_DRAW, GL_DYNAMIC_DRAW, etc.
 	*/
 	void Attach(GLenum hintBindtarget, GLenum hintUsage);
 
 	/**
-	Unregister the asset.
+	@brief
+	Unregister the asset from OpenGL, recycling its name for further use.
 	*/
 	void Detach() override;	
 
 	/**
-	Bind the buffer to some target
+	@brief
+	Bind the buffer to some target.
 	*/
-	//void Bind(GLenum target);
+	void Bind(GLenum target);
 
 	/**
+	@brief
+	Deprecated.
 	It's always a bad idea to include OpenGL invokes in destructing functions
 	So we just simply detach this in this function.
 	*/
-	//void DeleteObject() override;
+	void DeleteObject() override;
 
 	/**
+	@brief
 	Free its memory space allocated on the client side, and destroy the buffer pack.
 	*/
 	~BufferPack();
 
-	/** Modify the server side memory on the fly.
-	@ params
-	@ index the index of the element
+	/**
+	@brief Modify the server side memory on the fly.
+	@params
+	index: the index of the element
 	*/
 	GLclientside& operator[](GLsizei index);
+
+	/**
+	@brief Modify the server side memory on the fly.
+	@params
+	index: the index of the element
+	*/
 	GLclientside& at(GLsizei index);
 
 	/**
+	@brief
 	When you are done with the buffer changing on the fly, invoke this
 	to unmap the buffer and save your changes.
 	*/
 	void Done();
 
 	/**
+	@brief
 	Converter to GLuint.
 	*/
 	operator GLuint() override;
@@ -163,7 +193,7 @@ void BufferPack<GLclientside>::Detach()
 	this->isAttached = false;
 }
 
-/*template<typename GLclientside>
+template<typename GLclientside>
 void BufferPack<GLclientside>::Bind(GLenum target)
 {
 	if (!this->isAttached)
@@ -171,10 +201,10 @@ void BufferPack<GLclientside>::Bind(GLenum target)
 		Warning(debugMsg, "Cannot bind buffer %u for it's not attached yet, bailing.", this->AssetID);
 		return;
 	}
-	this->CurrentBindedTarget = target;
+
 	glBindBuffer(target, this->AssetID);
 	CheckStatus(__FUNCTION__);
-}*/
+}
 
 template<typename GLclientside>
 BufferPack<GLclientside>::~BufferPack()
@@ -248,6 +278,13 @@ BufferPack<GLclientside>::operator GLuint()
 		return -1;
 	}
 	return this->AssetID;
+}
+
+template<typename GLclientside>
+void BufferPack<GLclientside>::DeleteObject()
+{
+	if (this->isAttached)
+		this->Detach();
 }
 
 # endif

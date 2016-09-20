@@ -27,32 +27,45 @@ class GLApplication : public GLObject
 {
 public:
 	/**
-	@brief default constructor.
+	@brief
+	Default constructor.
 	*/
 	GLApplication();
 
 	/**
-	@brief default destructor.
+	@brief
+	Default destructor.
 	*/
 	virtual ~GLApplication();
 
 	/**
-	@brief this method creates the GLFW window, and also initializes the OpenGL context.
+	@brief
+	This method creates the GLFW window, and also initializes the OpenGL context.
+	@params
+	title: The title name of the window.
+	width: The width of the window in pixels.
+	height: The height of the window in pixels.
 	*/
 	void StartWindow(const char* title, int width, int height);
 
 	/**
-	@brief create the window, yet it's gonna be a fullscreen one.
+	@brief
+	Create the window, yet it's gonna be a fullscreen one.
+	@params
+	title: The title name of the window.
 	*/
 	void StartWindow(const char* title);
 
 	/**
-	@brief enter the main GLFW event loop.
+	@brief
+	Enter the main GLFW event loop.
 	*/
 	virtual void RunMainLoop();
 
 	/**
-	@brief Gets the key state.
+	@brief
+	Gets the state of the keyboard.
+	@params
 	*/
 	bool IsKeyDown(unsigned char chr)
 	{
@@ -60,72 +73,85 @@ public:
 	}
 
 	/**
-	@brief Gets the mouse key state.
+	@brief
+	Gets the state of the mouse buttons.
 	*/
-	bool IsMouseKeyDown(int which)
+	bool IsMouseButtonDown(int which)
 	{
 		return (which <= 2 && which >= 0) ? (fMouseState[which] == 1) : false;
 	}
 
-	/** @brief Gets the window width.
-	 * @see GetWindowHeight()
-	 */
+	/**
+	@brief 
+	Gets the window width.
+	@see GetWindowHeight()
+	*/
 	int GetWindowWidth()
 	{
 		return fWindowSize[0];
 	}
 
-	/** @brief Gets the window height.
-	 * @see GetWindowWidth()
-	 */
+	/**
+	@brief Gets the window height.
+	@see GetWindowWidth()
+	*/
 	int GetWindowHeight()
 	{
 		return fWindowSize[1];
 	}
 
-	/** @brief Get the screen aspect ratio.
-	 * 
-	 */
+	/**
+	@brief
+	Gets the screen aspect ratio.
+	*/
 	float GetAspectRatio()
 	{
-		if (fWindowSize[1] == 0)//avoid dividing by 0.
+		if (fWindowSize[1] == 0)//avoid being divided by 0.
 			return 1.0f;
 		else
 			return static_cast<float>(fWindowSize[0]) / fWindowSize[1];
 	}
 
-	/** @brief Gets the framebuffer width.
-	 * @see GetWindowFramebufferHeight().
-	 */
+	/**
+	@brief
+	Gets the framebuffer width.
+	@see GetWindowFramebufferHeight().
+	*/
 	int GetWindowFramebufferWidth()
 	{
 		return fWindowFramebufferSize[0];
 	}
 
-	/** @brief Gets the framebuffer height.
-	 * @see GetWindowFramebufferWidth().
-	 */
+	/**
+	@brief Gets the framebuffer height.
+	@see GetWindowFramebufferWidth().
+	*/
 	int GetWindowFramebufferHeight()
 	{
 		return fWindowFramebufferSize[1];
 	}
 
-	/** @brief Gets the pointer X coordinate.
-	 * @see GetPointerY()
-	 */
+	/**
+	@brief Gets the X coordinate of the mouse pointer.
+	@see GetPointerY()
+	*/
 	int GetPointerX()
 	{
 		return fMousePosition[0];
 	}
 
-	/** @brief Gets the pointer Y coordinate.
-	 * @see GetPointerX()
-	 */
+	/**
+	@brief Gets the Y coordinate of the mouse pointer.
+	@see GetPointerX()
+	*/
 	int GetPointerY()
 	{
 		return fMousePosition[1];
 	}
 
+	/**
+	@brief Gets the pointer to the current window.
+	*/
 	GLFWwindow* getWindow()
 	{
 		return this->fWindow;

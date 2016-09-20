@@ -1,6 +1,3 @@
-# ifndef TEXPLAIN
-# define TEXPLAIN
-
 # include <MeshPack.h>
 # include <ProgramPack.h>
 # include <FPSApplication.h>
@@ -15,7 +12,6 @@ private:
 public:
 	virtual void CreateApplication()
 	{
-		glEnable(GL_DEPTH_TEST);
 		Pack = MeshPack("D:/ModelView/assets/BasePlain.obj");
 		Pack.Attach();
 
@@ -72,4 +68,3 @@ public:
 };
 
 //RunInstance(TexPlain, 640, 480)
-# endif
