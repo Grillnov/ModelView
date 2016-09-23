@@ -44,6 +44,7 @@ public:
 		QueryPerformanceFrequency(&temp);
 		this->frequency = temp.QuadPart;
 	}
+
 	/**
 	@brief Start the benchmark timer.
 	*/
@@ -54,6 +55,7 @@ public:
 		QueryPerformanceCounter(&temp);
 		this->startTime = temp.QuadPart;
 	}
+
 	/**
 	@brief End the benchmark timer.
 	*/
@@ -69,6 +71,7 @@ public:
 		QueryPerformanceCounter(&temp);
 		this->endTime = temp.QuadPart;
 	}
+
 	/**
 	@brief Get the time elapsed in milliseconds.
 	*/
@@ -81,6 +84,9 @@ public:
 
 # include <sys/time.h>
 
+/**
+@brief Timer object serving as an utility benchmark timer. 
+*/
 class BenchmarkTimer
 {
 private:
@@ -91,10 +97,17 @@ private:
 	long esec;
 	long eusec;
 public:
+	/**
+	@brief Default constructor.
+	*/
 	BenchmarkTimer() : isTimerStarted(false)
 	{
 		
 	}
+
+	/**
+	@brief Start the benchmark timer.
+	*/
 	void startTimer()
 	{
 		this->isTimerStarted = true;
@@ -102,6 +115,10 @@ public:
 		this->sec = timer.tv_sec;
 		this->usec = timer.tv_usec;
 	}
+
+	/**
+	@brief End the benchmark timer.
+	*/
 	void endTimer()
 	{
 		if (!this->isTimerStarted)
@@ -114,6 +131,10 @@ public:
 		this->esec = timer.tv_sec;
 		this->eusec = timer.tv_usec;
 	}
+
+	/**
+	@brief Get the time elapsed in milliseconds.
+	*/
 	double getDeltaTimeInms()
 	{
 		return 1000.0 * (esec - sec) + (eusec - usec) / 1000.0;

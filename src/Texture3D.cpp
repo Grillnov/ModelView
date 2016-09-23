@@ -26,23 +26,6 @@ Texture3D::Texture3D(unsigned char* pixel, size_t width, size_t height, size_t d
 	this->layout = layout;
 }
 
-/*Texture3D::Texture3D(std::string Path, GLenum layout)
-{
-	if (layout > GL_TEXTURE0)
-		layout -= GL_TEXTURE0;
-
-	if (OccupiedLayouts.find(layout) != OccupiedLayouts.end())
-	{
-		Error(debugMsg, "Layout slot %u is already occupied!", layout);
-	}
-
-	LoadFromBMP(Path);
-	this->isFromFile = true;
-	OccupiedLayouts.emplace(layout);
-	this->layout = layout;
-	Log(debugMsg, "Texture at layout slot %u is now ready for attaching.", layout);
-}*/
-
 void Texture3D::Attach()
 {
 	Attach(GL_BGR, GL_RGB, true);

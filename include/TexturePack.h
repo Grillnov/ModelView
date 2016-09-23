@@ -10,6 +10,7 @@
 # define __ModelView__TexturePack__
 
 # include <AllinGL.h>
+# include <vector>
 # include <unordered_set>
 
 /**

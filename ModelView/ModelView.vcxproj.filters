@@ -42,9 +42,6 @@
     <ClInclude Include="..\include\GLObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\GLAttachable.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\BufferPack.hpp">
       <Filter>include</Filter>
     </ClInclude>
@@ -62,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="..\util\BenchmarkTimer.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GLAttachable.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
