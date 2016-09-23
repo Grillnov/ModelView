@@ -6,8 +6,8 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef ALLINGL
-# define ALLINGL
+# ifndef __ModelView__AllinGL__
+# define __ModelView__AllinGL__
 
 /**
 Modify this macro below to modify OpenGL version.
@@ -36,6 +36,7 @@ Try modifying this to USEGL3W if glew initialization failed or you found out tha
 some nullptr is invoked as a function pointer.
 */
 # define USEGLEW
+//# define USEGL3W
 
 
 

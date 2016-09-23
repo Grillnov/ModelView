@@ -1,5 +1,5 @@
 //
-//  TexturePack.cpp
+//  LoadBMP.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Sept 8, 2016.
@@ -15,6 +15,9 @@ typedef unsigned int DWORD;
 typedef int LONG;
 # endif
 
+/**
+@brief Standard BMP file header.
+*/
 struct bmpHeader
 {
 	WORD	bfType;
@@ -24,6 +27,9 @@ struct bmpHeader
 	DWORD	bfOffsetToData;
 };
 
+/**
+@brief BMP file info header.
+*/
 struct bmpInfo
 {
 	DWORD	biSize;
@@ -60,19 +66,19 @@ void TexturePic::LoadFromBMP(std::string Path)
 
 	fin.seekg(sizeof(DWORD) * 3 + sizeof(LONG) * 2, std::ios::cur);
 
-	if (fileInfo.biPlanes != 1 ||
-		fileInfo.biCompression != 0 ||
-		fileInfo.biBitCount != 24)
+	if (fileInfo.biPlanes != 1 || fileInfo.biCompression != 0)
 	{
 		Error(debugMsg, "Format of BMP file %s is not supported yet.", Path.c_str());
 	}
+
+	this->Channel = fileInfo.biBitCount / 8;
 
 	this->xWidth = fileInfo.biWidth;
 	this->yHeight = glm::abs(fileInfo.biHeight);
 	size_t bufferSize = xWidth * yHeight * 3;
 	try
 	{
-		this->Buffer = new char[bufferSize];
+		this->Buffer = new unsigned char[bufferSize];
 	}
 	catch (std::bad_alloc exception)
 	{
@@ -80,7 +86,7 @@ void TexturePic::LoadFromBMP(std::string Path)
 			, bufferSize);
 	}
 
-	fin.read(this->Buffer, bufferSize);
+	fin.read(reinterpret_cast<char*>(this->Buffer), bufferSize);
 
 	fin.close();
 

@@ -10,6 +10,8 @@
 # include <GLObject.h>
 # include <GLApplication.h>
 
+extern const char* getGLErrorString(GLenum error);
+
 # ifdef _MSC_VER
 
 HANDLE consoleH = nullptr;
@@ -114,7 +116,7 @@ void GLObject::CheckStatus(const char* function)
 	if (error != GL_NO_ERROR)
 	{
 		Error(debugMsg, "Error spotted during the execution of function: %s!\n"
-			"Fatal OpenGL Error %d:\n %s", function, error, glewGetErrorString(error));
+			"Fatal OpenGL Error %d: %s", function, error, getGLErrorString(error));
 	}
 }
 

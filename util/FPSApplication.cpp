@@ -1,5 +1,5 @@
 //
-//  VertexArrayPack.h
+//  FPSApplication.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 24, 2016.
@@ -11,9 +11,9 @@
 # include <CameraView.h>
 # include <FPSApplication.h>
 
-const static float VelocityX = 0.01f;//x axis moving speed
-const static float VelocityY = 0.01f;//y axis moving speed
-const static float VelocityZ = 0.01f;//z axis moving speed
+const static float VelocityDirect = 0.01f;//Forward/Backward moving speed
+const static float VelocityFlank = 0.01f;//Flanking moving speed
+const static float VelocityVertical = 0.01f;//Vertical moving speed
 const static float VelocitySwivel = 0.0015f;//camera spin speed
 
 const static bool isYAxisReversed = true;
@@ -23,20 +23,27 @@ void FPSApplication::HandleController()
 {
 	if (IsKeyDown('W'))
 	{
-		FPSCamera.Move(glm::vec3(0, 0, -VelocityZ));
-		//FPSCamera.Move()
+		FPSCamera.MoveForward(VelocityDirect);
 	}
 	if (IsKeyDown('A'))
 	{
-		FPSCamera.Move(glm::vec3(-VelocityX, 0, 0));
+		FPSCamera.MoveLeft(VelocityFlank);
 	}
 	if (IsKeyDown('S'))
 	{
-		FPSCamera.Move(glm::vec3(0, 0, VelocityZ));
+		FPSCamera.MoveBackward(VelocityDirect);
 	}
 	if (IsKeyDown('D'))
 	{
-		FPSCamera.Move(glm::vec3(VelocityX, 0, 0));
+		FPSCamera.MoveRight(VelocityFlank);
+	}
+	if (IsKeyDown(static_cast<unsigned char>(GLFW_KEY_SPACE)))
+	{
+		FPSCamera.MoveUp(VelocityVertical);
+	}
+	if (IsKeyDown('C'))
+	{
+		FPSCamera.MoveDown(VelocityVertical);
 	}
 }
 
@@ -51,6 +58,5 @@ void FPSApplication::MouseMove(int x, int y)
 
 void FPSApplication::MouseScroll(double xoffset, double yoffset)
 {
-	//Log(debugMsg, "x : %f, y : %f", xoffset, yoffset);
 	FPSCamera.ZoomIn(static_cast<float>(yoffset)* 0.1f);
 }

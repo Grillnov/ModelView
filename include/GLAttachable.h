@@ -28,13 +28,11 @@ class GLAttachable : public GLObject
 {
 protected:
 	/**
-	@brief
-	Its asset name on the server side.
+	@brief Its OpenGL asset name on the server side.
 	*/
 	GLuint AssetID;
 	/**
-	@brief
-	To tell whether it's attached or not.
+	@brief To tell whether it's attached or not.
 	*/
 	bool isAttached;
 public:
@@ -58,8 +56,7 @@ public:
 		return this->isAttached;
 	}
 	/**
-	@brief Transformation to GLuint so that assets can be directly used as 
-	parameters to invoke raw GL interfaces.
+	@brief Transformation to GLuint so that assets can be directly used as arguments to invoke raw GL interfaces.
 	*/
 	virtual operator GLuint()
 	{

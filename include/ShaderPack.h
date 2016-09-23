@@ -11,6 +11,9 @@
 
 # include "AllinGL.h"
 
+/**
+@brief Shader object that loads source code and compile it into a shader.
+*/
 class ShaderPack : public GLAttachable
 {
 private:
@@ -20,58 +23,51 @@ private:
 
 	GLenum ShaderType;//What kind of shader is it anyway? Vertex? Fragment? Compute?
 
-	/**
-	@brief
-	Load source code from the text.
-	@params
-	@Path the path of the source code text file.
+	/*
+	Load the source code from a text file.
+	@param Path the path of the source code text file.
 	*/
 	void LoadFromText(std::string Path, std::fstream& fin);
 
-	/**
+	/*
 	@brief
 	Load from compiled binary blob.
-	@params
-	@Path the path of the binary file.
+	@param Path the path of the binary file.
 	*/
 	void LoadFromBinary(std::string Path, std::fstream& fin);
 
-	/**
+	/*
 	@brief
 	Save the binary blob to file.
 	*/
 	void SaveBinary();
-
-	/**
-	@brief
-	Compile the source code if you have to.
-	*/
-	//void Compile();
 public:
 	/**
-	@brief
-	Construct the shader.
-	@params
-	@Path path to the asset.
-	@Type type of the shader.
+	@brief Construct the shader.
+	@param Path The path to the shader source code.
+	@param Type The type of the shader. A value among GL_VERTEX_SHADER, GL_FRAGMENT_SHADER
+	GL_GEOMETRY_SHADER, etc. is expected.
 	*/
 	ShaderPack(std::string Path, GLenum Type);
 
 	/**
-	@brief
-	Attach the shader.
-	Create the shader to register it on the server side.
+	@brief Attach the shader. Register and compile it.
 	*/
 	void Attach() override;
 
 	/**
-	Detach the shader.
-	Delete this shader so that server is able to reallocate its ID.
+	@brief Detach the shader. Delete this shader so that server is able to reallocate its ID.
 	*/
 	void Detach() override;
 
+	/**
+	@brief Converter to GLuint, so that it can be directly used as an argument in raw GL interfaces.
+	*/
 	operator GLuint();
 
+	/**
+	@brief Tell its type.
+	*/
 	GLenum getType()
 	{
 		return this->ShaderType;

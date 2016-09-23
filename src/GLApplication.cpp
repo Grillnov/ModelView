@@ -142,12 +142,12 @@ void GLApplication::RunMainLoop()
 		Error(debugMsg, "Window %s is not created yet!", windowName);
 
 	CreateApplication();
-	/**
+	/*
 	* OpenGL does not have depth test switched on by default, so if you want to 
 	* enable depth testing, call glEnable(GL_DEPTH_TEST) at CreateApplication().
-	*
+	* But it seems better off to do it for you.
 	*/
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	CheckStatus(__FUNCTION__);
 
 	while ((!glfwWindowShouldClose(fWindow))) 

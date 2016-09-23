@@ -1,5 +1,5 @@
 //
-//  VertexArrayPack.h
+//  VertexArrayPack.cpp
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 20, 2016.
@@ -142,9 +142,4 @@ void VertexArrayPack::Bind()
 VertexArrayPack::operator GLuint()
 {
 	return this->AssetID;
-}
-
-GLuint VertexArrayPack::operator[](GLuint index)
-{
-	return this->Attribs[index];
 }

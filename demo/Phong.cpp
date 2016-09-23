@@ -1,6 +1,3 @@
-# ifndef PHONG
-# define PHONG
-
 # include <MeshPack.h>
 # include <ProgramPack.h>
 # include <FPSApplication.h>
@@ -15,24 +12,22 @@ private:
 public:
 	virtual void CreateApplication()
 	{
-		glEnable(GL_DEPTH_TEST);
 		Pack = MeshPack("D:/ModelView/assets/Android.obj");
 		Pack.Attach();
 
-		Program.AddShader("D:/ModelView/shaders/phongfrag.glsl", GL_FRAGMENT_SHADER);
-		Program.AddShader("D:/ModelView/shaders/phongvert.glsl", GL_VERTEX_SHADER);
+		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/phongvert.glsl";
+		Program[GL_FRAGMENT_SHADER] = "D:/ModelView/shaders/phongfrag.glsl";
 		Program.Attach();
-		Program.Use();
-		Program.Uniform3("lightPosition", glm::vec3(0.0f, 0.0f, 1.0f));
-		Program.Uniform4("lightColor", glm::vec4(1.0f));
-		Program.Uniform4("diffuseColor", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
-		Program.Uniform4("ambientColor", glm::vec4(0.3f, 0.1f, 0.0f, 1.0f));
+
+		Program["lightPosition"] = glm::vec3(1.0f, 0.0f, 0.0f);
+		Program["lightColor"] = glm::vec4(1.0f);
+		Program["diffuseColor"] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+		Program["ambientColor"] = glm::vec4(0.3f, 0.1f, 0.0f, 1.0f);
 
 		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
 		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
 		Program2.Attach();
-		Program2.Use();
-		Program2.Uniform3("color", glm::vec3(0.0f, 0.0f, 1.0f));
+		Program2["color"] = glm::vec3(1.0f, 0.0f, 1.0f);
 	}
 
 	virtual void RenderFrame()
@@ -42,17 +37,18 @@ public:
 		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
 
 		glm::mat4 MVP = FPSCamera.GetModelViewProjection(GetAspectRatio());
-		Program.Use();
-		Program.UniformMat4("transformMatrix", MVP);
-		Program.UniformMat4("ModelViewMatrix", FPSCamera.GetModelView());
+
+		Program["transformMatrix"] = MVP;
+		Program["ModelViewMatrix"] = FPSCamera.GetModelView();
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		Program.Use();
 		Pack.DrawMesh();
 
-		Program2.Use();
-		Program2.UniformMat4("MVP", MVP);
+		Program2["MVP"] = MVP;
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		Program2.Use();
 		Pack.DrawMesh();
 	}
 
@@ -62,4 +58,5 @@ public:
 		Program.Detach();
 	}
 };
-# endif
+
+RunInstance(Phong, 640, 480)

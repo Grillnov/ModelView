@@ -140,8 +140,6 @@ void MeshPack::Attach()
 	else
 		Error(debugMsg, "%s is neither a .obj nor a .bin, incompatible model file format.", Path.c_str());
 
-	//ElementArr->Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
-
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Mesh %s was successfully attached.", this->Path.c_str());

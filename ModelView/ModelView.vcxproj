@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AllinGL.h" />
-    <ClInclude Include="..\include\BenchmarkTimer.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CameraView.h" />
     <ClInclude Include="..\include\GLApplication.h" />
@@ -22,8 +21,8 @@
     <ClInclude Include="..\include\ProgramPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />
-    <ClInclude Include="..\include\TextureTable.hpp" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
+    <ClInclude Include="..\util\BenchmarkTimer.h" />
     <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
@@ -32,16 +31,22 @@
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
-    <ClCompile Include="..\src\LoadBMP.cpp" />
     <ClCompile Include="..\src\SamplerPack.cpp" />
+    <ClCompile Include="..\src\Texture1D.cpp" />
+    <ClCompile Include="..\src\Texture2D.cpp" />
+    <ClCompile Include="..\src\TextureCube.cpp" />
     <ClCompile Include="..\src\TexturePack.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />
     <ClCompile Include="..\src\ProgramPack.cpp" />
     <ClCompile Include="..\src\ShaderPack.cpp" />
-    <ClCompile Include="..\src\LogCallStack.cpp" />
+    <ClCompile Include="..\src\TextureRect.cpp" />
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
+    <ClCompile Include="..\src\Texture3D.cpp" />
     <ClCompile Include="..\util\FPSApplication.cpp" />
+    <ClCompile Include="..\util\LoadBMP.cpp" />
+    <ClCompile Include="..\util\LogCallStack.cpp" />
+    <ClCompile Include="..\util\PrintGLErrorStr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\phong_normalMap.glsl" />
@@ -75,13 +80,15 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\PropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\util;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\util;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

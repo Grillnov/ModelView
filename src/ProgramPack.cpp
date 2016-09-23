@@ -27,7 +27,247 @@ static const char* getShaderTypeStr(GLenum type)
 	}
 }
 
-GLuint ProgramPack::ProgramInUse = 0;
+const char* ShaderFeeder::operator=(const char* Path)
+{
+	this->ptr->AddShader(Path, this->type);
+	return Path;
+}
+
+GLfloat UniformFeeder::operator=(GLfloat val)
+{
+	glUniform1f(this->location, val);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+GLdouble UniformFeeder::operator=(GLdouble val)
+{
+	glUniform1d(this->location, val);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+GLint UniformFeeder::operator=(GLint val)
+{
+	glUniform1i(this->location, val);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+GLuint UniformFeeder::operator=(GLuint val)
+{
+	glUniform1ui(this->location, val);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::vec2 UniformFeeder::operator=(const glm::vec2& val)
+{
+	glUniform2fv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dvec2 UniformFeeder::operator=(const glm::dvec2& val)
+{
+	glUniform2dv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::ivec2 UniformFeeder::operator=(const glm::ivec2& val)
+{
+	glUniform2iv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::u32vec2 UniformFeeder::operator=(const glm::u32vec2& val)
+{
+	glUniform2uiv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::vec3 UniformFeeder::operator=(const glm::vec3& val)
+{
+	glUniform3fv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dvec3 UniformFeeder::operator=(const glm::dvec3& val)
+{
+	glUniform3dv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::ivec3 UniformFeeder::operator=(const glm::ivec3& val)
+{
+	glUniform3iv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::u32vec3 UniformFeeder::operator=(const glm::u32vec3& val)
+{
+	glUniform3uiv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::vec4 UniformFeeder::operator=(const glm::vec4& val)
+{
+	glUniform4fv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dvec4 UniformFeeder::operator=(const glm::dvec4& val)
+{
+	glUniform4dv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::ivec4 UniformFeeder::operator=(const glm::ivec4& val)
+{
+	glUniform4iv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::u32vec4 UniformFeeder::operator=(const glm::u32vec4& val)
+{
+	glUniform4uiv(this->location, 1, &val[0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::mat2x2 UniformFeeder::operator=(const glm::mat2x2& val)
+{
+	glUniformMatrix2fv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dmat2x2 UniformFeeder::operator=(const glm::dmat2x2& val)
+{
+	glUniformMatrix2dv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::mat3x3 UniformFeeder::operator=(const glm::mat3x3& val)
+{
+	glUniformMatrix3fv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dmat3x3 UniformFeeder::operator=(const glm::dmat3x3& val)
+{
+	glUniformMatrix3dv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+glm::mat4x4 UniformFeeder::operator=(const glm::mat4x4& val)
+{
+	glUniformMatrix4fv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+glm::dmat4x4 UniformFeeder::operator=(const glm::dmat4x4& val)
+{
+	glUniformMatrix4dv(this->location, 1, GL_FALSE, &val[0][0]);
+	if (this->lastProgramID != 0)
+		glUseProgram(lastProgramID);
+	CheckStatus(__FUNCTION__);
+
+	return val;
+}
+
+
+
+GLuint ProgramPack::ProgramUsedJustNow = 0;
 
 void ProgramPack::AddShader(std::string Path, GLenum type)
 {
@@ -38,7 +278,8 @@ void ProgramPack::AddShader(std::string Path, GLenum type)
 	}
 	else
 	{
-		Warning(debugMsg, "Shader of %s type is already present, bailing.", getShaderTypeStr(type));
+		Warning(debugMsg, "Shader of %s type is already present in program %u, bailing.", 
+			getShaderTypeStr(type), this->AssetID);
 		return;
 	}
 }
@@ -76,7 +317,7 @@ void ProgramPack::Use()
 	}
 	glUseProgram(this->AssetID);
 	CheckStatus(__FUNCTION__);
-	ProgramInUse = this->AssetID;
+	ProgramUsedJustNow = this->AssetID;
 }
 
 void ProgramPack::Attach()
@@ -143,6 +384,16 @@ ProgramPack::operator GLuint()
 	return this->AssetID;
 }
 
+UniformFeeder ProgramPack::operator[](const char* name)
+{
+	return UniformFeeder(Fetch(name), ProgramUsedJustNow);
+}
+
+ShaderFeeder ProgramPack::operator[](GLenum type)
+{
+	return ShaderFeeder(type, this);
+}
+
 ProgramPack::~ProgramPack()
 {
 	for (auto shader : this->ShaderTable)
@@ -158,16 +409,16 @@ GLint ProgramPack::Fetch(std::string name)
 		Error(debugMsg, "Program is not linked yet. Unable to get the location of uniform %s.", name.c_str());
 		return -1;
 	}
-	if (ProgramInUse != this->AssetID)
-	{
-		Error(debugMsg, "Attempting to feed uniform %s to program %u who's not in use.", name.c_str(), this->AssetID);
-		return -1;
-	}
+	Use();
 	GLint location = glGetUniformLocation(this->AssetID, name.c_str());
 	if (location == -1)
 		Error(debugMsg, "Unable to fetch location for uniform %s. "
 		"Does this uniform variable actually exist in program %u?"
 		, name.c_str(), this->AssetID);
+	if (ProgramUsedJustNow != 0)
+	{
+		glUseProgram(ProgramUsedJustNow);
+	}
 	return location;
 }
 
@@ -178,16 +429,19 @@ void ProgramPack::Uniform1(std::string name, GLfloat val)
 	glUniform1f(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform1(std::string name, GLdouble val)
 {
 	glUniform1d(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform1(std::string name, GLint val)
 {
 	glUniform1i(Fetch(name), val);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform1(std::string name, GLuint val)
 {
 	glUniform1ui(Fetch(name), val);
@@ -201,39 +455,46 @@ void ProgramPack::Uniform2(std::string name, GLfloat* valLoc)
 	glUniform2fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform2(std::string name, GLdouble* valLoc)
 {
 	glUniform2dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform2(std::string name, GLint* valLoc)
 {
 	glUniform2iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform2(std::string name, GLuint* valLoc)
 {
 	glUniform2uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform2(std::string name, const glm::vec2& valLoc)
+
+void ProgramPack::Uniform2(std::string name, const glm::vec2& val)
 {
-	glUniform2fv(Fetch(name), 1, &valLoc[0]);
+	glUniform2fv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform2(std::string name, const glm::dvec2& valLoc)
+
+void ProgramPack::Uniform2(std::string name, const glm::dvec2& val)
 {
-	glUniform2dv(Fetch(name), 1, &valLoc[0]);
+	glUniform2dv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform2(std::string name, const glm::ivec2& valLoc)
+
+void ProgramPack::Uniform2(std::string name, const glm::ivec2& val)
 {
-	glUniform2iv(Fetch(name), 1, &valLoc[0]);
+	glUniform2iv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform2(std::string name, const glm::u32vec2& valLoc)
+
+void ProgramPack::Uniform2(std::string name, const glm::u32vec2& val)
 {
-	glUniform2uiv(Fetch(name), 1, &valLoc[0]);
+	glUniform2uiv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -244,39 +505,46 @@ void ProgramPack::Uniform3(std::string name, GLfloat* valLoc)
 	glUniform3fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform3(std::string name, GLdouble* valLoc)
 {
 	glUniform3dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform3(std::string name, GLint* valLoc)
 {
 	glUniform3iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform3(std::string name, GLuint* valLoc)
 {
 	glUniform3uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform3(std::string name, const glm::vec3& valLoc)
+
+void ProgramPack::Uniform3(std::string name, const glm::vec3& val)
 {
-	glUniform3fv(Fetch(name), 1, &valLoc[0]);
+	glUniform3fv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform3(std::string name, const glm::dvec3& valLoc)
+
+void ProgramPack::Uniform3(std::string name, const glm::dvec3& val)
 {
-	glUniform3dv(Fetch(name), 1, &valLoc[0]);
+	glUniform3dv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform3(std::string name, const glm::ivec3& valLoc)
+
+void ProgramPack::Uniform3(std::string name, const glm::ivec3& val)
 {
-	glUniform3iv(Fetch(name), 1, &valLoc[0]);
+	glUniform3iv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform3(std::string name, const glm::u32vec3& valLoc)
+
+void ProgramPack::Uniform3(std::string name, const glm::u32vec3& val)
 {
-	glUniform3uiv(Fetch(name), 1, &valLoc[0]);
+	glUniform3uiv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -287,39 +555,46 @@ void ProgramPack::Uniform4(std::string name, GLfloat* valLoc)
 	glUniform4fv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform4(std::string name, GLdouble* valLoc)
 {
 	glUniform4dv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform4(std::string name, GLint* valLoc)
 {
 	glUniform4iv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::Uniform4(std::string name, GLuint* valLoc)
 {
 	glUniform4uiv(Fetch(name), 1, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform4(std::string name, const glm::vec4& valLoc)
+
+void ProgramPack::Uniform4(std::string name, const glm::vec4& val)
 {
-	glUniform4fv(Fetch(name), 1, &valLoc[0]);
+	glUniform4fv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform4(std::string name, const glm::dvec4& valLoc)
+
+void ProgramPack::Uniform4(std::string name, const glm::dvec4& val)
 {
-	glUniform4dv(Fetch(name), 1, &valLoc[0]);
+	glUniform4dv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform4(std::string name, const glm::ivec4& valLoc)
+
+void ProgramPack::Uniform4(std::string name, const glm::ivec4& val)
 {
-	glUniform4iv(Fetch(name), 1, &valLoc[0]);
+	glUniform4iv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::Uniform4(std::string name, const glm::u32vec4& valLoc)
+
+void ProgramPack::Uniform4(std::string name, const glm::u32vec4& val)
 {
-	glUniform4uiv(Fetch(name), 1, &valLoc[0]);
+	glUniform4uiv(Fetch(name), 1, &val[0]);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -330,19 +605,22 @@ void ProgramPack::UniformMat2(std::string name, GLfloat* valLoc, GLenum isTransp
 	glUniformMatrix2fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::UniformMat2(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix2dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat2(std::string name, const glm::mat2x2& valLoc)
+
+void ProgramPack::UniformMat2(std::string name, const glm::mat2x2& val)
 {
-	glUniformMatrix2fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix2fv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat2(std::string name, const glm::dmat2x2& valLoc)
+
+void ProgramPack::UniformMat2(std::string name, const glm::dmat2x2& val)
 {
-	glUniformMatrix2dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix2dv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -353,19 +631,22 @@ void ProgramPack::UniformMat3(std::string name, GLfloat* valLoc, GLenum isTransp
 	glUniformMatrix3fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::UniformMat3(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix3dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat3(std::string name, const glm::mat3x3& valLoc)
+
+void ProgramPack::UniformMat3(std::string name, const glm::mat3x3& val)
 {
-	glUniformMatrix3fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix3fv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat3(std::string name, const glm::dmat3x3& valLoc)
+
+void ProgramPack::UniformMat3(std::string name, const glm::dmat3x3& val)
 {
-	glUniformMatrix3dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix3dv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }
 
@@ -376,18 +657,21 @@ void ProgramPack::UniformMat4(std::string name, GLfloat* valLoc, GLenum isTransp
 	glUniformMatrix4fv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
+
 void ProgramPack::UniformMat4(std::string name, GLdouble* valLoc, GLenum isTransposed)
 {
 	glUniformMatrix4dv(Fetch(name), 1, isTransposed, valLoc);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat4(std::string name, const glm::mat4x4& valLoc)
+
+void ProgramPack::UniformMat4(std::string name, const glm::mat4x4& val)
 {
-	glUniformMatrix4fv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix4fv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }
-void ProgramPack::UniformMat4(std::string name, const glm::dmat4x4& valLoc)
+
+void ProgramPack::UniformMat4(std::string name, const glm::dmat4x4& val)
 {
-	glUniformMatrix4dv(Fetch(name), 1, GL_FALSE, &valLoc[0][0]);
+	glUniformMatrix4dv(Fetch(name), 1, GL_FALSE, &val[0][0]);
 	CheckStatus(__FUNCTION__);
 }

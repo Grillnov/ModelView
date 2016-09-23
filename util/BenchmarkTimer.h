@@ -9,23 +9,45 @@
 # ifndef __ModelView__BenchmarkTimer__
 # define __ModelView__BenchmarkTimer__
 
-# ifdef _MSC_VER
+# ifdef _MSC_VER//On windows platform.
 # include <Windows.h>
 
+/**
+@brief Timer object serving as an utility benchmark timer. 
+*/
 class BenchmarkTimer
 {
 private:
+	/*
+	CPU frequency.
+	*/
 	long long frequency;
+	/*
+	Start time.
+	*/
 	__int64 startTime;
+	/*
+	End time.
+	*/
 	__int64 endTime;
+	/*
+	Has the timer been started yet?
+	*/
 	bool isTimerStarted;
 public:
+	/**
+	@brief Default constructor.
+	*/
 	BenchmarkTimer() : isTimerStarted(false)
 	{
 		LARGE_INTEGER temp;
 		QueryPerformanceFrequency(&temp);
 		this->frequency = temp.QuadPart;
 	}
+
+	/**
+	@brief Start the benchmark timer.
+	*/
 	void startTimer()
 	{
 		LARGE_INTEGER temp;
@@ -33,6 +55,10 @@ public:
 		QueryPerformanceCounter(&temp);
 		this->startTime = temp.QuadPart;
 	}
+
+	/**
+	@brief End the benchmark timer.
+	*/
 	void endTimer()
 	{
 		if (!this->isTimerStarted)
@@ -45,15 +71,22 @@ public:
 		QueryPerformanceCounter(&temp);
 		this->endTime = temp.QuadPart;
 	}
+
+	/**
+	@brief Get the time elapsed in milliseconds.
+	*/
 	double getDeltaTimeInms()
 	{
 		return 1000.0 * (static_cast<double>(this->endTime - this->startTime) / this->frequency);
 	}
 };
-# else
+# else//On Unix-like platforms.
 
 # include <sys/time.h>
 
+/**
+@brief Timer object serving as an utility benchmark timer. 
+*/
 class BenchmarkTimer
 {
 private:
@@ -64,10 +97,17 @@ private:
 	long esec;
 	long eusec;
 public:
+	/**
+	@brief Default constructor.
+	*/
 	BenchmarkTimer() : isTimerStarted(false)
 	{
 		
 	}
+
+	/**
+	@brief Start the benchmark timer.
+	*/
 	void startTimer()
 	{
 		this->isTimerStarted = true;
@@ -75,6 +115,10 @@ public:
 		this->sec = timer.tv_sec;
 		this->usec = timer.tv_usec;
 	}
+
+	/**
+	@brief End the benchmark timer.
+	*/
 	void endTimer()
 	{
 		if (!this->isTimerStarted)
@@ -87,6 +131,10 @@ public:
 		this->esec = timer.tv_sec;
 		this->eusec = timer.tv_usec;
 	}
+
+	/**
+	@brief Get the time elapsed in milliseconds.
+	*/
 	double getDeltaTimeInms()
 	{
 		return 1000.0 * (esec - sec) + (eusec - usec) / 1000.0;

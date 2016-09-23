@@ -22,15 +22,9 @@
     <Filter Include="demo">
       <UniqueIdentifier>{7920de1a-f124-4288-a5bc-79d02dc9e7ce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="entrance">
-      <UniqueIdentifier>{303af348-7a05-4fc3-a5b3-76854cab9aee}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\AllinGL.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\BenchmarkTimer.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\MeshPack.h">
@@ -48,9 +42,6 @@
     <ClInclude Include="..\include\GLObject.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\GLAttachable.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\BufferPack.hpp">
       <Filter>include</Filter>
     </ClInclude>
@@ -66,7 +57,10 @@
     <ClInclude Include="..\util\FPSApplication.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\TextureTable.hpp">
+    <ClInclude Include="..\util\BenchmarkTimer.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GLAttachable.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,17 +98,35 @@
     <ClCompile Include="..\src\SamplerPack.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\LoadBMP.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LogCallStack.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\demo\TexPlain.cpp">
+      <Filter>demo</Filter>
     </ClCompile>
     <ClCompile Include="..\demo\Phong.cpp">
       <Filter>demo</Filter>
     </ClCompile>
-    <ClCompile Include="..\demo\TexPlain.cpp">
-      <Filter>demo</Filter>
+    <ClCompile Include="..\src\Texture1D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture2D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureRect.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureCube.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture3D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\LoadBMP.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\LogCallStack.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\PrintGLErrorStr.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
