@@ -10,9 +10,8 @@ private:
 	ProgramPack Program;
 	ProgramPack Program2;
 public:
-	Phong()
+	Phong() : Pack("D:/ModelView/assets/Android.obj")
 	{
-		Pack.Load("D:/ModelView/assets/Android.obj");
 		Pack.Attach();
 
 		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/phongvert.glsl";
@@ -63,8 +62,8 @@ public:
 
 //RunInstance(Phong)
 
-int main(void)
+/*int main(void)
 {
 	Phong app;
 	app.StartMainLoop();
-}
+}*/

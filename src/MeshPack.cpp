@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include "MeshPack.h"
+# include <MeshPack.h>
 
 void MeshPack::Attach()
 {
@@ -72,8 +72,9 @@ void MeshPack::Detach()
 	this->isAttached = false;
 }
 
-void MeshPack::Load(std::string Path)
+MeshPack::MeshPack(std::string Path)
 {
+	this->isAttached = false;
 	this->Path = Path;
 }
 

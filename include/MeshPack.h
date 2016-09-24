@@ -90,16 +90,11 @@ private:
 	void LoadFromBinary(std::string Path, std::fstream& fout);
 
 public:
-	/**
-	@brief Default constructor.
-	*/
-	MeshPack() = default;
-
 	/** 
 	@brief Loader.
 	@param Path The path to the designated Mesh file, a plain-text 3D Model or a blob.
 	*/
-	void Load(std::string Path);
+	MeshPack(std::string Path);
 
 	/**
 	@brief Attach this mesh, creating GLVertexArray, AttribPointer and stuff.

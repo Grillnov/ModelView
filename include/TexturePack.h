@@ -111,7 +111,7 @@ public:
 	/**
 	@brief Default constructor.
 	*/
-	TexturePic() : xWidth(0), yHeight(0) {}
+	//TexturePic() : xWidth(0), yHeight(0) {}
 
 	/**
 	@brief Constructor that designates its binding slot.

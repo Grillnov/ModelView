@@ -10,9 +10,8 @@ private:
 	ProgramPack Program, Program2;
 	Texture2D White;
 public:
-	virtual void CreateApplication()
+	TexPlain() : Pack("D:/ModelView/assets/BasePlain.obj"), White(0)
 	{
-		Pack.Load("D:/ModelView/assets/BasePlain.obj");
 		Pack.Attach();
 
 		unsigned char simpleTex[12] =
@@ -23,8 +22,8 @@ public:
 			2, 4, 255
 		};
 
-		White = Texture2D(0);
-		White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
+		//White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
+		White.LoadFromMemory(simpleTex, 2, 2);
 
 		Program.AddShader("D:/ModelView/shaders/texvert.glsl", GL_VERTEX_SHADER);
 		Program.AddShader("D:/ModelView/shaders/texfrag.glsl", GL_FRAGMENT_SHADER);
@@ -64,4 +63,4 @@ public:
 	}
 };
 
-//RunInstance(TexPlain, 640, 480)
+RunInstance(TexPlain)

@@ -51,11 +51,11 @@ GLApplication::GLApplication() : fWindow(nullptr)
 
 	if (isFullScreened)
 	{
-		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, nullptr, nullptr);
+		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, primaryMonitor, nullptr);
 	}
 	else
 	{
-		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, primaryMonitor, nullptr);
+		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, nullptr, nullptr);
 	}
 
 	glfwMakeContextCurrent(fWindow);

@@ -46,8 +46,10 @@ void Texture2D::LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Heigh
 	this->xWidth = Width;
 	this->yHeight = Height;
 
-	glTexStorage2D(GL_TEXTURE_2D, levels, internalFormat, xWidth, yHeight);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, Pixels);
+	//glTexStorage2D(GL_TEXTURE_2D, levels, internalFormat, xWidth, yHeight);
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, Pixels);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, xWidth, yHeight, 0, clientsideFormat, GL_UNSIGNED_BYTE, Pixels);
 
 	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
 	glBindTexture(GL_TEXTURE_2D, this->AssetID);

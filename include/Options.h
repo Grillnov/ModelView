@@ -28,8 +28,10 @@ Note that only OpenGL 3.2 or higher is supported by GLFW3, a value greater than
 
 /**
 @brief Modify this flag to make the window fullscreen or windowed.
+1 : fullscreened
+0 : windowed
 */
-# define isFullScreened true
+# define isFullScreened 0
 
 /**
 @brief Modify the string below to change the title of the window.
@@ -136,6 +138,6 @@ Headers from this project.
 /**
 Entrance definition.
 */
-# define RunInstance(Class, width, height) int main(int argc, char** argv) { Class app; app.StartWindow(); app.RunMainLoop(); }
+# define RunInstance(Class) int main(int argc, char** argv) { Class app; app.StartMainLoop(); }
 
 # endif

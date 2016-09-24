@@ -43,7 +43,7 @@
     <ClCompile Include="..\src\VertexArrayPack.cpp" />
     <ClCompile Include="..\src\Texture3D.cpp" />
     <ClCompile Include="..\util\FPSApplication.cpp" />
-    <ClCompile Include="..\util\LoadBMP.cpp" />
+    <ClCompile Include="..\util\TextureLoadBMP.cpp" />
     <ClCompile Include="..\util\LogCallStack.cpp" />
     <ClCompile Include="..\util\PrintGLErrorStr.cpp" />
   </ItemGroup>

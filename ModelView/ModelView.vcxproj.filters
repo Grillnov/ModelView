@@ -116,14 +116,14 @@
     <ClCompile Include="..\src\Texture3D.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\util\LoadBMP.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\util\LogCallStack.cpp">
       <Filter>util</Filter>
     </ClCompile>
     <ClCompile Include="..\util\PrintGLErrorStr.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\TextureLoadBMP.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

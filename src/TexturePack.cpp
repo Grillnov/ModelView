@@ -35,6 +35,17 @@ TexturePack::TexturePack(GLenum Slot)
 	}
 }
 
+TexturePack::~TexturePack()
+{
+	glInvalidateTexImage(this->AssetID, 0);
+
+	glDeleteTextures(1, &this->AssetID);
+	CheckStatus(__FUNCTION__);
+
+	Log(debugMsg, "Texture %u at slot %u was successfully unregistered.", this->AssetID, this->layoutSlot);
+	OccupiedLayouts.erase(this->layoutSlot);
+}
+
 void TexturePic::Param(GLenum target, GLfloat param)
 {
 	this->defaultSampler.Param(target, param);
