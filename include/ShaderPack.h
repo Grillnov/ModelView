@@ -6,15 +6,15 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef SHADERPACK
-# define SHADERPACK
+# ifndef __ModelView__ShaderPack__
+# define __ModelView__ShaderPack__
 
-# include "AllinGL.h"
+# include <Options.h>
 
 /**
 @brief Shader object that loads source code and compile it into a shader.
 */
-class ShaderPack : public GLAttachable
+class ShaderPack : public GLAsset
 {
 private:
 	std::string Path;//Where do the asset sleep?
@@ -30,40 +30,36 @@ private:
 	void LoadFromText(std::string Path, std::fstream& fin);
 
 	/*
-	@brief
-	Load from compiled binary blob.
+	@brief Load from compiled binary blob.
+
 	@param Path the path of the binary file.
+	TODO: implement it
 	*/
 	void LoadFromBinary(std::string Path, std::fstream& fin);
 
 	/*
-	@brief
-	Save the binary blob to file.
+	@brief Save the binary blob to file.
+
+	TODO: implement it
 	*/
 	void SaveBinary();
 public:
 	/**
-	@brief Construct the shader.
+	@brief Register a shader in the OpenGL context.
+	
 	@param Path The path to the shader source code.
+
 	@param Type The type of the shader. A value among GL_VERTEX_SHADER, GL_FRAGMENT_SHADER
 	GL_GEOMETRY_SHADER, etc. is expected.
 	*/
 	ShaderPack(std::string Path, GLenum Type);
 
 	/**
-	@brief Attach the shader. Register and compile it.
+	@brief Unregister the shader from the OpenGL context, recycling its name for further use.
 	*/
-	void Attach() override;
+	~ShaderPack();
 
-	/**
-	@brief Detach the shader. Delete this shader so that server is able to reallocate its ID.
-	*/
-	void Detach() override;
-
-	/**
-	@brief Converter to GLuint, so that it can be directly used as an argument in raw GL interfaces.
-	*/
-	operator GLuint();
+	void Compile();
 
 	/**
 	@brief Tell its type.

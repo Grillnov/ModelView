@@ -6,9 +6,6 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <AllinGL.h>
-# include <GLApplication.h>
-# include <CameraView.h>
 # include <FPSApplication.h>
 
 const static float VelocityDirect = 0.01f;//Forward/Backward moving speed
@@ -19,7 +16,7 @@ const static float VelocitySwivel = 0.0015f;//camera spin speed
 const static bool isYAxisReversed = true;
 const static bool isXAxisReversed = false;
 
-void FPSApplication::HandleController()
+void FPSApplication::PollController()
 {
 	if (IsKeyDown('W'))
 	{

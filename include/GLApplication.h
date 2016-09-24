@@ -10,8 +10,8 @@
 # ifndef __ModelView__GLApplication__
 # define __ModelView__GLApplication__
 
-# include "AllinGL.h"
-# include "GLObject.h"
+# include <Options.h>
+# include <GLObject.h>
 
 /**
  * @brief GLApplication class is the base class of a complete OpenGL application. 
@@ -37,23 +37,9 @@ public:
 	virtual ~GLApplication();
 
 	/**
-	@brief This method creates the GLFW window, and also initializes the OpenGL context.
-	@param title The title of the window.
-	@param width The width of the window in pixels.
-	@param height The height of the window in pixels.
-	*/
-	void StartWindow(const char* title, int width, int height);
-
-	/**
-	@brief Create the window, yet it's gonna be a fullscreen one.
-	@param title The title of the window.
-	*/
-	void StartWindow(const char* title);
-
-	/**
 	@brief Enter the main GLFW event loop.
 	*/
-	virtual void RunMainLoop();
+	virtual void StartMainLoop();
 
 	/**
 	@brief Gets the state of the keyboard.
@@ -165,7 +151,7 @@ protected:
 	 *  - MouseScrollDown()
 	 *  - WindowClosed()
 	 */
-	virtual void CreateApplication() = 0;
+	//virtual void CreateApplication() = 0;
 
 	/** @brief Event callback of every frame draw event.
 	 *
@@ -177,7 +163,7 @@ protected:
 	 *
 	 * Free the objects created in CreateApplication() during this callback.
 	 */
-	virtual void ShutdownApplication() = 0;
+	//virtual void ShutdownApplication() = 0;
 
 	 /** @brief Event callback when the window size has changed.
 	 * @param[in] width the new window width.
@@ -218,7 +204,7 @@ protected:
 	/**
 	Update the status based on controller (e.g. mouse and keyboard) status.
 	*/
-	virtual void HandleController()
+	virtual void PollController()
 	{
 		return;
 	}
@@ -335,8 +321,6 @@ private:
 	{
 		instance()->WindowClosed(window);
 	}
-	
-	void WindowCreation(const char* title, int width, int height, bool isFullScreen);
 };
 
 # endif

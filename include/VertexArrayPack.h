@@ -9,20 +9,20 @@
 # ifndef __ModelView__VertexArrayPack__
 # define __ModelView__VertexArrayPack__
 
-# include <AllinGL.h>
+# include <Options.h>
 # include <BufferPack.hpp>
-# include <unordered_map>
+# include <unordered_set>
 
 /**
 @brief VertexArray object that loads and activates several vertex attributes as a vertex array.
 */
-class VertexArrayPack : public GLAttachable
+class VertexArrayPack : public GLAsset
 {
 private:
 	/*
 	Attributes are stored here, ready for attaching.
 	*/
-	std::unordered_map<GLuint, GLuint> Attribs;
+	std::unordered_set<GLuint> Attribs;
 
 	/*
 	Add an attribute to the vertex array.
@@ -31,21 +31,24 @@ private:
 
 public:
 	/**
-	@brief Creates the vertex array, registering its name on the server side.
+	@brief Register a vertexarray in the OpenGL context.
 	*/
-	void Attach() override;
+	VertexArrayPack();
 
 	/**
-	@brief Destroys the vertex array, recycling its name for further usage.
+	@brief Unregister the vertexarray from the OpenGL context, recycling its name for further use.
 	*/
-	void Detach() override;
+	~VertexArrayPack();
 
 	/**
 	@brief
 	Register a buffer object storing single precision floating points as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components);
@@ -54,8 +57,11 @@ public:
 	@brief
 	Register a buffer object storing double precisions as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components);
@@ -64,8 +70,11 @@ public:
 	@brief
 	Register a buffer object storing signed integers as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLint>& buffer, GLuint index, GLuint components);
@@ -74,8 +83,11 @@ public:
 	@brief
 	Register a buffer object storing unsigned integers as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLuint>& buffer, GLuint index, GLuint components);
@@ -84,8 +96,11 @@ public:
 	@brief
 	Register a buffer object storing signed short integers as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLshort>& buffer, GLuint index, GLuint components);
@@ -94,8 +109,11 @@ public:
 	@brief
 	Register a buffer object storing unsigned short integers as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components);
@@ -104,8 +122,11 @@ public:
 	@brief
 	Register a buffer object storing signed bytes as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLbyte>& buffer, GLuint index, GLuint components);
@@ -114,22 +135,19 @@ public:
 	@brief
 	Register a buffer object storing unsigned bytes as an vertex attribute at layout index(layout location = index).
 	Rejects the operation if the index is already occupied.
+
 	@param buffer The buffer storing attribute values.
+
 	@param index The layout index of the attribute in GLSL shader code.
+
 	@param components How many components a vertex can have. A value between 1 to 4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLubyte>& buffer, GLuint index, GLuint components);
 
 	/**
-	@brief
-	Bind the vertex array.
+	@brief Bind the vertex array.
 	*/
 	void Bind();
-
-	/**
-	@brief Converter to GLuint, so that it can be directly used as an argument in raw GL interfaces.
-	*/
-	operator GLuint();
 };
 
 # endif
