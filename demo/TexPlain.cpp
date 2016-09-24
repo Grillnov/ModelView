@@ -22,8 +22,8 @@ public:
 			2, 4, 255
 		};
 
-		White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
-		//White.LoadFromMemory(simpleTex, 2, 2);
+		//White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
+		White.LoadFromMemory(simpleTex, 2, 2);
 
 		Program.AddShader("D:/ModelView/shaders/texvert.glsl", GL_VERTEX_SHADER);
 		Program.AddShader("D:/ModelView/shaders/texfrag.glsl", GL_FRAGMENT_SHADER);
