@@ -11,13 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\AllinGL.h" />
     <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CameraView.h" />
-    <ClInclude Include="..\include\GLApplication.h" />
-    <ClInclude Include="..\include\GLAttachable.h" />
+    <ClInclude Include="..\include\GLAsset.h" />
     <ClInclude Include="..\include\GLObject.h" />
     <ClInclude Include="..\include\MeshPack.h" />
+    <ClInclude Include="..\include\Options.h" />
     <ClInclude Include="..\include\ProgramPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\TexturePack.h" />

@@ -5,39 +5,32 @@
 //  Created by Bowen Yang on Aug 20, 2016.
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
-# include "VertexArrayPack.h"
 
-void VertexArrayPack::Attach()
+# include <VertexArrayPack.h>
+
+VertexArrayPack::VertexArrayPack()
 {
-	if (this->isAttached)
-	{
-		Warning(debugMsg, "Vertexarray %u is already attached, bailing.", this->AssetID);
-		return;
-	}
-
 	glGenVertexArrays(1, &this->AssetID);
-	glBindVertexArray(this->AssetID);
+	//glBindVertexArray(this->AssetID);
 
+	if (AssetID != 0)
+	{
+		Log(debugMsg, "Vertexarray %u was successfully registered.", this->AssetID);
+	}
+	else
+	{
+		Error(debugMsg, "Failed to create a vertexarray.");
+	}
 	CheckStatus(__FUNCTION__);
-
-	Log(debugMsg, "Vertexarray %u was successfully attached.", this->AssetID);
-	this->isAttached = true;
 }
 
-void VertexArrayPack::Detach()
+VertexArrayPack::~VertexArrayPack()
 {
-	if (!this->isAttached)
-	{
-		Warning(debugMsg, "Vertexarray %u is not attached yet, bailing.", this->AssetID);
-		return;
-	}
-
 	glDeleteVertexArrays(1, &this->AssetID);
 
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Vertexarray %u was successfully detached.", this->AssetID);
-	this->isAttached = false;
 }
 
 void VertexArrayPack::AddAttribute(GLuint buffer, GLuint index, GLuint components, GLenum type)
@@ -52,8 +45,6 @@ void VertexArrayPack::AddAttribute(GLuint buffer, GLuint index, GLuint component
 		Error(debugMsg, "For vertexarray %u, index %u is already occupied by another attribute.", this->AssetID, index);
 		return;
 	}
-
-	Attribs[index] = buffer;
 
 	glBindVertexArray(this->AssetID);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -130,16 +121,6 @@ void VertexArrayPack::AddAttribAt(BufferPack<GLubyte>& buffer, GLuint index, GLu
 
 void VertexArrayPack::Bind()
 {
-	if (!this->isAttached)
-	{
-		Warning(debugMsg, "Cannot bind vertexarray %u for it's not attached yet, bailing.", this->AssetID);
-		return;
-	}
 	glBindVertexArray(this->AssetID);
 	CheckStatus(__FUNCTION__);
-}
-
-VertexArrayPack::operator GLuint()
-{
-	return this->AssetID;
 }

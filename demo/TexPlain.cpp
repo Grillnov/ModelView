@@ -8,11 +8,11 @@ class TexPlain : public FPSApplication
 private:
 	MeshPack Pack;
 	ProgramPack Program, Program2;
-	Texture1D White;
+	Texture2D White;
 public:
 	virtual void CreateApplication()
 	{
-		Pack = MeshPack("D:/ModelView/assets/BasePlain.obj");
+		Pack.Load("D:/ModelView/assets/BasePlain.obj");
 		Pack.Attach();
 
 		unsigned char simpleTex[12] =
@@ -23,20 +23,18 @@ public:
 			2, 4, 255
 		};
 
-		White = Texture1D("D:/ModelView/assets/trial.bmp", 0);
-		//White = Texture1D(&simpleTex[0], 2, 0);
-		White.Attach();
+		White = Texture2D(0);
+		White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
 
 		Program.AddShader("D:/ModelView/shaders/texvert.glsl", GL_VERTEX_SHADER);
 		Program.AddShader("D:/ModelView/shaders/texfrag.glsl", GL_FRAGMENT_SHADER);
-		Program.Attach();
-		Program.Use();
+		Program.Link();
 
 		Program.Uniform1("tex", 0);
 
 		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
 		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
-		Program2.Attach();
+		Program2.Link();
 	}
 
 	virtual void RenderFrame()
@@ -63,7 +61,6 @@ public:
 	virtual void ShutdownApplication()
 	{
 		Pack.Detach();
-		Program.Detach();
 	}
 };
 

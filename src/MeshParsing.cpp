@@ -161,8 +161,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 		MassCenter[i] = 0.0f;
 	}
 
-	this->VertexCoord = BufferPack<GLfloat>(3 * SizeInVertices);
-	VertexCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+	this->VertexCoord.Alloc(3 * SizeInVertices, GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	unsigned counter = 0;
 	for (auto a : Vertices)
 	{
@@ -189,8 +188,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	this->VertexArray.AddAttribAt(VertexCoord, Pos, 3);
 
 
-	this->NormalCoord = BufferPack<GLfloat>(3 * SizeInVertices);
-	NormalCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+	this->NormalCoord.Alloc(3 * SizeInVertices, GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	counter = 0;
 	for (auto a : Vertices)
 	{
@@ -203,8 +201,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	this->VertexArray.AddAttribAt(NormalCoord, Nor, 3);
 
 
-	this->TextureCoord = BufferPack<GLfloat>(3 * SizeInVertices);
-	TextureCoord.Attach(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+	this->TextureCoord.Alloc(3 * SizeInVertices, GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 	counter = 0;
 	for (auto a : Vertices)
 	{
@@ -220,8 +217,7 @@ void MeshPack::ParseModel(std::string Path, std::fstream& fin)
 	Vertices.clear();
 
 
-	this->ElementArr = BufferPack<GLuint>(IndexSum);
-	ElementArr.Attach(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
+	this->ElementArr.Alloc(IndexSum, GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
 	counter = 0;
 	for (auto a : ElementArrayTemp)
 	{

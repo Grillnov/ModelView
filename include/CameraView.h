@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <AllinGL.h>
+# include <Options.h>
 
 # ifndef __ModelView__CameraView__
 # define __ModelView__CameraView__
