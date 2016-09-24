@@ -7,10 +7,10 @@ class TexPlain : public FPSApplication
 {
 private:
 	MeshPack Pack;
-	ProgramPack Program, Program2;
-	Texture2D White;
+	ProgramPack Program;
+	Texture2D SimplePic;
 public:
-	TexPlain() : Pack("D:/ModelView/assets/BasePlain.obj"), White(0)
+	TexPlain() : Pack("D:/ModelView/assets/BasePlain.obj"), SimplePic(0)
 	{
 		Pack.Attach();
 
@@ -22,18 +22,14 @@ public:
 			2, 4, 255
 		};
 
-		//White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
-		White.LoadFromMemory(simpleTex, 2, 2);
+		SimplePic.LoadFromBMP("D:/ModelView/assets/trial.bmp");
+		//White.LoadFromMemory(simpleTex, 2, 2);
 
-		Program.AddShader("D:/ModelView/shaders/texvert.glsl", GL_VERTEX_SHADER);
-		Program.AddShader("D:/ModelView/shaders/texfrag.glsl", GL_FRAGMENT_SHADER);
+		Program[GL_VERTEX_SHADER] = ("D:/ModelView/shaders/texvert.glsl");
+		Program[GL_FRAGMENT_SHADER] = ("D:/ModelView/shaders/texfrag.glsl");
 		Program.Link();
 
-		Program.Uniform1("tex", 0);
-
-		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
-		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
-		Program2.Link();
+		Program["tex"] = 0;
 	}
 
 	virtual void RenderFrame()
@@ -44,16 +40,9 @@ public:
 
 		glm::mat4 MVP = FPSCamera.GetModelViewProjection(GetAspectRatio());
 		Program.Use();
-		Program.UniformMat4("transformMatrix", MVP);
+		Program["transformMatrix"] = MVP;
 		
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		Pack.DrawMesh();
-
-		Program2.Use();
-		Program2.Uniform3("color", glm::vec3(0.0f, 0.0f, 1.0f));
-		Program2.UniformMat4("MVP", MVP);
-
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		Pack.DrawMesh();
 	}
 
