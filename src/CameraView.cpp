@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <AllinGL.h>
+# include <Options.h>
 # include <CameraView.h>
 
 CameraView::CameraView() : FOV(45.0f)

@@ -9,7 +9,7 @@
 # ifndef __ModelView__MeshPack__
 # define __ModelView__MeshPack__
 
-# include <AllinGL.h>
+# include <Options.h>
 # include <BufferPack.hpp>
 # include <VertexArrayPack.h>
 
@@ -90,13 +90,8 @@ private:
 	void LoadFromBinary(std::string Path, std::fstream& fout);
 
 public:
-	/**
-	@brief Default constructor.
-	*/
-	MeshPack() = default;
-
 	/** 
-	@brief Constructor.
+	@brief Loader.
 	@param Path The path to the designated Mesh file, a plain-text 3D Model or a blob.
 	*/
 	MeshPack(std::string Path);

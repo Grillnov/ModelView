@@ -10,20 +10,41 @@
 
 std::unordered_set<GLenum> TexturePack::OccupiedLayouts = std::unordered_set<GLenum>();
 
-TexturePack::operator GLuint()
+TexturePack::TexturePack(GLenum Slot)
 {
-	if (!this->isAttached)
+	if (Slot > GL_TEXTURE0)
+		Slot -= GL_TEXTURE0;
+
+	if (OccupiedLayouts.find(Slot) != OccupiedLayouts.end())
 	{
-		Error(debugMsg, "Texture %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
-		return -1;
+		Error(debugMsg, "Texture slot %u is already occupied!", Slot);
 	}
-	return this->AssetID;
+
+	OccupiedLayouts.emplace(Slot);
+	this->layoutSlot = Slot;
+
+	glGenTextures(1, &this->AssetID);
+
+	if (AssetID != 0)
+	{
+		Log(debugMsg, "Texture %u at slot %u was successfully registered.", this->AssetID, this->layoutSlot);
+	}
+	else
+	{
+		Error(debugMsg, "Failed to create a program.");
+	}
 }
 
+TexturePack::~TexturePack()
+{
+	glInvalidateTexImage(this->AssetID, 0);
 
+	glDeleteTextures(1, &this->AssetID);
+	CheckStatus(__FUNCTION__);
 
-TexturePic::TexturePic() : Buffer(nullptr), Channel(0), xWidth(0), yHeight(0), isFromFile(false)
-{}
+	Log(debugMsg, "Texture %u at slot %u was successfully unregistered.", this->AssetID, this->layoutSlot);
+	OccupiedLayouts.erase(this->layoutSlot);
+}
 
 void TexturePic::Param(GLenum target, GLfloat param)
 {

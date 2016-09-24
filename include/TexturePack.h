@@ -9,7 +9,7 @@
 # ifndef __ModelView__TexturePack__
 # define __ModelView__TexturePack__
 
-# include <AllinGL.h>
+# include <Options.h>
 # include <vector>
 # include <unordered_set>
 
@@ -17,48 +17,51 @@
 @brief Samplers. You may want to add samplers for textures yourself, or just
 use the default sampler and modify its parameters.
 */
-class SamplerPack : public GLAttachable
+class SamplerPack : public GLAsset
 {
 public:
 	/**
-	@brief Attach the sampler. Register its name.
+	@brief Register the sampler.
 	*/
-	void Attach() override;
+	SamplerPack();
 
 	/**
-	@brief Detach the sampler. Recycling its name for further usage.
+	@brief Unregister the sampler, recycling its name for further usage.
 	*/
-	void Detach() override;
+	~SamplerPack();
 
 	/**
-	@brief Converter to GLuint, so that it can be directly used as an argument in raw GL interfaces.
-	*/
-	operator GLuint() override;
+	@brief Feed a single precision floating point parameter to the sampler.
 
-	/**
-	@brief Feeding a single precision floating point parameter to the sampler.
 	@param target The name of the parameter.
+
 	@param param The value of the parameter.
 	*/
 	void Param(GLenum target, GLfloat param);
 
 	/**
-	@brief Feeding an integer parameter to the sampler.
+	@brief Feed an integer parameter to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The value of the parameter.
 	*/
 	void Param(GLenum target, GLint param);
 
 	/**
-	@brief Feeding some single precision floating point parameters to the sampler.
+	@brief Feed some single precision floating point parameters to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum target, GLfloat* param);
 
 	/**
-	@brief Feeding some integer parameters to the sampler.
+	@brief Feed some integer parameters to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum target, GLint* param);
@@ -67,28 +70,36 @@ public:
 /**
 @brief Virtual base class for all kinds of textures.
 */
-class TexturePack : public GLAttachable
+class TexturePack : public GLAsset
 {
 public:
 	/**
-	@brief Default constructor.
+	@brief Dummy default constructor.
 	*/
 	TexturePack() = default;
+
+	/**
+	@brief Register a texture in the OpenGL context.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	*/
+	TexturePack(GLenum Slot);
+
+	/**
+	@brief Unregister the buffer from the OpenGL context, recycling its name for further use.
+	*/
+	~TexturePack();
 protected:
 	/**
 	@brief Layout index of the sampler in GLSL shader source code.
 	*/
-	GLuint layout;
+	GLuint layoutSlot;
 
 	/**
 	@brief Preventing from binding two texture objects to one binding slot.
 	*/
 	static std::unordered_set<GLenum> OccupiedLayouts;
-
-	/**
-	@brief Converter to GLuint, so that it can be directly used as an argument in raw GL interfaces.
-	*/
-	operator GLuint() override;
 };
 
 /**
@@ -100,42 +111,56 @@ public:
 	/**
 	@brief Default constructor.
 	*/
-	TexturePic();
+	//TexturePic() : xWidth(0), yHeight(0) {}
+
+	/**
+	@brief Constructor that designates its binding slot.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	*/
+	TexturePic(GLenum Slot) : TexturePack(Slot), xWidth(0), yHeight(0) {}
 protected:
 	/**
-	@brief Load the texture from a BMP file.
-	@param Path The path to the bmp file.
 	*/
-	void LoadFromBMP(std::string Path);
+	unsigned char* LoadBMP(std::string Path);
 
 	/**
 	@brief Set the texture parameters via the default sampler.
-	Feeding a single precision floating point parameter to the sampler.
+	Feed a single precision floating point parameter to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The value of the parameter.
 	*/
 	void Param(GLenum target, GLfloat param);
 
 	/**
 	@brief Set the texture parameters via the default sampler.
-	Feeding an integer parameter to the sampler.
+	Feed an integer parameter to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The value of the parameter.
 	*/
 	void Param(GLenum target, GLint param);
 
 	/**
 	@brief Set the texture parameters via the default sampler.
-	Feeding some single precision floating point parameters to the sampler.
+	Feed some single precision floating point parameters to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum target, GLfloat* param);
 
 	/**
 	@brief Set the texture parameters via the default sampler.
-	Feeding some integer parameters to the sampler.
+	Feed some integer parameters to the sampler.
+
 	@param target The name of the parameter.
+
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum target, GLint* param);
@@ -154,21 +179,6 @@ protected:
 	@brief Its height.
 	*/
 	GLsizei yHeight;
-
-	/**
-	@brief Number of channels.
-	*/
-	int Channel;
-
-	/**
-	@brief The temporary BMP pixel buffer storage pointer.
-	*/
-	unsigned char *Buffer;
-
-	/**
-	@brief Is the texture from a file? If so we have to recycle the buffer memory by ourselves...
-	*/
-	bool isFromFile;
 };
 
 /**
@@ -236,40 +246,30 @@ public:
 	Texture1D() = default;
 
 	/**
+	@brief Constructor that designates its binding slot.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	*/
+	Texture1D(GLenum Slot) : TexturePic(Slot) {}
+
+	/**
 	@brief Initialize the texture from local pointers.
-	@param Buffer The pointer to the texture storage.
-	@param width The width of the 1D texture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	Texture1D(unsigned char* Buffer, size_t width, GLenum layout);
 
-	/**
-	@brief Initialize the texture from pictures.
-	@param Path The path to the texture picture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	Texture1D(std::string Path, GLenum layout);
+	@param Pixels The pointer to the texture storage.
 
-	/**
-	@brief Initialize the texture from pictures.
-	internalFormat's set as GL_R8 by default, with client side arrangement set as GL_RED.
-	*/
-	void Attach() override;
+	@param Width The width of the 1D texture.
 
-	/**
-	@brief Initialize the texture from pictures.
-	@param clientsideFormat The arrangement of the local buffer on the client side.
-	A value among GL_RED, GL_RGB, GL_BGRA...... etc. is expected.
 	@param internalFormat The storage format on the server side.
 	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	*/
-	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
+	By default it's set as GL_R8.
 
-	/**
-	@brief Detach the texture, recycling its name for further usage.
+	@param clientsideFormat The arrangement of the local storage on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RED.
 	*/
-	void Detach() override;
+	void LoadFromMemory(unsigned char* Pixels, size_t Width, 
+		GLint internalFormat = GL_R8, GLint clientsideFormat = GL_RED);
 };
 
 /**
@@ -284,41 +284,59 @@ public:
 	Texture2D() = default;
 
 	/**
+	@brief Constructor that designates its binding slot.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	*/
+	Texture2D(GLenum Slot) : TexturePic(Slot) {}
+
+	/**
 	@brief Initialize the texture from local pointers.
-	@param Buffer The pointer to the texture storage.
-	@param width The width of the 2D texture.
-	@param height The height of the 2D texture.
-	@param layout The index of the sampler in GLSL shader code.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 2.
+
+	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	Texture2D(unsigned char* pixels, size_t width, size_t height, GLenum layout);
+	void LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height, 
+		GLint internalFormat = GL_RGB32F, GLint clientsideFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
 
 	/**
-	@brief Initialize the texture from pictures.
+	@brief Load the texels from BMP files.
+
 	@param Path The path to the texture picture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	Texture2D(std::string Path, GLenum layout);
 
-	/**
-	@brief Initialize the texture from pictures.
-	internalFormat's set as GL_RGB by default, with client side arrangement set as GL_BGR(default BMP protocol).
-	*/
-	void Attach() override;
-
-	/**
-	@brief Initialize the texture from pictures.
-	@param clientsideFormat The arrangement of the local buffer on the client side.
-	A value among GL_RED, GL_RGB, GL_BGRA...... etc. is expected.
 	@param internalFormat The storage format on the server side.
 	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 2.
+
 	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
 	*/
-	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
-
-	/**
-	@brief Detach the texture, recycling its name for further usage.
-	*/
-	void Detach() override;
+	void LoadFromBMP(std::string Path, GLint internalFormat = GL_RGB32F, 
+		GLint clientsideFormat = GL_BGR, GLsizei levels = 2, bool generateMipMap = true);
 };
 
 /**
@@ -333,41 +351,48 @@ public:
 	TextureRect() = default;
 
 	/**
+	@brief Constructor that designates its binding slot.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	*/
+	TextureRect(GLenum Slot) : TexturePic(Slot) {}
+
+	/**
 	@brief Initialize the texture from local pointers.
-	@param Buffer The pointer to the texture storage.
-	@param width The width of the rectangular texture.
-	@param height The height of the rectangular texture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	TextureRect(unsigned char* pixels, size_t width, size_t height, GLenum layout);
 
-	/**
-	@brief Initialize the texture from pictures.
-	@param Path The path to the texture picture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	TextureRect(std::string Path, GLenum layout);
+	@param Pixels The pointer to the texture storage.
 
-	/**
-	@brief Initialize the texture from pictures.
-	internalFormat's set as GL_R8 by default, with client side arrangement set as GL_RED.
-	*/
-	void Attach() override;
+	@param Width The width of the 2D texture.
 
-	/**
-	@brief Initialize the texture from pictures.
-	@param clientsideFormat The arrangement of the local buffer on the client side.
-	A value among GL_RED, GL_RGB, GL_BGRA...... etc. is expected.
+	@param Height The height of the 2D texture.
+
 	@param internalFormat The storage format on the server side.
 	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as GL_RGB32F.
+
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
 	*/
-	void Attach(GLint clientsideFormat, GLint internalFormat);
+	void LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height,
+		GLint internalFormat = GL_RGB32F, GLint clientsideFormat = GL_RGB);
 
 	/**
-	@brief Detach the texture, recycling its name for further usage.
+	@brief Load the texels from BMP files.
+
+	@param Path The path to the texture picture.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
+	By defualt it's set as GL_RGB32F.
+
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
 	*/
-	void Detach() override;
+	void LoadFromBMP(std::string Path, GLint internalFormat = GL_RGB32F,
+		GLint clientsideFormat = GL_BGR);
 };
 
 /**
@@ -382,24 +407,58 @@ public:
 	TextureMultiSamp() = default;
 
 	/**
-	@brief Initialize the texture from local pointers.
-	@param Buffer The pointer to the texture storage.
-	@param width The width of the 2D texture.
-	@param height The height of the 2D texture.
-	@param layout The index of the sampler in GLSL shader code.
+	@brief Constructor that designates its binding slot.
+
+	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
+	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
 	*/
-	TextureMultiSamp(unsigned char* Buffer, size_t width, size_t height, GLenum layout);
+	TextureMultiSamp(GLenum Slot) : TexturePic(Slot) {}
 
 	/**
-	@brief Initialize the texture from pictures.
+	@brief Initialize the texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 2.
+
+	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	TextureMultiSamp(std::string Path, GLenum layout);
+	void LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height,
+		GLint internalFormat = GL_RGB, GLint clientsideFormat = GL_BGR, GLsizei levels = 2, bool generateMipMap = true);
 
-	void Attach() override;
+	/**
+	@brief Load the texels from BMP files.
 
-	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
+	@param Path The path to the texture picture.
 
-	void Detach() override;
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 2.
+
+	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
+	*/
+	void LoadFromBMP(std::string Path, GLint clientsideFormat = GL_BGR,
+		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
 };
 
 /**
@@ -415,34 +474,32 @@ public:
 
 	/**
 	@brief Initialize the texture from local pointers.
-	@param Buffer The pointer to the texture storage.
-	@param width The width of the 3D texture.
-	@param height The height of the 3D texture.
-	@param depth The depth of the 3D texture.
-	@param layout The index of the sampler in GLSL shader code.
-	*/
-	Texture3D(unsigned char* pixels, size_t width, size_t height, size_t depth, GLenum layout);
 
-	/**
-	@brief Initialize the texture from pictures.
-	internalFormat's set as GL_R8 by default, with client side arrangement set as GL_RED.
-	*/
-	void Attach() override;
+	@param Pixels The pointer to the texture storage.
 
-	/**
-	@brief Initialize the texture from pictures.
-	@param clientsideFormat The arrangement of the local buffer on the client side.
-	A value among GL_RED, GL_RGB, GL_BGRA...... etc. is expected.
+	@param Width The width of the 3D texture.
+
+	@param Height The height of the 3D texture.
+
+	@param Depth The depth of the 3D texture.
+
 	@param internalFormat The storage format on the server side.
 	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	*/
-	void Attach(GLint clientsideFormat, GLint internalFormat, bool generateMipMap = true);
+	By default it's set as GL_RGB.
 
-	/**
-	@brief Detach the texture, recycling its name for further usage.
+	@param clientsideFormat The arrangement of the local buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 2.
+
+	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	void Detach() override;
+	void LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height, size_t Depth,
+		GLint internalFormat = GL_RGB, GLint clientsideFormat = GL_BGR, GLsizei levels = 2, bool generateMipMap = true);
+
 private:
 	GLsizei dDepth;
 };
@@ -466,9 +523,9 @@ public:
 	*/
 	TextureCube(std::string Path, GLenum layout);
 
-	void Attach() override;
+	//void Attach() override;
 	void Attach(GLint internalFormat, GLboolean generateMipMap);
-	void Detach() override;
+	//void Detach() override;
 };
 
 /**
@@ -477,8 +534,8 @@ public:
 class Texture1DArray : public TexturePic
 {
 public:
-	void Attach() override;
-	void Detach() override;
+	//void Attach() override;
+	//void Detach() override;
 private:
 	void Bind(GLenum target);
 	GLsizei size;
@@ -491,8 +548,8 @@ private:
 class Texture2DArray : public TexturePic
 {
 public:
-	void Attach() override;
-	void Detach() override;
+	//void Attach() override;
+	//void Detach() override;
 private:
 	void Bind(GLenum target);
 	GLsizei size;
