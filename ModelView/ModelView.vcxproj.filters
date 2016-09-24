@@ -24,9 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\AllinGL.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\MeshPack.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -61,6 +58,9 @@
       <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GLAttachable.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Options.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

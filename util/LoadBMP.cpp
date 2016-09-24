@@ -42,7 +42,7 @@ struct bmpInfo
 	DWORD	biclrs[2];
 };
 
-void TexturePic::LoadFromBMP(std::string Path)
+unsigned char* TexturePic::LoadBMP(std::string Path)
 {
 	bmpHeader fileHeader;
 	bmpInfo fileInfo;
@@ -71,14 +71,15 @@ void TexturePic::LoadFromBMP(std::string Path)
 		Error(debugMsg, "Format of BMP file %s is not supported yet.", Path.c_str());
 	}
 
-	this->Channel = fileInfo.biBitCount / 8;
-
 	this->xWidth = fileInfo.biWidth;
 	this->yHeight = glm::abs(fileInfo.biHeight);
+
 	size_t bufferSize = xWidth * yHeight * 3;
+
+	unsigned char* buffer = nullptr;
 	try
 	{
-		this->Buffer = new unsigned char[bufferSize];
+		buffer = new unsigned char[bufferSize];
 	}
 	catch (std::bad_alloc exception)
 	{
@@ -86,7 +87,7 @@ void TexturePic::LoadFromBMP(std::string Path)
 			, bufferSize);
 	}
 
-	fin.read(reinterpret_cast<char*>(this->Buffer), bufferSize);
+	fin.read(reinterpret_cast<char*>(buffer), bufferSize);
 
 	fin.close();
 
@@ -98,10 +99,12 @@ void TexturePic::LoadFromBMP(std::string Path)
 
 		for (int i = 0; i<(fileInfo.biHeight * -1) / 2; i++)
 		{
-			memcpy(tmp, &this->Buffer[i * width * 3], width * 3);
-			memcpy(&this->Buffer[i * width * 3], &this->Buffer[(height - 1 - i) * width * 3], width * 3);
-			memcpy(&this->Buffer[(height - i - 1) * width * 3], tmp, width * 3);
+			memcpy(tmp, &buffer[i * width * 3], width * 3);
+			memcpy(&buffer[i * width * 3], &buffer[(height - 1 - i) * width * 3], width * 3);
+			memcpy(&buffer[(height - i - 1) * width * 3], tmp, width * 3);
 		}
 		delete[] tmp;
 	}
+
+	return buffer;
 }
