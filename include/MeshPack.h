@@ -9,7 +9,7 @@
 # ifndef __ModelView__MeshPack__
 # define __ModelView__MeshPack__
 
-# include <Options.h>
+# include <AllinGL.h>
 # include <BufferPack.hpp>
 # include <VertexArrayPack.h>
 
@@ -96,10 +96,10 @@ public:
 	MeshPack() = default;
 
 	/** 
-	@brief Loader.
+	@brief Constructor.
 	@param Path The path to the designated Mesh file, a plain-text 3D Model or a blob.
 	*/
-	void Load(std::string Path);
+	MeshPack(std::string Path);
 
 	/**
 	@brief Attach this mesh, creating GLVertexArray, AttribPointer and stuff.

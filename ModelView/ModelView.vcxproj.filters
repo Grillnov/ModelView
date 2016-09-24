@@ -24,6 +24,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\AllinGL.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\MeshPack.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -31,6 +34,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\TexturePack.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GLApplication.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GLObject.h">
@@ -54,10 +60,7 @@
     <ClInclude Include="..\util\BenchmarkTimer.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Options.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\GLAsset.h">
+    <ClInclude Include="..\include\GLAttachable.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

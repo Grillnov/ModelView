@@ -3,22 +3,21 @@
 # include <FPSApplication.h>
 # include <TexturePack.h>
 
-class Phong : public FPSApplication
+class Phong :public FPSApplication
 {
 private:
 	MeshPack Pack;
 	ProgramPack Program;
 	ProgramPack Program2;
 public:
-	Phong()
+	virtual void CreateApplication()
 	{
-		Pack.Load("D:/ModelView/assets/Android.obj");
+		Pack = MeshPack("D:/ModelView/assets/Android.obj");
 		Pack.Attach();
 
 		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/phongvert.glsl";
 		Program[GL_FRAGMENT_SHADER] = "D:/ModelView/shaders/phongfrag.glsl";
-
-		Program.Link();
+		Program.Attach();
 
 		Program["lightPosition"] = glm::vec3(1.0f, 0.0f, 0.0f);
 		Program["lightColor"] = glm::vec4(1.0f);
@@ -27,9 +26,7 @@ public:
 
 		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
 		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
-
-		Program2.Link();
-
+		Program2.Attach();
 		Program2["color"] = glm::vec3(1.0f, 0.0f, 1.0f);
 	}
 
@@ -55,16 +52,11 @@ public:
 		Pack.DrawMesh();
 	}
 
-	~Phong()
+	virtual void ShutdownApplication()
 	{
 		Pack.Detach();
+		Program.Detach();
 	}
 };
 
-//RunInstance(Phong)
-
-int main(void)
-{
-	Phong app;
-	app.StartMainLoop();
-}
+RunInstance(Phong, 640, 480)

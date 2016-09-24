@@ -27,162 +27,6 @@ static const char* getShaderTypeStr(GLenum type)
 	}
 }
 
-GLuint ProgramPack::ProgramUsedJustNow = 0;
-
-void ProgramPack::AddShader(std::string Path, GLenum type)
-{
-	ShaderPack* shaderPtr = new ShaderPack(Path, type);
-	if (ShaderTable.find(type) == ShaderTable.end())
-	{
-		ShaderTable[type] = shaderPtr;
-	}
-	else
-	{
-		Warning(debugMsg, "Shader of %s type is already present in program %u, bailing.",
-			getShaderTypeStr(type), this->AssetID);
-		return;
-	}
-}
-
-void ProgramPack::AddShader(std::string Path)
-{
-	if (Path.find(".vert") != Path.npos ||
-		Path.find(".vertex") != Path.npos ||
-		Path.find(".vertexshader") != Path.npos)
-		AddShader(Path, GL_VERTEX_SHADER);
-	else if
-		(Path.find(".frag") != Path.npos ||
-		Path.find(".fragment") != Path.npos ||
-		Path.find(".fragmentshader") != Path.npos)
-		AddShader(Path, GL_FRAGMENT_SHADER);
-	else if
-		(Path.find(".tessc") != Path.npos)
-		AddShader(Path, GL_TESS_CONTROL_SHADER);
-	else if
-		(Path.find(".tesse") != Path.npos)
-		AddShader(Path, GL_TESS_EVALUATION_SHADER);
-	else if
-		(Path.find(".geo") != Path.npos)
-		AddShader(Path, GL_GEOMETRY_SHADER);
-	else
-		Error(debugMsg, "Unrecognized shader postfix: %s", Path.substr(Path.rfind("."), Path.size()).c_str());
-}
-
-void ProgramPack::Use()
-{
-	if (!this->isReady)
-	{
-		Warning(debugMsg, "Program %u is not linked yet, bailing.", this->AssetID);
-		return;
-	}
-
-	glUseProgram(*this);
-	CheckStatus(__FUNCTION__);
-
-	ProgramUsedJustNow = this->AssetID;
-}
-
-ProgramPack::ProgramPack()
-{
-	this->AssetID = glCreateProgram();
-
-	if (AssetID != 0)
-	{
-		Log(debugMsg, "Program %u was successfully registered.", this->AssetID);
-	}
-	else
-	{
-		Error(debugMsg, "Failed to create a program.");
-	}
-	CheckStatus(__FUNCTION__);
-}
-
-ProgramPack::~ProgramPack()
-{
-	for (auto i : this->ShaderTable)
-	{
-		glDetachShader(this->AssetID, *i.second);
-		delete i.second;
-	}
-	glDeleteProgram(this->AssetID);
-	CheckStatus(__FUNCTION__);
-
-	Log(debugMsg, "Program %u was successfully unregistered.", this->AssetID);
-}
-
-void ProgramPack::Link()
-{
-	if (this->isReady)
-	{
-		Warning(debugMsg, "Program %u was already compiled and linked, bailing.", this->AssetID);
-		return;
-	}
-
-	for (auto i : this->ShaderTable)
-	{
-		i.second->Compile();
-		glAttachShader(this->AssetID, *i.second);
-		Log(debugMsg, "Linked a %s with ID %u to program with ID %u.",
-			getShaderTypeStr(i.second->getType()), i.second->operator GLuint(), this->AssetID);
-	}
-
-	glLinkProgram(this->AssetID);
-
-	GLint programStatus;
-	glGetProgramiv(this->AssetID, GL_LINK_STATUS, &programStatus);
-	if (programStatus != GL_TRUE)
-	{
-		glGetProgramiv(this->AssetID, GL_INFO_LOG_LENGTH, &programStatus);
-		char* InfoLogStr = new char[programStatus];
-		glGetProgramInfoLog(this->AssetID, programStatus, nullptr, InfoLogStr);
-		Error(debugMsg, "Program linkage failed with link error message:\n%s", InfoLogStr);
-		delete[] InfoLogStr;
-	}
-	else
-	{
-		CheckStatus(__FUNCTION__);
-		Log(debugMsg, "Program %u was successfully compiled and linked, now ready to be used.", this->AssetID);
-		this->isReady = true;
-	}
-}
-
-UniformFeeder ProgramPack::operator[](const char* name)
-{
-	return UniformFeeder(Fetch(name), ProgramUsedJustNow);
-}
-
-ShaderFeeder ProgramPack::operator[](GLenum type)
-{
-	return ShaderFeeder(type, this);
-}
-
-GLint ProgramPack::Fetch(std::string name)
-{
-	if (!this->isReady)
-	{
-		Error(debugMsg, "Program is not linked yet. Unable to get the location of uniform %s.", name.c_str());
-		return -1;
-	}
-
-	Use();
-
-	GLint location = glGetUniformLocation(this->AssetID, name.c_str());
-
-	if (location == -1)
-		Error(debugMsg, "Unable to fetch location for uniform %s. "
-		"Does this uniform variable actually exist in program %u?"
-		, name.c_str(), this->AssetID);
-
-	if (ProgramUsedJustNow != 0)
-	{
-		glUseProgram(ProgramUsedJustNow);
-	}
-
-	return location;
-}
-
-
-
 const char* ShaderFeeder::operator=(const char* Path)
 {
 	this->ptr->AddShader(Path, this->type);
@@ -419,6 +263,163 @@ glm::dmat4x4 UniformFeeder::operator=(const glm::dmat4x4& val)
 	CheckStatus(__FUNCTION__);
 
 	return val;
+}
+
+
+
+GLuint ProgramPack::ProgramUsedJustNow = 0;
+
+void ProgramPack::AddShader(std::string Path, GLenum type)
+{
+	ShaderPack* shaderPtr = new ShaderPack(Path, type);
+	if (ShaderTable.find(type) == ShaderTable.end())
+	{
+		ShaderTable[type] = shaderPtr;
+	}
+	else
+	{
+		Warning(debugMsg, "Shader of %s type is already present in program %u, bailing.", 
+			getShaderTypeStr(type), this->AssetID);
+		return;
+	}
+}
+
+void ProgramPack::AddShader(std::string Path)
+{
+	if (Path.find(".vert") != Path.npos ||
+		Path.find(".vertex") != Path.npos ||
+		Path.find(".vertexshader") != Path.npos)
+		AddShader(Path, GL_VERTEX_SHADER);
+	else if
+		(Path.find(".frag") != Path.npos ||
+		Path.find(".fragment") != Path.npos ||
+		Path.find(".fragmentshader") != Path.npos)
+		AddShader(Path, GL_FRAGMENT_SHADER);
+	else if
+		(Path.find(".tessc") != Path.npos)
+		AddShader(Path, GL_TESS_CONTROL_SHADER);
+	else if
+		(Path.find(".tesse") != Path.npos)
+		AddShader(Path, GL_TESS_EVALUATION_SHADER);
+	else if
+		(Path.find(".geo") != Path.npos)
+		AddShader(Path, GL_GEOMETRY_SHADER);
+	else
+		Error(debugMsg, "Unrecognized shader postfix: %s", Path.substr(Path.rfind("."), Path.size()).c_str());
+}
+
+void ProgramPack::Use()
+{
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is not attached yet, bailing.", this->AssetID);
+		return;
+	}
+	glUseProgram(this->AssetID);
+	CheckStatus(__FUNCTION__);
+	ProgramUsedJustNow = this->AssetID;
+}
+
+void ProgramPack::Attach()
+{
+	if (this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is already attached, bailing", this->AssetID);
+		return;
+	}
+	this->AssetID = glCreateProgram();
+	for (auto shader : this->ShaderTable)
+	{
+		shader.second->Attach();
+		glAttachShader(this->AssetID, *shader.second);
+		Log(debugMsg, "Attached a %s to program with ID %u.",
+			getShaderTypeStr(shader.second->getType()), this->AssetID);
+	}
+
+	glLinkProgram(this->AssetID);
+
+	GLint programStatus;
+	glGetProgramiv(this->AssetID, GL_LINK_STATUS, &programStatus);
+	if (programStatus != GL_TRUE)
+	{
+		glGetProgramiv(this->AssetID, GL_INFO_LOG_LENGTH, &programStatus);
+		char* InfoLogStr = new char[programStatus];
+		glGetProgramInfoLog(this->AssetID, programStatus, nullptr, InfoLogStr);
+		Error(debugMsg, "Program linkage failed with link error message:\n%s", InfoLogStr);
+		delete[] InfoLogStr;
+	}
+	else
+	{
+		CheckStatus(__FUNCTION__);
+		Log(debugMsg, "Program %u was successfully attached.", this->AssetID);
+		this->isAttached = true;
+	}
+}
+
+void ProgramPack::Detach()
+{
+	if (!this->isAttached)
+	{
+		Warning(debugMsg, "Program %u is not attached yet, bailing.", this->AssetID);
+	}
+	for (auto shader : this->ShaderTable)
+	{
+		glDetachShader(this->AssetID, *shader.second);
+		shader.second->Detach();
+	}
+	glDeleteProgram(this->AssetID);
+	CheckStatus(__FUNCTION__);
+
+	Log(debugMsg, "Program %u was successfully detached.", this->AssetID);
+	this->isAttached = false;
+}
+
+ProgramPack::operator GLuint()
+{
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Program %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+		return -1;
+	}
+	return this->AssetID;
+}
+
+UniformFeeder ProgramPack::operator[](const char* name)
+{
+	return UniformFeeder(Fetch(name), ProgramUsedJustNow);
+}
+
+ShaderFeeder ProgramPack::operator[](GLenum type)
+{
+	return ShaderFeeder(type, this);
+}
+
+ProgramPack::~ProgramPack()
+{
+	for (auto shader : this->ShaderTable)
+	{
+		delete shader.second;
+	}
+}
+
+GLint ProgramPack::Fetch(std::string name)
+{
+	if (!this->isAttached)
+	{
+		Error(debugMsg, "Program is not linked yet. Unable to get the location of uniform %s.", name.c_str());
+		return -1;
+	}
+	Use();
+	GLint location = glGetUniformLocation(this->AssetID, name.c_str());
+	if (location == -1)
+		Error(debugMsg, "Unable to fetch location for uniform %s. "
+		"Does this uniform variable actually exist in program %u?"
+		, name.c_str(), this->AssetID);
+	if (ProgramUsedJustNow != 0)
+	{
+		glUseProgram(ProgramUsedJustNow);
+	}
+	return location;
 }
 
 

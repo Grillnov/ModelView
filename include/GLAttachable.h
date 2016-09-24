@@ -1,17 +1,17 @@
 //
-//  GLAsset.h
+//  GLAttachable.h
 //  ModelView
 //
-//  Created by Bowen Yang on Sept 23.
+//  Created by Haoyan Huo on 3/27/15.
 //  Copyright (c) 2015 Haoyan Huo. All rights reserved.
 //
 //  Modified by Bowen Yang
 
-# include <Options.h>
+# include <AllinGL.h>
 # include <GLObject.h>
 
-# ifndef __ModelView__GLAsset__
-# define __ModelView__GLAsset__
+# ifndef __ModelView__GLAttachable__
+# define __ModelView__GLAttachable__
 
 /**
  * @brief Interface of a OpenGL attachable resource.
@@ -24,7 +24,7 @@
  * is forbidden, but resources like meshes, textures could have buffer
  * prepared in memory, to reduce OpenGL object init time.
  */
-class GLAsset : public GLObject
+class GLAttachable : public GLObject
 {
 protected:
 	/**
@@ -32,34 +32,39 @@ protected:
 	*/
 	GLuint AssetID;
 	/**
-	@brief To tell whether it's ready or not.
+	@brief To tell whether it's attached or not.
 	*/
-	bool isReady;
+	bool isAttached;
 public:
 	/**
 	@brief Default constructor.
 	*/
-	GLAsset() : AssetID(0), isReady(false) {}
+	GLAttachable() : AssetID(0), isAttached(false) {}
 	/**
 	@brief Attach the asset, so that GL object is created on the server side
 	*/
-	//virtual void Attach() = 0;
+	virtual void Attach() = 0;
 	/**
 	@brief Detach the asset, so that GL object ID can be reused.
 	*/
-	//virtual void Detach() = 0;
+	virtual void Detach() = 0;
 	/**
 	@brief Telling whether it's attached.
 	*/
-	virtual bool IsReady()
+	virtual bool IsAttached()
 	{
-		return this->isReady;
+		return this->isAttached;
 	}
 	/**
 	@brief Transformation to GLuint so that assets can be directly used as arguments to invoke raw GL interfaces.
 	*/
 	virtual operator GLuint()
 	{
+		if (!this->isAttached)
+		{
+			Error(debugMsg, "Buffer %u is not attached yet, illegal parameter for GL interface!", this->AssetID);
+			return -1;
+		}
 		return this->AssetID;
 	}
 };
