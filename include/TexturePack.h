@@ -74,6 +74,11 @@ class TexturePack : public GLAsset
 {
 public:
 	/**
+	@brief Dummy default constructor.
+	*/
+	TexturePack() = default;
+
+	/**
 	@brief Register a texture in the OpenGL context.
 
 	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
@@ -103,6 +108,11 @@ protected:
 class TexturePic : public TexturePack
 {
 public:
+	/**
+	@brief Default constructor.
+	*/
+	//TexturePic() : xWidth(0), yHeight(0) {}
+
 	/**
 	@brief Constructor that designates its binding slot.
 
@@ -231,6 +241,11 @@ class Texture1D : public TexturePic
 {
 public:
 	/**
+	@brief Default constructor.
+	*/
+	Texture1D() = default;
+
+	/**
 	@brief Constructor that designates its binding slot.
 
 	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
@@ -263,6 +278,11 @@ public:
 class Texture2D : public TexturePic
 {
 public:
+	/**
+	@brief Default constructor.
+	*/
+	Texture2D() = default;
+
 	/**
 	@brief Constructor that designates its binding slot.
 
@@ -326,6 +346,11 @@ class TextureRect : public TexturePic
 {
 public:
 	/**
+	@brief Default constructor.
+	*/
+	TextureRect() = default;
+
+	/**
 	@brief Constructor that designates its binding slot.
 
 	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
@@ -376,6 +401,11 @@ public:
 class TextureMultiSamp : public TexturePic
 {
 public:
+	/**
+	@brief Default constructor.
+	*/
+	TextureMultiSamp() = default;
+
 	/**
 	@brief Constructor that designates its binding slot.
 
@@ -438,6 +468,11 @@ class Texture3D : public TexturePic
 {
 public:
 	/**
+	@brief Default constructor.
+	*/
+	Texture3D() = default;
+
+	/**
 	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
@@ -475,6 +510,10 @@ private:
 class TextureCube : public TextureArr
 {
 public:
+	/**
+	@brief The default constructor
+	*/
+	TextureCube() = default;
 	/**
 	@brief Initialize the texture from local pointers.
 	*/
