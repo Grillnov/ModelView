@@ -8,9 +8,10 @@
 //  Modified by Bowen Yang
 
 # include <GLApplication.h>
-# include <Options.h>
+
 # include <BenchmarkTimer.h>
 
+BenchmarkTimer GlobalTimer;// A global timer, for performance benchmarking.
 GLApplication* GLApplication::fInstance = nullptr;
 
 # ifdef __llvm__
@@ -22,47 +23,73 @@ GLApplication::GLApplication() : fWindow(nullptr)
 {
 	Log(debugMsg, "Initialization may take some time. Please wait...");
 
-	fWindowSize[0] = xWindowWidth;
-	fWindowSize[1] = yWindowHeight;
+	// Set up OpenGL environment and do necessary stuff.
 
-	fMousePosition[0] = 0;
-	fMousePosition[1] = 0;
-
-	fWindowFramebufferSize[0] = 0;
-	fWindowFramebufferSize[1] = 0;
+	// TODO: we can't do this in initializer due to a compiler bug of VS2013, 
+	// Maybe this will be fixed in the next generation of VS
+	fWindowSize[0] = 0; fWindowSize[1] = 0;
+	fMousePosition[0] = fMousePosition[1] = 0;
+	fWindowFramebufferSize[0] = fWindowFramebufferSize[1] = 0;
 
 	memset(fKeyState, 0, sizeof(fKeyState));
 	memset(fMouseState, 0, sizeof(fMouseState));
 
-	if (fInstance)
-		Error(debugMsg, "More than one GL app is instantiated!");
+	if(fInstance)
+		Error(debugMsg, "More than one GL app is instantiated");
 
 	fInstance = this;
-
+	glfwSetErrorCallback(GLApplication::ErrorCallback);
 	if (!glfwInit())
 		Error(debugMsg, "GLFW initialization failed!");
+}
+
+GLApplication::~GLApplication()
+{
+	glfwTerminate();
+}
+
+void GLApplication::WindowCreation(const char* title, int width, int height, bool isFullScreen)
+{
+	if (width <= 0)
+		Error(debugMsg, "Attempting to create window %s with illegal width: %d", title, width);
+	if (height <= 0)
+		Error(debugMsg, "Attempting to create window %s with illegal height: %d", title, height);
+
+	fWindowSize[0] = width;
+	fWindowSize[1] = height;
+	windowName = title;
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLMajorVer);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLMinorVer);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-
-	if (isFullScreened)
-	{
-		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, nullptr, nullptr);
-	}
+	if (isFullScreen)
+		fWindow = glfwCreateWindow(width, height, title, glfwGetPrimaryMonitor(), nullptr);
 	else
-	{
-		fWindow = glfwCreateWindow(xWindowWidth, yWindowHeight, titleofWindow, primaryMonitor, nullptr);
-	}
+		fWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
+
+	glfwGetFramebufferSize(fWindow, fWindowFramebufferSize, fWindowFramebufferSize + 1);
+
+	if (!fWindow)
+		Error(debugMsg, "Failed to create window %s!", title);
 
 	glfwMakeContextCurrent(fWindow);
+	glfwSwapInterval(1);
+
+	glfwSetInputMode(fWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+	glfwSetMouseButtonCallback(fWindow, GLApplication::MouseCallback);
+	glfwSetWindowSizeCallback(fWindow, GLApplication::ResizeCallback);
+	glfwSetKeyCallback(fWindow, GLApplication::KeyboardCallback);
+	glfwSetScrollCallback(fWindow, GLApplication::ScrollCallback);
+	glfwSetCursorPosCallback(fWindow, GLApplication::MotionCallback);
+	glfwSetFramebufferSizeCallback(fWindow, GLApplication::FramebufferSizeCallback);
+	glfwSetWindowCloseCallback(fWindow, GLApplication::WindowClosedCallback);
 
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 	std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
-
+# ifdef _MSC_VER// Microsoft Windows OS requires Glew to be initialized
 	/*
 	An Intel integrated graphics device is detected.
 	Certain Intel drivers are not supported by glew, and null function pointers might be retrieved.
@@ -81,80 +108,63 @@ GLApplication::GLApplication() : fWindow(nullptr)
 		Warning(debugMsg, "Notebook video card was detected. GlewExperimental flag is now switched on.");
 		glewExperimental = GL_TRUE;
 	}
-
-	/*
-	Initiate Glew to retrieve function pointers to OpenGL interfaces.
-	*/
 	if (GLEW_OK != glewInit())
 	{
 		Error(debugMsg, "Glew initialization failed!");
 	}
-
-	Info(debugMsg, "OpenGL version: %s", glGetString(GL_VERSION));
-	Info(debugMsg, "Running on rendering device: %s", device.c_str());
-	Info(debugMsg, "GPU Vendor: %s", vendor.c_str());
-
-	fWindowSize[0] = xWindowWidth;
-	fWindowSize[1] = yWindowHeight;
-	windowName = titleofWindow;
-
-	glfwGetFramebufferSize(fWindow, fWindowFramebufferSize, fWindowFramebufferSize + 1);
-
-	if (!fWindow)
-		Error(debugMsg, "Failed to create window %s!", titleofWindow);
-
-	glfwSwapInterval(1);
-
-	glfwSetInputMode(fWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-	glfwSetErrorCallback(GLApplication::ErrorCallback);
-	glfwSetMouseButtonCallback(fWindow, GLApplication::MouseCallback);
-	glfwSetWindowSizeCallback(fWindow, GLApplication::ResizeCallback);
-	glfwSetKeyCallback(fWindow, GLApplication::KeyboardCallback);
-	glfwSetScrollCallback(fWindow, GLApplication::ScrollCallback);
-	glfwSetCursorPosCallback(fWindow, GLApplication::MotionCallback);
-	glfwSetFramebufferSizeCallback(fWindow, GLApplication::FramebufferSizeCallback);
-	glfwSetWindowCloseCallback(fWindow, GLApplication::WindowClosedCallback);
-
+# endif
 	/*
 	Initialization complete!
 	*/
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Initialization complete!");
+	Info(debugMsg, "OpenGL version: %s", glGetString(GL_VERSION));
+	Info(debugMsg, "Running on rendering device: %s", device.c_str());
+	Info(debugMsg, "GPU Vendor: %s", vendor.c_str());
 }
 
-GLApplication::~GLApplication()
+
+void GLApplication::StartWindow(const char* title)
 {
-	glfwDestroyWindow(fWindow);
-	glfwTerminate();
+	GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* primaryVidMode = glfwGetVideoMode(primaryMonitor);
+	WindowCreation(title, primaryVidMode->width, primaryVidMode->height, true);
 }
 
-void GLApplication::StartMainLoop()
+void GLApplication::StartWindow(const char* title, int width, int height)
 {
+	WindowCreation(title, width, height, false);
+}
+
+void GLApplication::RunMainLoop()
+{
+	if(!fWindow)
+		Error(debugMsg, "Window %s is not created yet!", windowName);
+
+	CreateApplication();
 	/*
-	* OpenGL does not have depth test switched on by default.
+	* OpenGL does not have depth test switched on by default, so if you want to 
+	* enable depth testing, call glEnable(GL_DEPTH_TEST) at CreateApplication().
 	* But it seems better off to do it for you.
 	*/
 	glEnable(GL_DEPTH_TEST);
 	CheckStatus(__FUNCTION__);
 
-	while ((!glfwWindowShouldClose(fWindow)))
+	while ((!glfwWindowShouldClose(fWindow))) 
 	{
+		HandleController();
 		RenderFrame();
-
 		glfwSwapBuffers(fWindow);
-
 		glfwPollEvents();
-		PollController();
-
 		CheckStatus(__FUNCTION__);
-
-		if (IsKeyDown('Q'))
+		if (IsKeyDown('Q'))//GLFW_KEY_ESCAPE))
 		{
 			break;
 		}
 	}
+
+	ShutdownApplication();
+	glfwDestroyWindow(fWindow);
 }
 
 void GLApplication::Resize(GLFWwindow *window, int width, int height)

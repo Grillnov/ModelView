@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <Options.h>
+# include <AllinGL.h>
 
 const char* getGLErrorString(GLenum errorId)
 {

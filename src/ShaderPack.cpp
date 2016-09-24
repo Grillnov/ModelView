@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <ShaderPack.h>
+# include "ShaderPack.h"
 
 ShaderPack::ShaderPack(std::string Path, GLenum type) :Path(Path), ShaderType(type)
 {
@@ -29,18 +29,6 @@ ShaderPack::ShaderPack(std::string Path, GLenum type) :Path(Path), ShaderType(ty
 		LoadFromText(Path, fin);
 		fin.close();
 	}
-
-	this->AssetID = glCreateShader(this->ShaderType);
-
-	if (AssetID != 0)
-	{
-		Log(debugMsg, "Shader %u was successfully registered.", this->AssetID);
-	}
-	else
-	{
-		Error(debugMsg, "Failed to create a shader.");
-	}
-	CheckStatus(__FUNCTION__);
 }
 
 void ShaderPack::LoadFromText(std::string Path, std::fstream& fin)
@@ -60,9 +48,9 @@ void ShaderPack::SaveBinary()
 
 }
 
-void ShaderPack::Compile()
+void ShaderPack::Attach()
 {
-	if (this->isReady)
+	if (this->isAttached)
 	{
 		Warning(debugMsg, "Shader %s is already attached, bailing.", this->Path.c_str());
 		return;
@@ -74,9 +62,12 @@ void ShaderPack::Compile()
 	else
 	{
 		//Attach from source code
+		this->AssetID = glCreateShader(this->ShaderType);
 		const char* SrcPtr = SrcCode.c_str();
 		GLint length = static_cast<GLint>(SrcCode.size());
 		glShaderSource(this->AssetID, 1, &SrcPtr, &length);
+
+		CheckStatus(__FUNCTION__);
 
 		glCompileShader(this->AssetID);
 		GLint shaderStatus;
@@ -92,21 +83,29 @@ void ShaderPack::Compile()
 		else
 		{
 			Log(debugMsg, "Shader %s was successfully compiled and attached.", this->Path.c_str());
-
 			SaveBinary();
-			//Log(debugMsg, "Blob compiled from shader %s was saved.", this->Path.c_str());
-
+			Log(debugMsg, "Blob compiled from shader %s was saved.", this->Path.c_str());
 			CheckStatus(__FUNCTION__);
-
-			this->isReady = true;
+			this->isAttached = true;
 		}
 	}
 }
 
-ShaderPack::~ShaderPack()
+void ShaderPack::Detach()
 {
+	if (!IsAttached())
+	{
+		Warning(debugMsg, "Shader %s is not attached yet, bailing.", this->Path.c_str());
+		return;
+	}
 	glDeleteShader(this->AssetID);
 
 	CheckStatus(__FUNCTION__);
-	Log(debugMsg, "Shader %s was successfully unregistered.", this->Path.c_str());
+	Log(debugMsg, "Shader %s was successfully detached.", this->Path.c_str());
+	this->isAttached = false;
+}
+
+ShaderPack::operator GLuint()
+{
+	return this->AssetID;
 }

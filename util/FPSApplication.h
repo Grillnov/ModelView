@@ -9,7 +9,7 @@
 # ifndef __ModelView__FPSApplication__
 # define __ModelView__FPSApplication__
 
-# include <Options.h>
+# include <AllinGL.h>
 # include <GLApplication.h>
 # include <CameraView.h>
 
@@ -21,7 +21,7 @@ class FPSApplication : public GLApplication
 public:
 	CameraView FPSCamera;
 
-	void PollController() override;
+	void HandleController() override;
 
 	void MouseMove(int x, int y) override;
 

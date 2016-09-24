@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <Options.h>
+# include <AllinGL.h>
 
 # ifdef _MSC_VER
 

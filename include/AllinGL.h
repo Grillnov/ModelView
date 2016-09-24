@@ -1,16 +1,16 @@
 //
-//  Options.h
+//  AllinGL.h
 //  ModelView
 //
 //  Created by Bowen Yang on Aug 4, 2016.
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# ifndef __ModelView__Options__
-# define __ModelView__Options__
+# ifndef __ModelView__AllinGL__
+# define __ModelView__AllinGL__
 
 /**
-@brief Modify the two macros below to modify OpenGL version.
+Modify this macro below to modify OpenGL version.
 By default it's set as OpenGL 4.3.
 If your device has any difficulties supporting novel versions of OpenGL,
 please try and modify this context version.
@@ -21,44 +21,22 @@ Note that only OpenGL 3.2 or higher is supported by GLFW3, a value greater than
 # define GLMinorVer 3
 
 /**
-@brief Modify the two macros below to change the resolution of the window.
-*/
-# define xWindowWidth 800
-# define yWindowHeight 600
-
-/**
-@brief Modify this flag to make the window fullscreen or windowed.
-*/
-# define isFullScreened true
-
-/**
-@brief Modify the string below to change the title of the window.
-*/
-# define titleofWindow "ModelView"
-
-/**
-@brief Comment this macro below to disable log message.
+Comment this macro below to disable log message.
 */
 # define LOGDEBUGMSG
 
 /**
-@brief GL errors will not be checked if the macro definition below is commented.
+GL errors will not be checked if the macro definition below is commented.
 Comment this macro below during release build to boost performance.
 */
 # define DEBUGBUILD
 
 /**
-@brief Try modifying this to USEGL3W if glew initialization failed or you found out that
+Try modifying this to USEGL3W if glew initialization failed or you found out that
 some nullptr is invoked as a function pointer.
 */
 # define USEGLEW
 //# define USEGL3W
-
-
-
-
-
-
 
 
 
@@ -80,19 +58,13 @@ some nullptr is invoked as a function pointer.
 
 
 
-
-
-
-
-
-
 /**
 Macro for debug message.
 */
 # define debugMsg __FILE__, __LINE__, __FUNCTION__
 
 /**
-@brief Due to the botched OpenGL support provided by many platforms,
+Due to the botched OpenGL support provided by Microsoft Windows OS, 
 Glew has to be initiated to retrieve function pointers to GL interfaces.
 Problems might arise if you are using an Intel graphic device(for instance, HD4000 series) on Windows platform.
 If so, try and run the executable with independent video cards(for instance, your ATI or NVIDIA card).
@@ -103,7 +75,6 @@ TODO: GL3W may work if we fail to initiate glew.
 # ifdef USEGLEW
 # include <GL/glew.h>
 # endif
-
 # ifdef USEGL3W
 # include <GL/GL3W.h>
 # endif
@@ -131,11 +102,11 @@ Headers from this project.
 */
 # include <BenchmarkTimer.h>
 # include <GLObject.h>
-# include <GLAsset.h>
+# include <GLAttachable.h>
 
 /**
 Entrance definition.
 */
-# define RunInstance(Class, width, height) int main(int argc, char** argv) { Class app; app.StartWindow(); app.RunMainLoop(); }
+# define RunInstance(Class, width, height) int main(int argc, char** argv) { Class app; app.StartWindow("Class", width, height); app.RunMainLoop(); }
 
 # endif
