@@ -122,7 +122,7 @@ void ProgramPack::Link()
 	{
 		i.second->Compile();
 		glAttachShader(this->AssetID, *i.second);
-		Log(debugMsg, "Linked a %s with ID %u to program with ID %u.",
+		Log(debugMsg, "Added a %s with ID %u to program with ID %u.",
 			getShaderTypeStr(i.second->getType()), i.second->operator GLuint(), this->AssetID);
 	}
 

@@ -30,7 +30,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
 
-		glm::mat4 MVP = FPSCamera.GetModelViewProjection(GetAspectRatio());
+		glm::mat4 MVP = FPSCamera.GetModelViewProjection();
 		Program.Use();
 		Program["transformMatrix"] = MVP;
 		

@@ -59,6 +59,9 @@ public:
 	*/
 	~ShaderPack();
 
+	/**
+	@brief Compile the shader.
+	*/
 	void Compile();
 
 	/**

@@ -42,7 +42,8 @@ public:
 	virtual void StartMainLoop();
 
 	/**
-	@brief Gets the state of the keyboard.
+	@brief Get the state of the keyboard.
+
 	@param chr The character of the keyboard key.
 	*/
 	bool IsKeyDown(unsigned char chr)
@@ -51,7 +52,8 @@ public:
 	}
 
 	/**
-	@brief Gets the state of the mouse buttons.
+	@brief Get the state of the mouse buttons.
+
 	@param which The mouse button.
 	*/
 	bool IsMouseButtonDown(int which)
@@ -60,7 +62,8 @@ public:
 	}
 
 	/**
-	@brief Gets the window width.
+	@brief Get the window width.
+
 	@see GetWindowHeight()
 	*/
 	int GetWindowWidth()
@@ -69,7 +72,8 @@ public:
 	}
 
 	/**
-	@brief Gets the window height.
+	@brief Get the window height.
+
 	@see GetWindowWidth()
 	*/
 	int GetWindowHeight()
@@ -138,9 +142,9 @@ protected:
 	 * initialized.
 	 *
 	 * Initialize important objects and get ready for rendering during this callback.
-	 * Three fundamental callbacks that child classes must implement are CreateApplication(),
-	 * RenderFrame(), and ShutdownApplication(). And those virtual methods could be 
-	 * implemented for conveience:
+	 * Three fundamental callbacks that child classes must implement are constructor,
+	 * RenderFrame(), and destructor.
+	 * Those virtual methods are implemented for convenience:
 	 *  - WindowSizeChanged()
 	 *  - MouseKeyDown()
 	 *  - MouseKeyUp()
@@ -150,24 +154,22 @@ protected:
 	 *  - MouseScrollUp()
 	 *  - MouseScrollDown()
 	 *  - WindowClosed()
+	 You may override them if you want.
 	 */
-	//virtual void CreateApplication() = 0;
 
 	/** @brief Event callback of every frame draw event.
 	 *
-	 * Draw the framebuffer in this callback. But try not doing heavy works.
+	 * Draw the framebuffer in this callback.
+	 Keep the heavy-lifting that initializes something only once away from this function.
 	 */
 	virtual void RenderFrame() = 0;
 
-	/** @brief Event callback when the application is going to die.
-	 *
-	 * Free the objects created in CreateApplication() during this callback.
-	 */
-	//virtual void ShutdownApplication() = 0;
-
 	 /** @brief Event callback when the window size has changed.
+
 	 * @param[in] width the new window width.
+
 	 * @param[in] height the new window height.
+
 	 * @see WindowFramebufferSizeChanged()
 	 */
 	virtual void WindowSizeChanged(int width, int height)
@@ -177,6 +179,8 @@ protected:
 
 	/**
 	Event callback when the window is closed.
+
+	@param window The GLFW window pointer.
 	*/
 	virtual void WindowClosed(GLFWwindow* window)
 	{
@@ -192,8 +196,11 @@ protected:
 	 * screen coordinates, framebuffer size is measured in pixels, this is especially
 	 * important on retina displays, the window size may not be equal to framebuffer
 	 * size.
+
 	 * @param[in] width the new framebuffer width.
+
 	 * @param[in] height the new framebuffer height.
+
 	 * @see WindowSizeChanged()
 	 */
 	virtual void WindowFramebufferSizeChanged(int width, int height)
@@ -202,7 +209,7 @@ protected:
 	}
 
 	/**
-	Update the status based on controller (e.g. mouse and keyboard) status.
+	Update the application based on controller (e.g. mouse and keyboard) status.
 	*/
 	virtual void PollController()
 	{
@@ -210,25 +217,28 @@ protected:
 	}
 
 	 /** @brief Event callback when a mouse key is pressed.
+
 	 * @param[in] which the key id, 0 stands for left button, and 1 the
 	 * middle button, 2 the right button.
 	 * @see MouseKeyUp()
 	 */
-	virtual void MouseKeyDown(int which)
+	virtual void MouseButtonDown(int which)
 	{
 		return;
 	}
 
 	 /** @brief Event callback when a mouse key is released.
+
 	 * @param[in] which the key id.
 	 * @see MouseKeyDown()
 	 */
-	virtual void MouseKeyUp(int which)
+	virtual void MouseButtonUp(int which)
 	{
 		return;
 	}
 
 	 /** @brief Event callback when a keyboard key is pressed.
+
 	 * @param[in] which the key char.
 	 * @see KeyUp()
 	 */
@@ -238,6 +248,7 @@ protected:
 	}
 
 	 /** @brief Event callback when a keyboard key is released.
+
 	 * @param[in] which the key char.
 	 * @see KeyDown()
 	 */
@@ -246,8 +257,10 @@ protected:
 		return;
 	}
 
-	 /** @brief Event callback when the pointer moves in window.
+	 /** @brief Event callback when the pointer moves within the window.
+
 	 * @param[in] x the x coordinate of pointer.
+
 	 * @param[in] y the y coordinate of pointer.
 	 */
 	virtual void MouseMove(int x, int y)
@@ -255,7 +268,7 @@ protected:
 		return;
 	}
 
-	 /** @brief Event callback when scrolls.
+	 /** @brief Event callback when mouse scrolls.
 	 *
 	 */
 	virtual void MouseScroll(double xoffset, double yoffset)
@@ -271,15 +284,15 @@ protected:
 	const char* windowName;
 
 private:
-	 /**
+	 /*
 	 @brief The singleton pointer of GLApplication.
 	 */
 	static GLApplication* fInstance;
 
-	 /**
+	 /*
 	 @brief Gets the unique GLApplication of this process.
 	 */
-	static GLApplication* instance(){return fInstance;}
+	static GLApplication* instance(){ return fInstance; }
 
 	void Resize(GLFWwindow* window, int width, int height);
 	void Keyboard(GLFWwindow* window, int key, int scancode, int action, int mods);

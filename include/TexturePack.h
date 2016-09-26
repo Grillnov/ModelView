@@ -81,8 +81,10 @@ public:
 	/**
 	@brief Register a texture in the OpenGL context.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	TexturePack(GLenum Slot);
 
@@ -109,19 +111,22 @@ class TexturePic : public TexturePack
 {
 public:
 	/**
-	@brief Default constructor.
+	@brief Dummy default constructor.
 	*/
-	//TexturePic() : xWidth(0), yHeight(0) {}
+	TexturePic() = default;
 
 	/**
 	@brief Constructor that designates its binding slot.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	TexturePic(GLenum Slot) : TexturePack(Slot), xWidth(0), yHeight(0) {}
 protected:
-	/**
+	/*
+	Load the BMP file.
 	*/
 	unsigned char* LoadBMP(std::string Path);
 
@@ -198,14 +203,43 @@ protected:
 	void LoadFromBMP(std::string Path);
 
 	/**
-	@brief Set its parameters.
+	@brief Set the texture parameters via the default sampler.
+	Feed a single precision floating point parameter to the sampler.
+
+	@param target The name of the parameter.
+
+	@param param The value of the parameter.
 	*/
 	void Param(GLenum target, GLfloat param);
 
+	/**
+	@brief Set the texture parameters via the default sampler.
+	Feed an integer parameter to the sampler.
+
+	@param target The name of the parameter.
+
+	@param param The value of the parameter.
+	*/
 	void Param(GLenum target, GLint param);
 
+	/**
+	@brief Set the texture parameters via the default sampler.
+	Feed some single precision floating point parameters to the sampler.
+
+	@param target The name of the parameter.
+
+	@param param The pointer to the value array of the parameter.
+	*/
 	void Param(GLenum target, GLfloat* param);
 
+	/**
+	@brief Set the texture parameters via the default sampler.
+	Feed some integer parameters to the sampler.
+
+	@param target The name of the parameter.
+
+	@param param The pointer to the value array of the parameter.
+	*/
 	void Param(GLenum target, GLint* param);
 
 	/**
@@ -222,16 +256,6 @@ protected:
 	Height.
 	*/
 	GLsizei yHeight;
-
-	/**
-	Number of channels.
-	*/
-	int Channel;
-
-	/**
-	The BMP pixel buffer.
-	*/
-	char *Buffer;
 };
 
 /**
@@ -248,8 +272,10 @@ public:
 	/**
 	@brief Constructor that designates its binding slot.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	Texture1D(GLenum Slot) : TexturePic(Slot) {}
 
@@ -286,8 +312,10 @@ public:
 	/**
 	@brief Constructor that designates its binding slot.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	Texture2D(GLenum Slot) : TexturePic(Slot) {}
 
@@ -309,13 +337,13 @@ public:
 	By default it's set as GL_RGB.
 
 	@param levels The total amount of mipmap levels.
-	By default it's set as 2.
+	By default it's set as 4.
 
 	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
 	By default it's set as true, so that mipmaps are generated for you.
 	*/
 	void LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height, 
-		GLint internalFormat = GL_RGB32F, GLint clientsideFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+		GLint internalFormat = GL_RGB32F, GLint clientsideFormat = GL_RGB, GLsizei levels = 4, bool generateMipMap = true);
 
 	/**
 	@brief Load the texels from BMP files.
@@ -331,12 +359,12 @@ public:
 	By default it's set as GL_BGR, by default BMP protocol.
 
 	@param levels The total amount of mipmap levels.
-	By default it's set as 2.
+	By default it's set as 4.
 
 	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
 	*/
 	void LoadFromBMP(std::string Path, GLint internalFormat = GL_RGB32F, 
-		GLint clientsideFormat = GL_BGR, GLsizei levels = 2, bool generateMipMap = true);
+		GLint clientsideFormat = GL_BGR, GLsizei levels = 4, bool generateMipMap = true);
 };
 
 /**
@@ -353,8 +381,10 @@ public:
 	/**
 	@brief Constructor that designates its binding slot.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	TextureRect(GLenum Slot) : TexturePic(Slot) {}
 
@@ -409,8 +439,10 @@ public:
 	/**
 	@brief Constructor that designates its binding slot.
 
-	@param Slot An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS.
-	A value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS is also recognized and accepted.
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 	*/
 	TextureMultiSamp(GLenum Slot) : TexturePic(Slot) {}
 
@@ -513,7 +545,7 @@ public:
 	/**
 	@brief The default constructor
 	*/
-	TextureCube() = default;
+	//TextureCube() = default;
 	/**
 	@brief Initialize the texture from local pointers.
 	*/
@@ -534,8 +566,7 @@ public:
 class Texture1DArray : public TexturePic
 {
 public:
-	//void Attach() override;
-	//void Detach() override;
+	
 private:
 	void Bind(GLenum target);
 	GLsizei size;
@@ -548,8 +579,7 @@ private:
 class Texture2DArray : public TexturePic
 {
 public:
-	//void Attach() override;
-	//void Detach() override;
+	
 private:
 	void Bind(GLenum target);
 	GLsizei size;

@@ -57,10 +57,10 @@
     <ClInclude Include="..\util\BenchmarkTimer.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\GLAttachable.h">
+    <ClInclude Include="..\include\Options.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Options.h">
+    <ClInclude Include="..\include\GLAsset.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

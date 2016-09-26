@@ -23,8 +23,8 @@ Note that only OpenGL 3.2 or higher is supported by GLFW3, a value greater than
 /**
 @brief Modify the two macros below to change the resolution of the window.
 */
-# define xWindowWidth 800
-# define yWindowHeight 600
+# define xWindowWidth 800.0
+# define yWindowHeight 600.0
 
 /**
 @brief Modify this flag to make the window fullscreen or windowed.

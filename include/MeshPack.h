@@ -91,7 +91,8 @@ private:
 
 public:
 	/** 
-	@brief Loader.
+	@brief Load from a mesh file.
+
 	@param Path The path to the designated Mesh file, a plain-text 3D Model or a blob.
 	*/
 	MeshPack(std::string Path);
@@ -108,7 +109,9 @@ public:
 
 	/**
 	@brief Invoking drawcalls to render the mesh.
+
 	@param mode The OpenGL primitive mode to draw the mesh.
+	Set to GL_TRIANGLES by default.
 	*/
 	void DrawMesh(GLenum mode = GL_TRIANGLES);
 
@@ -119,48 +122,66 @@ public:
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components);
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components);
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLint>& buffer, GLuint index, GLuint components);
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLuint>& buffer, GLuint index, GLuint components);
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLshort>& buffer, GLuint index, GLuint components);
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
+
 	@param buffer The buffer object.
+
 	@param index The layout location used in the vertex shader.
+
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components);

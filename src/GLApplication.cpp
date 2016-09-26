@@ -219,12 +219,12 @@ void GLApplication::Mouse(GLFWwindow *window, int button, int action, int mods)
 	{
 	case GLFW_PRESS:
 		fMouseState[which] = 1;
-		MouseKeyDown(which);
+		MouseButtonDown(which);
 		break;
 
 	case GLFW_RELEASE:
 		fMouseState[which] = 0;
-		MouseKeyUp(which);
+		MouseButtonUp(which);
 		break;
 
 	default:
