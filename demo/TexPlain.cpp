@@ -10,14 +10,14 @@ private:
 	ProgramPack Program;
 	Texture2D White;
 public:
-	TexPlain() : Pack("D:/ModelView/assets/BasePlain.obj"), White(0)
+	TexPlain() : Pack("../assets/BasePlain.obj"), White(0)
 	{
 		Pack.Attach();
 
-		White.LoadFromBMP("D:/ModelView/assets/trial.bmp");
+		White.LoadFromBMP("../assets/trial.bmp");
 
-		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/texvert.glsl";
-		Program[GL_FRAGMENT_SHADER] = "D:/ModelView/shaders/texfrag.glsl";
+		Program[GL_VERTEX_SHADER] = "../shaders/texvert.glsl";
+		Program[GL_FRAGMENT_SHADER] = "../shaders/texfrag.glsl";
 		Program.Link();
 
 		Program["tex"] = 0;

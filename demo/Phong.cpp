@@ -10,12 +10,12 @@ private:
 	ProgramPack Program;
 	ProgramPack Program2;
 public:
-	Phong() : Pack("D:/ModelView/assets/Android.obj")
+	Phong() : Pack("../assets/Android.obj")
 	{
 		Pack.Attach();
 
-		Program[GL_VERTEX_SHADER] = "D:/ModelView/shaders/phongvert.glsl";
-		Program[GL_FRAGMENT_SHADER] = "D:/ModelView/shaders/phongfrag.glsl";
+		Program[GL_VERTEX_SHADER] = "../shaders/phongvert.glsl";
+		Program[GL_FRAGMENT_SHADER] = "../shaders/phongfrag.glsl";
 
 		Program.Link();
 
@@ -24,8 +24,8 @@ public:
 		Program["diffuseColor"] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		Program["ambientColor"] = glm::vec4(0.3f, 0.1f, 0.0f, 1.0f);
 
-		Program2.AddShader("D:/ModelView/Shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
-		Program2.AddShader("D:/ModelView/Shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
+		Program2.AddShader("../shaders/simpleFragment.glsl", GL_FRAGMENT_SHADER);
+		Program2.AddShader("../shaders/simpleVertex.glsl", GL_VERTEX_SHADER);
 
 		Program2.Link();
 
@@ -47,7 +47,7 @@ public:
 		Program.Use();
 		Pack.DrawMesh();
 
-		Program2["MVP"] = MVP;
+		Program2.UniformMat4("MVP", MVP);
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		Program2.Use();
@@ -61,9 +61,3 @@ public:
 };
 
 //RunInstance(Phong)
-
-/*int main(void)
-{
-	Phong app;
-	app.StartMainLoop();
-}*/
