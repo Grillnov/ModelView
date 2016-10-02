@@ -6,16 +6,19 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <TexturePack.h>
+# include <TextureRect.h>
 
 void TextureRect::LoadFromBMP(std::string Path, GLint clientsideFormat,
 	GLint internalFormat)
 {
-	unsigned char* texels = LoadBMP(Path);
+	BMPLoader texels = LoadBMP(Path);
+
+	this->xWidth = texels.xWidth;
+	this->yHeight = texels.yHeight;
 
 	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
 	glTexStorage2D(GL_TEXTURE_RECTANGLE, 1, internalFormat, xWidth, yHeight);
-	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, texels);
+	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, texels.Pixels);
 
 	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
 	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
@@ -28,10 +31,10 @@ void TextureRect::LoadFromBMP(std::string Path, GLint clientsideFormat,
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
-	delete[] texels;
+	delete[] texels.Pixels;
 }
 
-void TextureRect::LoadFromMemory(unsigned char* Pixels, size_t Width, size_t Height,
+void TextureRect::LoadFromMemory(GLubyte* Pixels, size_t Width, size_t Height,
 	GLint internalFormat, GLint clientsideFormat)
 {
 	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);

@@ -1,7 +1,7 @@
 # include <MeshPack.h>
 # include <ProgramPack.h>
 # include <FPSApplication.h>
-# include <TexturePack.h>
+# include <Texture2D.h>
 
 class TexPlain : public FPSApplication
 {

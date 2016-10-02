@@ -65,3 +65,23 @@ void TexturePic::Param(GLenum target, GLint* param)
 {
 	this->defaultSampler.Param(target, param);
 }
+
+void TextureArr::Param(GLenum target, GLfloat param)
+{
+	this->defaultSampler.Param(target, param);
+}
+
+void TextureArr::Param(GLenum target, GLint param)
+{
+	this->defaultSampler.Param(target, param);
+}
+
+void TextureArr::Param(GLenum target, GLfloat* param)
+{
+	this->defaultSampler.Param(target, param);
+}
+
+void TextureArr::Param(GLenum target, GLint* param)
+{
+	this->defaultSampler.Param(target, param);
+}

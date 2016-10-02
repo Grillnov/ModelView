@@ -63,6 +63,30 @@
     <ClInclude Include="..\include\GLAsset.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Texture1D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture1DArray.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture2D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture2DArray.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture3D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextureRect.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextureCube.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextureMultiSamp.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\GLApplication.cpp">
@@ -127,6 +151,15 @@
     </ClCompile>
     <ClCompile Include="..\util\PrintGLErrorStr.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture1DArray.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture2DArray.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureMultiSamp.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

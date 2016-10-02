@@ -42,7 +42,7 @@ struct bmpInfo
 	DWORD	biclrs[2];
 };
 
-unsigned char* TexturePic::LoadBMP(std::string Path)
+BMPLoader TexturePack::LoadBMP(std::string Path)
 {
 	bmpHeader fileHeader;
 	bmpInfo fileInfo;
@@ -71,8 +71,8 @@ unsigned char* TexturePic::LoadBMP(std::string Path)
 		Error(debugMsg, "Format of BMP file %s is not supported yet.", Path.c_str());
 	}
 
-	this->xWidth = fileInfo.biWidth;
-	this->yHeight = glm::abs(fileInfo.biHeight);
+	GLsizei xWidth = fileInfo.biWidth;
+	GLsizei yHeight = glm::abs(fileInfo.biHeight);
 
 	size_t bufferSize = xWidth * yHeight * 3;
 
@@ -106,5 +106,5 @@ unsigned char* TexturePic::LoadBMP(std::string Path)
 		delete[] tmp;
 	}
 
-	return buffer;
+	return BMPLoader(buffer, xWidth, yHeight, 0);
 }
