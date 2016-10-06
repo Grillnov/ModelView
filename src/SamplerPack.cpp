@@ -6,7 +6,7 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
-# include <TexturePack.h>
+# include <SamplerPack.h>
 
 SamplerPack::SamplerPack()
 {

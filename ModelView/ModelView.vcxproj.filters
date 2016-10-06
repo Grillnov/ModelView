@@ -84,7 +84,13 @@
     <ClInclude Include="..\include\TextureCube.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\TextureMultiSamp.h">
+    <ClInclude Include="..\include\RenderBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FrameBuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SamplerPack.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,7 +164,7 @@
     <ClCompile Include="..\src\Texture2DArray.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextureMultiSamp.cpp">
+    <ClCompile Include="..\src\FrameBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

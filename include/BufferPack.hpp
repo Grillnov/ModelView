@@ -206,6 +206,7 @@ GLclientside& BufferPack<GLclientside>::operator[](GLsizei Index)
 		CheckStatus(__FUNCTION__);
 
 		this->isMapped = true;
+		glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
 		return *(this->MappedPtr + Index);
 	}
 }
@@ -231,6 +232,7 @@ void BufferPack<GLclientside>::Done()
 	Log(debugMsg, "Synchorized memory for buffer %u", this->AssetID);
 
 	this->isMapped = false;
+	glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
 }
 
 # endif

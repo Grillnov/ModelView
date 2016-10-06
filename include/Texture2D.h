@@ -14,7 +14,7 @@
 /**
 @brief 2D textures.
 */
-class Texture2D : public TexturePic
+class Texture2D : public TexturePack
 {
 public:
 	/**
@@ -24,37 +24,38 @@ public:
 	Simply invoke texture() with the correspondent sampler assigned with the slot.
 	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
 	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 4.
+
+	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	Texture2D(GLenum Slot) : TexturePic(Slot) {}
+	Texture2D(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true)
+		: TexturePack(Slot, internalFormat, levels, generateMipmaps)
+	{}
 
 	/**
-	@brief Initialize the texture from local pointers as an image.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
 	@param Width The width of the 2D texture.
 
 	@param Height The height of the 2D texture.
-
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	By default it's set as GL_RGB32F.
 
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
 	By default it's set as GL_RGB.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	void LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat = GL_RGB32F, GLint clientsideFormat = GL_RGB, GLsizei levels = 4, bool generateMipMap = true);
+	void LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -62,27 +63,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -90,27 +78,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLushort* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLushort* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -118,27 +93,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLshort* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLshort* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -146,27 +108,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLuint* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLuint* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -174,27 +123,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLint* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLint* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -202,27 +138,14 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table.
+	@brief Initialize the texture from local pointers.
 
 	@param Pixels The pointer to the texture storage.
 
@@ -230,28 +153,15 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
+	By default it's set as GL_RGB.
 	*/
-	void LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat = GL_RGB);
 
 	/**
-	@brief Initialize the texture from local pointers as a table
-	(Generic version in case you can't find the type you want).
+	@brief Initialize the texture from local pointers.
+	(Generic version in case you can't find the type you want)
 
 	@param Pixels The pointer to the texture storage.
 
@@ -259,47 +169,35 @@ public:
 
 	@param Height The height of the 2D texture.
 
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of format should be chosen in GLSL shaders.
-
 	@param clientsideFormat The arrangement of the storage buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
-	No default value is given. For it's supposed to be used as a table, it's up to
-	programmers to decide what kind of layout on the client side is used to feed the texture.
+	No default value is given. It's up to the programmers to decide what kind
+	of layout on the client side is used to feed the texture.
 
 	@param type The type of the texels you provided from the client side.
 	A value among GL_UNSIGNED_SHORT, GL_FLOAT...... etc. is expected.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 1, for it's a table.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as false, for it's a table.
 	*/
-	void LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height,
-		GLint internalFormat, GLint clientsideFormat, GLenum type, GLsizei levels = 1, bool generateMipMap = false);
+	void LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat, GLenum type);
 
 	/**
-	@brief Load the texels from BMP files as an image.
+	@brief Load the texels from a BMP file.
 
 	@param Path The path to the texture picture.
-
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI...... etc. is expected.
-	By default it's set as GL_RGB32F.
 
 	@param clientsideFormat The arrangement of the local buffer on the client side.
 	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
 	By default it's set as GL_BGR, by default BMP protocol.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
-
-	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
 	*/
-	void LoadFromBMP(std::string Path, GLint internalFormat = GL_RGB32F,
-		GLint clientsideFormat = GL_BGR, GLsizei levels = 4, bool generateMipMap = true);
+	void LoadFromBMP(std::string Path, GLenum clientsideFormat = GL_BGR);
+
+	/**
+	@brief (Re)Allocate memory for this 2D texture.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+	*/
+	void Alloc(GLsizei Width, GLsizei Height);
 };
+
 # endif

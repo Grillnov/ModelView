@@ -14,7 +14,8 @@ public:
 	{
 		Pack.Attach();
 
-		White.LoadFromBMP("../assets/trial.bmp");
+		//White.LoadFromBMP("../assets/trial.bmp");
+		White.LoadFromBMP("../assets/blip.bmp");
 
 		Program[GL_VERTEX_SHADER] = "../shaders/texvert.glsl";
 		Program[GL_FRAGMENT_SHADER] = "../shaders/texfrag.glsl";

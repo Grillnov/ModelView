@@ -35,14 +35,6 @@ public:
 	GLAsset() : AssetID(0), isReady(false) {}
 	
 	/**
-	@brief Tell whether it's ready.
-	*/
-	virtual bool IsReady()
-	{
-		return this->isReady;
-	}
-
-	/**
 	@brief Transformation to GLuint so that assets can be directly used as arguments to invoke raw GL interfaces.
 	*/
 	virtual operator GLuint()

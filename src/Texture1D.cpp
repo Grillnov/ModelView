@@ -8,82 +8,81 @@
 
 # include <Texture1D.h>
 
-void Texture1D::LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1D::LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_BYTE, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_BYTE);
 }
 
-void Texture1D::LoadFromMemory(GLushort* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLushort* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_UNSIGNED_SHORT, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_UNSIGNED_SHORT);
 }
 
-void Texture1D::LoadFromMemory(GLshort* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLshort* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_SHORT, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_SHORT);
 }
 
-void Texture1D::LoadFromMemory(GLuint* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLuint* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_UNSIGNED_INT, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_UNSIGNED_INT);
 }
 
-void Texture1D::LoadFromMemory(GLint* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLint* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_INT, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_INT);
 }
 
-void Texture1D::LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_FLOAT, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_FLOAT);
 }
 
-void Texture1D::LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLsizei levels, bool generateMipmap)
+void Texture1D::LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, internalFormat
-		, clientsideFormat, GL_DOUBLE, levels, generateMipmap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, clientsideFormat, GL_DOUBLE);
 }
 
-void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLint internalFormat,
-	GLint clientsideFormat, GLenum type, GLsizei levels, bool generateMipmap)
+void Texture1D::Alloc(GLsizei Width)
 {
-	if (this->isReady)
+	if (this->xWidth != 0)
 	{
-		glInvalidateTexImage(this->AssetID, 0);//Reload the texture.
+		Error(debugMsg, "1D texture %u: Cannot vary texture's dimensions within one texturepack. "
+			"You may want to invoke TexImage2D for yourself if you have to."
+			, this->AssetID);
+		return;
 	}
 
 	glBindTexture(GL_TEXTURE_1D, this->AssetID);
-
 	this->xWidth = Width;
+	glTexStorage1D(GL_TEXTURE_1D, levels, internalFormat, xWidth);
 
-	glTexStorage1D(GL_TEXTURE_1D, 1, internalFormat, xWidth);
+	glBindTexture(GL_TEXTURE_1D, 0);
+}
+
+void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLenum clientsideFormat, GLenum type)
+{
+	if (this->xWidth != Width)
+	{
+		this->Alloc(Width);
+	}
+	glBindTexture(GL_TEXTURE_1D, this->AssetID);
+
 	glTexSubImage1D(GL_TEXTURE_1D, 0, 0, xWidth, clientsideFormat, type, Pixels);
 
+	if (generateMipmaps)
+	{
+		glGenerateTextureMipmap(this->AssetID);
+	}
+	
 	glActiveTexture(GL_TEXTURE0 + layoutSlot);
-
-	CheckStatus(__FUNCTION__);
-
 	glBindTexture(GL_TEXTURE_1D, this->AssetID);
+
 	glBindSampler(layoutSlot, defaultSampler);
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -93,6 +92,6 @@ void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLint internalFormat
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "1D texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
-
 	this->isReady = true;
+	glBindTexture(GL_TEXTURE_1D, 0);
 }

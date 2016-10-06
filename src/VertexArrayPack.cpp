@@ -75,8 +75,12 @@ void VertexArrayPack::AddAttribute(GLuint buffer, GLuint index, GLuint component
 		Error(debugMsg, "Unrecognized type!");
 	}
 	glEnableVertexAttribArray(index);
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	Log(debugMsg, "Vertexarray %u: Attribute %u was successfully activated.", this->AssetID, index);
+	CheckStatus(__FUNCTION__);
+
+	Attribs.emplace(index);
 }
 
 void VertexArrayPack::AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components)

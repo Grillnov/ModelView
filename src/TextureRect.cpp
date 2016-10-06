@@ -8,42 +8,70 @@
 
 # include <TextureRect.h>
 
-void TextureRect::LoadFromBMP(std::string Path, GLint clientsideFormat,
-	GLint internalFormat)
+void TextureRect::LoadFromBMP(std::string Path, GLenum clientsideFormat)
 {
-	BMPLoader texels = LoadBMP(Path);
+	BMPLoader l = LoadBMP(Path);
 
-	this->xWidth = texels.xWidth;
-	this->yHeight = texels.yHeight;
+	this->LoadFromMemory(reinterpret_cast<GLubyte*>(l.Pixels), l.xWidth, l.yHeight, clientsideFormat);
 
-	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
-	glTexStorage2D(GL_TEXTURE_RECTANGLE, 1, internalFormat, xWidth, yHeight);
-	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, texels.Pixels);
-
-	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
-	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
-
-	glBindSampler(layoutSlot, defaultSampler);
-
-	Param(GL_TEXTURE_WRAP_S, GL_REPEAT);
-	Param(GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	CheckStatus(__FUNCTION__);
-
-	Log(debugMsg, "Texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
-	delete[] texels.Pixels;
+	delete[] l.Pixels;
 }
 
-void TextureRect::LoadFromMemory(GLubyte* Pixels, size_t Width, size_t Height,
-	GLint internalFormat, GLint clientsideFormat)
+void TextureRect::LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_UNSIGNED_BYTE);
+}
+
+void TextureRect::LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_BYTE);
+}
+
+void TextureRect::LoadFromMemory(GLushort* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_UNSIGNED_SHORT);
+}
+
+void TextureRect::LoadFromMemory(GLshort* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_SHORT);
+}
+
+void TextureRect::LoadFromMemory(GLuint* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_UNSIGNED_INT);
+}
+
+void TextureRect::LoadFromMemory(GLint* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_INT);
+}
+
+void TextureRect::LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_FLOAT);
+}
+
+void TextureRect::LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLsizei Height, GLint clientsideFormat)
+{
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Width, Height, clientsideFormat, GL_DOUBLE);
+}
+
+void TextureRect::LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLenum clientsideFormat, GLenum type)
 {
 	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
 
-	this->xWidth = Width;
-	this->yHeight = Height;
-
-	glTexStorage2D(GL_TEXTURE_RECTANGLE, 1, internalFormat, xWidth, yHeight);
-	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, xWidth, yHeight, clientsideFormat, GL_UNSIGNED_BYTE, Pixels);
+	if (this->xWidth != Width || this->yHeight != Height)
+	{
+		if (this->xWidth != 0 || this->yHeight != 0)
+		{
+			glInvalidateTexImage(this->AssetID, 0);
+		}
+		this->xWidth = Width;
+		this->yHeight = Height;
+		glTexStorage2D(GL_TEXTURE_RECTANGLE, levels, internalFormat, xWidth, yHeight);
+	}
+	glTexSubImage2D(GL_TEXTURE_RECTANGLE, 0, 0, 0, xWidth, yHeight, clientsideFormat, type, Pixels);
 
 	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
 	glBindTexture(GL_TEXTURE_RECTANGLE, this->AssetID);
@@ -55,5 +83,5 @@ void TextureRect::LoadFromMemory(GLubyte* Pixels, size_t Width, size_t Height,
 
 	CheckStatus(__FUNCTION__);
 
-	Log(debugMsg, "Texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
+	Log(debugMsg, "Rectangular texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
 }

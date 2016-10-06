@@ -8,76 +8,67 @@
 
 # include <Texture1DArray.h>
 
-void Texture1DArray::LoadFromMemory(GLubyte* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLubyte* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLbyte* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLbyte* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLushort* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLushort* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLshort* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLshort* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLuint* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLuint* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLint* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLint* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLfloat* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLfloat* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(GLdouble* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLsizei levels, bool generateMipMap)
+void Texture1DArray::LoadFromMemory(GLdouble* Pixels, GLsizei Index, GLenum clientsideFormat)
 {
-	this->LoadFromMemory(Pixels, Index, clientsideFormat, GL_UNSIGNED_BYTE, levels, generateMipMap);
+	this->LoadFromMemory(reinterpret_cast<void*>(Pixels), Index, clientsideFormat, GL_UNSIGNED_BYTE);
 }
 
-void Texture1DArray::LoadFromMemory(void* Pixels, GLsizei Index,
-	GLint clientsideFormat, GLenum type, GLsizei levels, bool generateMipmap)
+void Texture1DArray::LoadFromMemory(void* Pixels, GLsizei Index, GLenum clientsideFormat, GLenum type)
 {
-	if (Index >= this->sSlices)
+	if (Index >= this->yHeight)
 	{
-		Error(debugMsg, "Index %u is out of range: Array %u has only %u slices.", Index, this->AssetID, this->sSlices);
-	}
-
-	if (this->isReady)
-	{
-		glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
-		glTexSubImage2D(GL_TEXTURE_1D_ARRAY, 0, 0, Index, this->xWidth, 1, clientsideFormat, type, Pixels);
+		Error(debugMsg, "Index %u is out of range: Array %u has only %u slices.", Index, this->AssetID, this->yHeight);
 	}
 
 	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
 
-	glTexStorage2D(GL_TEXTURE_1D_ARRAY, levels, this->internalFormat, this->xWidth, this->sSlices);
+	if (!this->isReady)
+	{
+		glTexStorage2D(GL_TEXTURE_1D_ARRAY, this->levels, this->internalFormat, this->xWidth, this->yHeight);
+	}
 	glTexSubImage2D(GL_TEXTURE_1D_ARRAY, 0, 0, Index, this->xWidth, 1, clientsideFormat, type, Pixels);
 
-	glActiveTexture(GL_TEXTURE0 + layoutSlot);
+	if (this->generateMipmaps)
+	{
+		glGenerateTextureMipmap(this->AssetID);
+	}
 
-	CheckStatus(__FUNCTION__);
+	glActiveTexture(GL_TEXTURE0 + layoutSlot);
 
 	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
 	glBindSampler(layoutSlot, defaultSampler);
@@ -89,7 +80,43 @@ void Texture1DArray::LoadFromMemory(void* Pixels, GLsizei Index,
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "1D texture array %u with %u slices at layout slot %u is now ready."
-		, this->AssetID, this->sSlices, this->layoutSlot);
+		, this->AssetID, this->yHeight, this->layoutSlot);
+
+	this->isReady = true;
+}
+
+void Texture1DArray::LoadFromMemory(void* Pixels, GLenum clientsideFormat, GLenum type)
+{
+	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
+
+	if (this->isReady)
+	{
+		glTexSubImage2D(GL_TEXTURE_1D_ARRAY, 0, 0, 0, this->xWidth, this->yHeight, clientsideFormat, type, Pixels);
+	}
+	else
+	{
+		glTexStorage2D(GL_TEXTURE_1D_ARRAY, this->levels, this->internalFormat, this->xWidth, this->yHeight);
+		glTexSubImage2D(GL_TEXTURE_1D_ARRAY, 0, 0, 0, this->xWidth, this->yHeight, clientsideFormat, type, Pixels);
+	}
+
+	if (this->generateMipmaps)
+	{
+		glGenerateTextureMipmap(this->AssetID);
+	}
+
+	glActiveTexture(GL_TEXTURE0 + layoutSlot);
+
+	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
+	glBindSampler(layoutSlot, defaultSampler);
+
+	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	Param(GL_TEXTURE_WRAP_S, GL_REPEAT);
+
+	CheckStatus(__FUNCTION__);
+
+	Log(debugMsg, "1D texture array %u with %u slices at layout slot %u is now ready."
+		, this->AssetID, this->yHeight, this->layoutSlot);
 
 	this->isReady = true;
 }

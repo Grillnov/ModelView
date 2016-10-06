@@ -13,12 +13,15 @@
   <ItemGroup>
     <ClInclude Include="..\include\BufferPack.hpp" />
     <ClInclude Include="..\include\CameraView.h" />
+    <ClInclude Include="..\include\FrameBuffer.h" />
     <ClInclude Include="..\include\GLApplication.h" />
     <ClInclude Include="..\include\GLAsset.h" />
     <ClInclude Include="..\include\GLObject.h" />
     <ClInclude Include="..\include\MeshPack.h" />
     <ClInclude Include="..\include\Options.h" />
     <ClInclude Include="..\include\ProgramPack.h" />
+    <ClInclude Include="..\include\RenderBuffer.h" />
+    <ClInclude Include="..\include\SamplerPack.h" />
     <ClInclude Include="..\include\ShaderPack.h" />
     <ClInclude Include="..\include\Texture1D.h" />
     <ClInclude Include="..\include\Texture1DArray.h" />
@@ -26,7 +29,6 @@
     <ClInclude Include="..\include\Texture2DArray.h" />
     <ClInclude Include="..\include\Texture3D.h" />
     <ClInclude Include="..\include\TextureCube.h" />
-    <ClInclude Include="..\include\TextureMultiSamp.h" />
     <ClInclude Include="..\include\TexturePack.h" />
     <ClInclude Include="..\include\TextureRect.h" />
     <ClInclude Include="..\include\VertexArrayPack.h" />
@@ -37,6 +39,7 @@
     <ClCompile Include="..\demo\Phong.cpp" />
     <ClCompile Include="..\demo\TexPlain.cpp" />
     <ClCompile Include="..\src\CameraView.cpp" />
+    <ClCompile Include="..\src\FrameBuffer.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />
     <ClCompile Include="..\src\GLObject.cpp" />
     <ClCompile Include="..\src\SamplerPack.cpp" />
@@ -45,7 +48,6 @@
     <ClCompile Include="..\src\Texture2D.cpp" />
     <ClCompile Include="..\src\Texture2DArray.cpp" />
     <ClCompile Include="..\src\TextureCube.cpp" />
-    <ClCompile Include="..\src\TextureMultiSamp.cpp" />
     <ClCompile Include="..\src\TexturePack.cpp" />
     <ClCompile Include="..\src\MeshPack.cpp" />
     <ClCompile Include="..\src\MeshParsing.cpp" />

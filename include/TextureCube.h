@@ -14,7 +14,7 @@
 /**
 @brief Cube maps.
 */
-class TextureCube : public TextureArr
+class TextureCube : public TexturePack
 {
 public:
 	/**
@@ -25,53 +25,260 @@ public:
 	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
 	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
 
-	@param Width The width of all the textures.
-
-	@param Height The height of all the textures.
-
 	@param internalFormat The storage format on the server side.
 	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 4.
+
+	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	TextureCube(GLenum Slot, GLsizei Width, GLsizei Height, GLenum internalFormat) : TextureArr(Slot, 6)
-	{
-		glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
+	TextureCube(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true) 
+		: TexturePack(Slot, internalFormat, levels, generateMipmaps) {}
 
-		this->xWidth = Width;
+	/**
+	@brief Load the texels from a BMP file into the cube map as its positive X plane.
 
-		glTexStorage2D(GL_TEXTURE_1D_ARRAY, 1, internalFormat, xWidth, sSlices);
+	@param Path The path to the texture.
 
-		glActiveTexture(GL_TEXTURE0 + layoutSlot);
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadPositiveX(std::string Path, GLenum clientsideFormat = GL_BGR);
 
-		CheckStatus(__FUNCTION__);
+	/**
+	@brief Load the texels from a BMP file into the cube map as its negative X plane.
 
-		glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
-		glBindSampler(layoutSlot, defaultSampler);
+	@param Path The path to the texture.
 
-		Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		Param(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadNegativeX(std::string Path, GLenum clientsideFormat = GL_BGR);
 
-		CheckStatus(__FUNCTION__);
+	/**
+	@brief Load the texels from a BMP file into the cube map as its positive Y plane.
 
-		Log(debugMsg, "1D texture array %u was successfully attached at layout slot %u.", this->AssetID, this->layoutSlot);
-	}
+	@param Path The path to the texture.
 
-	void LoadLeftPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadPositiveY(std::string Path, GLenum clientsideFormat = GL_BGR);
 
-	void LoadRightPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	/**
+	@brief Load the texels from a BMP file into the cube map as its negative Y plane.
 
-	void LoadFrontPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	@param Path The path to the texture.
 
-	void LoadBackPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadNegativeY(std::string Path, GLenum clientsideFormat = GL_BGR);
 
-	void LoadTopPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	/**
+	@brief Load the texels from a BMP file into the cube map as its positive Z plane.
 
-	void LoadBottomPlane(std::string Path, GLint clientsideFormat = GL_BGR,
-		GLint internalFormat = GL_RGB, GLsizei levels = 2, bool generateMipMap = true);
+	@param Path The path to the texture.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadPositiveZ(std::string Path, GLenum clientsideFormat = GL_BGR);
+
+	/**
+	@brief Load the texels from a BMP file into the cube map as its negative Z plane.
+
+	@param Path The path to the texture.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_BGR, by default BMP protocol.
+	*/
+	void LoadNegativeZ(std::string Path, GLenum clientsideFormat = GL_BGR);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLubyte* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLbyte* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLushort* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLshort* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLuint* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLint* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLfloat* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+	*/
+	void LoadFromMemory(GLdouble* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB);
+
+	/**
+	@brief Initialize the cube map texture from local pointers.
+	(Generic version in case you can't find the type you want)
+
+	@param Pixels The pointer to the texture storage.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+
+	@param Target The target to which you are loading the texture.
+	A value among GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y...... etc. is expected.
+
+	@param clientsideFormat The arrangement of the storage buffer on the client side.
+	A value among GL_RED, GL_RGB, GL_BGRA, GL_RGBA_INTEGER...... etc. is expected.
+	By default it's set as GL_RGB.
+
+	@param type The type of the texels you provided from the client side.
+	A value among GL_UNSIGNED_SHORT, GL_FLOAT...... etc. is expected.
+	By default it's set as GL_UNSIGNED_BYTE.
+	*/
+	void LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLenum Target,
+		GLenum clientsideFormat = GL_RGB, GLenum type = GL_UNSIGNED_BYTE);
 };
+
 # endif

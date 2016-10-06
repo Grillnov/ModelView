@@ -137,6 +137,21 @@ void GLApplication::StartMainLoop()
 	* But it seems better off to do it for you.
 	*/
 	glEnable(GL_DEPTH_TEST);
+
+	if (enableMultiSampling == 1)
+	{
+		GLint isMSsupported = 0;
+		glGetIntegerv(GL_SAMPLE_BUFFERS, &isMSsupported);
+		if (isMSsupported == 1)
+		{
+			glEnable(GL_MULTISAMPLE);
+			Log(debugMsg, "Multisampling now activated.");
+		}
+		else
+		{
+			Warning(debugMsg, "Multisampling is not supported by this OpenGL implementation.");
+		}
+	}
 	CheckStatus(__FUNCTION__);
 
 	while ((!glfwWindowShouldClose(fWindow)))

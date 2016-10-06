@@ -18,17 +18,6 @@
 */
 class VertexArrayPack : public GLAsset
 {
-private:
-	/*
-	Attributes are stored here, ready for attaching.
-	*/
-	std::unordered_set<GLuint> Attribs;
-
-	/*
-	Add an attribute to the vertex array.
-	*/
-	void AddAttribute(GLuint buffer, GLuint index, GLuint components, GLenum type);
-
 public:
 	/**
 	@brief Register a vertexarray in the OpenGL context.
@@ -148,6 +137,21 @@ public:
 	@brief Bind the vertex array.
 	*/
 	void Bind();
+
+	/**
+	@brief Deactivate the attribute.
+	*/
+	void DeleteAttribAt(GLuint index);
+private:
+	/*
+	Attributes are stored here, ready for attaching.
+	*/
+	std::unordered_set<GLuint> Attribs;
+
+	/*
+	Add an attribute to the vertex array.
+	*/
+	void AddAttribute(GLuint buffer, GLuint index, GLuint components, GLenum type);
 };
 
 # endif

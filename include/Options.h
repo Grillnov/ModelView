@@ -27,7 +27,14 @@ Note that only OpenGL 3.2 or higher is supported by GLFW3, a value greater than
 # define yWindowHeight 600.0
 
 /**
-@brief Modify this flag to make the window fullscreen or windowed.
+@brief Modify this flag below to switch multisampling on/off.
+1 : on
+0 : off
+*/
+# define enableMultiSampling 0
+
+/**
+@brief Modify this flag below to make the window fullscreen or windowed.
 1 : fullscreened
 0 : windowed
 */

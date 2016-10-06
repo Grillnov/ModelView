@@ -10,7 +10,8 @@
 
 std::unordered_set<GLenum> TexturePack::OccupiedLayouts = std::unordered_set<GLenum>();
 
-TexturePack::TexturePack(GLenum Slot)
+TexturePack::TexturePack(GLenum Slot, GLint internalFormat, GLsizei levels, bool generateMipmaps) :
+	layoutSlot(Slot), xWidth(0), yHeight(0), dDepth(0), internalFormat(internalFormat), levels(levels), generateMipmaps(generateMipmaps)
 {
 	if (Slot > GL_TEXTURE0)
 		Slot -= GL_TEXTURE0;
@@ -46,42 +47,22 @@ TexturePack::~TexturePack()
 	OccupiedLayouts.erase(this->layoutSlot);
 }
 
-void TexturePic::Param(GLenum target, GLfloat param)
+void TexturePack::Param(GLenum pname, GLfloat param)
 {
-	this->defaultSampler.Param(target, param);
+	this->defaultSampler.Param(pname, param);
 }
 
-void TexturePic::Param(GLenum target, GLint param)
+void TexturePack::Param(GLenum pname, GLint param)
 {
-	this->defaultSampler.Param(target, param);
+	this->defaultSampler.Param(pname, param);
 }
 
-void TexturePic::Param(GLenum target, GLfloat* param)
+void TexturePack::Param(GLenum pname, GLfloat* param)
 {
-	this->defaultSampler.Param(target, param);
+	this->defaultSampler.Param(pname, param);
 }
 
-void TexturePic::Param(GLenum target, GLint* param)
+void TexturePack::Param(GLenum pname, GLint* param)
 {
-	this->defaultSampler.Param(target, param);
-}
-
-void TextureArr::Param(GLenum target, GLfloat param)
-{
-	this->defaultSampler.Param(target, param);
-}
-
-void TextureArr::Param(GLenum target, GLint param)
-{
-	this->defaultSampler.Param(target, param);
-}
-
-void TextureArr::Param(GLenum target, GLfloat* param)
-{
-	this->defaultSampler.Param(target, param);
-}
-
-void TextureArr::Param(GLenum target, GLint* param)
-{
-	this->defaultSampler.Param(target, param);
+	this->defaultSampler.Param(pname, param);
 }
