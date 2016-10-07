@@ -36,8 +36,11 @@
     <ClInclude Include="..\util\FPSApplication.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\demo\Phong.cpp" />
-    <ClCompile Include="..\demo\TexPlain.cpp" />
+    <ClCompile Include="..\demo\DrawMeshDemo.cpp" />
+    <ClCompile Include="..\demo\FrameBufferDemo.cpp" />
+    <ClCompile Include="..\demo\NormalMapDemo.cpp" />
+    <ClCompile Include="..\demo\PhongDemo.cpp" />
+    <ClCompile Include="..\demo\TextureDemo.cpp" />
     <ClCompile Include="..\src\CameraView.cpp" />
     <ClCompile Include="..\src\FrameBuffer.cpp" />
     <ClCompile Include="..\src\GLApplication.cpp" />

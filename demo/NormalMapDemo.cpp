@@ -1,16 +1,17 @@
 # include <MeshPack.h>
 # include <ProgramPack.h>
 # include <FPSApplication.h>
-# include <TexturePack.h>
+# include <Texture2D.h>
 
-class Phong : public FPSApplication
+class NormalMapDemo : public FPSApplication
 {
 private:
 	MeshPack Pack;
 	ProgramPack Program;
 	ProgramPack Program2;
+	Texture2D TextureWall, TextureWallNorm;
 public:
-	Phong() : Pack("../assets/Android.obj")
+	NormalMapDemo() : Pack("../assets/Android.obj"), TextureWall(0), TextureWallNorm(1)
 	{
 		Pack.Attach();
 
@@ -54,10 +55,10 @@ public:
 		Pack.DrawMesh();
 	}
 
-	~Phong()
+	~NormalMapDemo()
 	{
 		Pack.Detach();
 	}
 };
 
-//RunInstance(Phong)
+//RunInstance(NormalMapDemo)

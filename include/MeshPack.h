@@ -38,10 +38,7 @@ private:
 	Texture coordinates.
 	*/
 	BufferPack<GLfloat> TextureCoord;
-	/*
-	Tangent coordinates.
-	*/
-	BufferPack<GLfloat> Tangent;
+	
 	/*
 	Buffer storing indices of vertex, defining how triangles are assembled.
 	*/

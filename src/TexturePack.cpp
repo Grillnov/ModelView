@@ -8,20 +8,14 @@
 
 # include <TexturePack.h>
 
-std::unordered_set<GLenum> TexturePack::OccupiedLayouts = std::unordered_set<GLenum>();
-
 TexturePack::TexturePack(GLenum Slot, GLint internalFormat, GLsizei levels, bool generateMipmaps) :
-	layoutSlot(Slot), xWidth(0), yHeight(0), dDepth(0), internalFormat(internalFormat), levels(levels), generateMipmaps(generateMipmaps)
+	layoutSlot(Slot > GL_TEXTURE0 ? Slot - GL_TEXTURE0 : Slot), xWidth(0), yHeight(0), dDepth(0),
+	defaultSampler(Slot > GL_TEXTURE0 ? Slot - GL_TEXTURE0 : Slot),
+	internalFormat(internalFormat), levels(levels), generateMipmaps(generateMipmaps)
 {
 	if (Slot > GL_TEXTURE0)
 		Slot -= GL_TEXTURE0;
 
-	if (OccupiedLayouts.find(Slot) != OccupiedLayouts.end())
-	{
-		Error(debugMsg, "Texture slot %u is already occupied!", Slot);
-	}
-
-	OccupiedLayouts.emplace(Slot);
 	this->layoutSlot = Slot;
 
 	glGenTextures(1, &this->AssetID);
@@ -44,7 +38,6 @@ TexturePack::~TexturePack()
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "Texture %u at slot %u was successfully unregistered.", this->AssetID, this->layoutSlot);
-	OccupiedLayouts.erase(this->layoutSlot);
 }
 
 void TexturePack::Param(GLenum pname, GLfloat param)

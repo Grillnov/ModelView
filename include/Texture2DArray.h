@@ -36,13 +36,13 @@ public:
 	By default it's set as GL_RGB32F.
 
 	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
+	By default it's set as 2.
 
 	@param generateMipmap Tells OpenGL to generate mipmap automatically or not.
 	By default it's set as true, so that mipmaps are generated for you.
 	*/
 	Texture2DArray(GLenum Slot, GLsizei Slices, GLsizei Width, GLsizei Height,
-		GLenum internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true) : 
+		GLenum internalFormat = GL_RGB32F, GLsizei levels = 2, bool generateMipmaps = true) : 
 		TexturePack(Slot, internalFormat, levels, generateMipmaps), AllPaths(std::vector<std::string>())
 	{
 		this->xWidth = Width;
@@ -227,6 +227,11 @@ public:
 	By default it's set as GL_BGR, by default BMP protocol.
 	*/
 	void LoadFromBMP(GLsizei Index, GLenum clientsideFormat = GL_BGR);
+
+	/**
+	@brief Activate the texture.
+	*/
+	void Activate() override;
 private:
 	std::vector<std::string> AllPaths;
 };

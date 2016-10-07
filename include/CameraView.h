@@ -19,7 +19,9 @@ class CameraView
 private:
 	glm::vec3 Location;
 	glm::vec3 UpOrientation;
-	glm::vec3 LookAtOrientation;
+
+	GLfloat yaw;
+	GLfloat pitch;
 
 	float FOV;
 
@@ -123,18 +125,18 @@ public:
 	void Up(glm::vec3 Up);
 
 	/**
-	@brief Set the orientation the camera's looking at.
+	@brief Vary the yaw of the camera.
 
-	@param Lookat The direction it's looking at.
+	@param offset The delta of the yaw value.
 	*/
-	void Look(glm::vec3 Lookat);
+	void Yaw(GLfloat offset);
 
 	/**
-	@brief Rotate the camera so that it's looking at a new direction.
+	@brief Vary the pitch of the camera.
 
-	@param Swivel: The delta value of orientation change you expect.
+	@param offset The delta of the pitch value.
 	*/
-	void Swivel(glm::vec3 Swivel);
+	void Pitch(GLfloat offset);
 
 	/**
 	@brief Zoom by setting FOV.
@@ -190,6 +192,16 @@ public:
 	*/
 	glm::mat4 GetModelViewProjection(float AspectRatio = xWindowWidth / yWindowHeight, glm::mat4 Model = glm::mat4(1.0f),
 		float nearP = 0.1f, float farP = 100.0f);
+
+	/**
+	@brief Get the camera's position.
+	*/
+	glm::vec3 GetCameraLocation();
+
+	/**
+	@brief Get the camera's orientation.
+	*/
+	glm::vec3 GetCameraOrientation();
 };
 
 # endif

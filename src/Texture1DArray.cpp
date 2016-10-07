@@ -68,10 +68,7 @@ void Texture1DArray::LoadFromMemory(void* Pixels, GLsizei Index, GLenum clientsi
 		glGenerateTextureMipmap(this->AssetID);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + layoutSlot);
-
-	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
-	glBindSampler(layoutSlot, defaultSampler);
+	Activate();
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -104,9 +101,8 @@ void Texture1DArray::LoadFromMemory(void* Pixels, GLenum clientsideFormat, GLenu
 		glGenerateTextureMipmap(this->AssetID);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + layoutSlot);
+	Activate();
 
-	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
 	glBindSampler(layoutSlot, defaultSampler);
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -119,4 +115,12 @@ void Texture1DArray::LoadFromMemory(void* Pixels, GLenum clientsideFormat, GLenu
 		, this->AssetID, this->yHeight, this->layoutSlot);
 
 	this->isReady = true;
+}
+
+void Texture1DArray::Activate()
+{
+	glBindSampler(layoutSlot, defaultSampler);
+	glActiveTexture(GL_TEXTURE0 + layoutSlot);
+	glBindTexture(GL_TEXTURE_1D_ARRAY, this->AssetID);
+	CheckStatus(__FUNCTION__);
 }

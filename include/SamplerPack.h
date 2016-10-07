@@ -21,7 +21,7 @@ public:
 	/**
 	@brief Register the sampler.
 	*/
-	SamplerPack();
+	SamplerPack(GLsizei Slot);
 
 	/**
 	@brief Unregister the sampler, recycling its name for further usage.
@@ -63,6 +63,8 @@ public:
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum pname, GLint* param);
+private:
+	GLenum Slot;
 };
 
 # endif

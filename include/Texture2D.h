@@ -30,12 +30,12 @@ public:
 	By default it's set as GL_RGB32F.
 
 	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
+	By default it's set as 2.
 
 	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
 	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	Texture2D(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true)
+	Texture2D(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 2, bool generateMipmaps = true)
 		: TexturePack(Slot, internalFormat, levels, generateMipmaps)
 	{}
 
@@ -198,6 +198,11 @@ public:
 	@param Height The height of the 2D texture.
 	*/
 	void Alloc(GLsizei Width, GLsizei Height);
+
+	/**
+	@brief Activate the texture.
+	*/
+	void Activate() override;
 };
 
 # endif

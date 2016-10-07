@@ -8,7 +8,7 @@
 
 # include <SamplerPack.h>
 
-SamplerPack::SamplerPack()
+SamplerPack::SamplerPack(GLsizei Slot) : Slot(Slot)
 {
 	glGenSamplers(1, &this->AssetID);
 	if (AssetID != 0)
@@ -32,24 +32,28 @@ SamplerPack::~SamplerPack()
 
 void SamplerPack::Param(GLenum target, GLfloat param)
 {
+	glBindSampler(this->Slot, this->AssetID);
 	glSamplerParameterf(this->AssetID, target, param);
 	CheckStatus(__FUNCTION__);
 }
 
 void SamplerPack::Param(GLenum target, GLint param)
 {
+	glBindSampler(this->Slot, this->AssetID);
 	glSamplerParameteri(this->AssetID, target, param);
 	CheckStatus(__FUNCTION__);
 }
 
 void SamplerPack::Param(GLenum target, GLfloat* param)
 {
+	glBindSampler(this->Slot, this->AssetID);
 	glSamplerParameterfv(this->AssetID, target, param);
 	CheckStatus(__FUNCTION__);
 }
 
 void SamplerPack::Param(GLenum target, GLint* param)
 {
+	glBindSampler(this->Slot, this->AssetID);
 	glSamplerParameteriv(this->AssetID, target, param);
 	CheckStatus(__FUNCTION__);
 }

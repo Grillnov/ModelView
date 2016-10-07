@@ -30,32 +30,7 @@ struct BMPLoader
 */
 class TexturePack : public GLAsset
 {
-protected:
-	/**
-	@brief Register a texture in the OpenGL context.
-
-	@param Slot The slot of the texture. To sample the texture in fragment shaders:
-	Simply invoke texture() with the correspondent sampler assigned with the slot.
-	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
-	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
-
-	@param internalFormat The storage format on the server side.
-	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
-	By default it's set as GL_RGB32F.
-
-	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
-
-	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
-	By default it's set as true, so that mipmaps are generated for you.
-	*/
-	TexturePack(GLenum Slot, GLint internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true);
-
-	/**
-	@brief Unregister the buffer from the OpenGL context, recycling its name for further use.
-	*/
-	~TexturePack();
-
+public:
 	/**
 	@brief Set the texture parameters via the default sampler.
 	Feed a single precision floating point parameter to the sampler.
@@ -95,16 +70,41 @@ protected:
 	@param param The pointer to the value array of the parameter.
 	*/
 	void Param(GLenum pname, GLint* param);
+protected:
+	/**
+	@brief Register a texture in the OpenGL context.
+
+	@param Slot The slot of the texture. To sample the texture in fragment shaders:
+	Simply invoke texture() with the correspondent sampler assigned with the slot.
+	An enumeration between GL_TEXTURE0 and GL_TEXTURE0 + GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is expected.
+	Note that a value between 0 and GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS - 1 is also recognized and accepted.
+
+	@param internalFormat The storage format on the server side.
+	A value among GL_R8, GL_RGB32F, GL_RG8UI, GL_RGBA...... etc. is expected.
+	By default it's set as GL_RGB32F.
+
+	@param levels The total amount of mipmap levels.
+	By default it's set as 4.
+
+	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
+	By default it's set as true, so that mipmaps are generated for you.
+	*/
+	TexturePack(GLenum Slot, GLint internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true);
+
+	/**
+	@brief Unregister the buffer from the OpenGL context, recycling its name for further use.
+	*/
+	~TexturePack();
+
+	/**
+	@brief Activate the texture.
+	*/
+	virtual void Activate() = 0;
 
 	/**
 	@brief Layout index of the sampler in GLSL shader source code.
 	*/
 	GLuint layoutSlot;
-
-	/**
-	@brief Preventing from binding two texture objects to one binding slot.
-	*/
-	static std::unordered_set<GLenum> OccupiedLayouts;
 
 	/*
 	Width.

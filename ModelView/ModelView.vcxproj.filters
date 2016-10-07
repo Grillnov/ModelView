@@ -128,12 +128,6 @@
     <ClCompile Include="..\src\SamplerPack.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\demo\TexPlain.cpp">
-      <Filter>demo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\demo\Phong.cpp">
-      <Filter>demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Texture1D.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -166,6 +160,21 @@
     </ClCompile>
     <ClCompile Include="..\src\FrameBuffer.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\TextureDemo.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\DrawMeshDemo.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\PhongDemo.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\NormalMapDemo.cpp">
+      <Filter>demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo\FrameBufferDemo.cpp">
+      <Filter>demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

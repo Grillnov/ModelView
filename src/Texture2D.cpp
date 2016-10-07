@@ -92,10 +92,7 @@ void Texture2D::LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLen
 		glGenerateTextureMipmap(this->AssetID);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
-	glBindTexture(GL_TEXTURE_2D, this->AssetID);
-
-	glBindSampler(layoutSlot, defaultSampler);
+	Activate();
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -104,4 +101,12 @@ void Texture2D::LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLen
 
 	Log(debugMsg, "2D texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
 	this->isReady = true;
+}
+
+void Texture2D::Activate()
+{
+	glBindSampler(layoutSlot, defaultSampler);
+	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
+	glBindTexture(GL_TEXTURE_2D, this->AssetID);
+	CheckStatus(__FUNCTION__);
 }

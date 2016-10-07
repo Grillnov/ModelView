@@ -30,12 +30,12 @@ public:
 	By default it's set as GL_RGB32F.
 
 	@param levels The total amount of mipmap levels.
-	By default it's set as 4.
+	By default it's set as 2.
 
 	@param generateMipmaps Tells OpenGL to generate mipmap automatically or not.
 	By default it's set as true, so that mipmaps are generated for you.
 	*/
-	Texture3D(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 4, bool generateMipmaps = true)
+	Texture3D(GLenum Slot, GLenum internalFormat = GL_RGB32F, GLsizei levels = 2, bool generateMipmaps = true)
 		: TexturePack(Slot, internalFormat, levels, generateMipmaps) {}
 
 	/**
@@ -207,6 +207,7 @@ public:
 
 	/**
 	@brief (Re)Allocate memory for this 3D texture.
+	Allocate memory before using the texture as a rendering target.
 
 	@param Width The width of the 3D texture.
 
@@ -215,6 +216,11 @@ public:
 	@param Depth The depth of the 3D texture.
 	*/
 	void Alloc(GLsizei Width, GLsizei Height, GLsizei Depth);
+
+	/**
+	@brief Activate the texture.
+	*/
+	void Activate() override;
 };
 
 # endif

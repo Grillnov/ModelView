@@ -61,8 +61,6 @@ void Texture1D::Alloc(GLsizei Width)
 	glBindTexture(GL_TEXTURE_1D, this->AssetID);
 	this->xWidth = Width;
 	glTexStorage1D(GL_TEXTURE_1D, levels, internalFormat, xWidth);
-
-	glBindTexture(GL_TEXTURE_1D, 0);
 }
 
 void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLenum clientsideFormat, GLenum type)
@@ -80,10 +78,7 @@ void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLenum clientsideFor
 		glGenerateTextureMipmap(this->AssetID);
 	}
 	
-	glActiveTexture(GL_TEXTURE0 + layoutSlot);
-	glBindTexture(GL_TEXTURE_1D, this->AssetID);
-
-	glBindSampler(layoutSlot, defaultSampler);
+	Activate();
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -93,5 +88,12 @@ void Texture1D::LoadFromMemory(void* Pixels, GLsizei Width, GLenum clientsideFor
 
 	Log(debugMsg, "1D texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
 	this->isReady = true;
-	glBindTexture(GL_TEXTURE_1D, 0);
+}
+
+void Texture1D::Activate()
+{
+	glBindSampler(layoutSlot, defaultSampler);
+	glActiveTexture(GL_TEXTURE0 + layoutSlot);
+	glBindTexture(GL_TEXTURE_1D, this->AssetID);
+	CheckStatus(__FUNCTION__);
 }

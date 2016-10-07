@@ -93,11 +93,8 @@ void Texture3D::LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLsi
 	{
 		glGenerateTextureMipmap(this->AssetID);
 	}
-	
-	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
-	glBindTexture(GL_TEXTURE_2D, this->AssetID);
 
-	glBindSampler(layoutSlot, defaultSampler);
+	Activate();
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -108,4 +105,12 @@ void Texture3D::LoadFromMemory(void* Pixels, GLsizei Width, GLsizei Height, GLsi
 	CheckStatus(__FUNCTION__);
 
 	Log(debugMsg, "3D texture %u at layout slot %u is now ready.", this->AssetID, this->layoutSlot);
+}
+
+void Texture3D::Activate()
+{
+	glBindSampler(layoutSlot, defaultSampler);
+	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
+	glBindTexture(GL_TEXTURE_3D, this->AssetID);
+	CheckStatus(__FUNCTION__);
 }

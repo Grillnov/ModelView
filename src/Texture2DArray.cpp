@@ -88,10 +88,7 @@ void Texture2DArray::LoadFromMemory(void* Pixels, GLsizei Index, GLenum clientsi
 		glGenerateTextureMipmap(this->AssetID);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, this->AssetID);
-
-	glBindSampler(layoutSlot, defaultSampler);
+	Activate();
 
 	Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -120,8 +117,7 @@ void Texture2DArray::LoadFromMemory(void* Pixels, GLint clientsideFormat, GLenum
 		glGenerateTextureMipmap(this->AssetID);
 	}
 
-	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, this->AssetID);
+	Activate();
 
 	glBindSampler(layoutSlot, defaultSampler);
 
@@ -134,4 +130,12 @@ void Texture2DArray::LoadFromMemory(void* Pixels, GLint clientsideFormat, GLenum
 
 	Log(debugMsg, "2D texture array %u with %u slices at layout slot %u is now ready.", this->AssetID, this->dDepth, this->layoutSlot);
 	this->isReady = true;
+}
+
+void Texture2DArray::Activate()
+{
+	glBindSampler(layoutSlot, defaultSampler);
+	glActiveTexture(GL_TEXTURE0 + this->layoutSlot);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, this->AssetID);
+	CheckStatus(__FUNCTION__);
 }
