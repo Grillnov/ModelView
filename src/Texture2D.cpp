@@ -62,7 +62,7 @@ void Texture2D::Alloc(GLsizei Width, GLsizei Height)
 	if (this->xWidth != 0 || this->yHeight != 0)
 	{
 		Error(debugMsg, "2D texture %u: Cannot vary texture's dimensions within one texturepack. "
-			"You may want to invoke TexImage2D for yourself if you have to."
+			"You may want to invoke AllocMutable() for yourself if you have to."
 			, this->AssetID);
 		return;
 	}
@@ -71,6 +71,16 @@ void Texture2D::Alloc(GLsizei Width, GLsizei Height)
 	this->xWidth = Width;
 	this->yHeight = Height;
 	glTexStorage2D(GL_TEXTURE_2D, levels, internalFormat, xWidth, yHeight);
+
+	CheckStatus(__FUNCTION__);
+}
+
+void Texture2D::AllocMutable(GLsizei Width, GLsizei Height)
+{
+	glBindTexture(GL_TEXTURE_2D, this->AssetID);
+	this->xWidth = Width;
+	this->yHeight = Height;
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
 	CheckStatus(__FUNCTION__);
 }

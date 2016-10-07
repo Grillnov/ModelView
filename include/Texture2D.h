@@ -191,13 +191,22 @@ public:
 	void LoadFromBMP(std::string Path, GLenum clientsideFormat = GL_BGR);
 
 	/**
-	@brief (Re)Allocate memory for this 2D texture.
+	@brief Allocate memory storage(immutable) for this 2D texture.
 
 	@param Width The width of the 2D texture.
 
 	@param Height The height of the 2D texture.
 	*/
 	void Alloc(GLsizei Width, GLsizei Height);
+
+	/**
+	@brief Allocate memory space(mutable) for this 2D texture.
+
+	@param Width The width of the 2D texture.
+
+	@param Height The height of the 2D texture.
+	*/
+	void AllocMutable(GLsizei Width, GLsizei Height);
 
 	/**
 	@brief Activate the texture.

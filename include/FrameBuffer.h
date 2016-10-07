@@ -24,9 +24,9 @@ public:
 	@brief Register a framebuffer in the OpenGL context.
 
 	@param Usage Read or write to the frame buffer.
-	By default it's set as GL_FRAMEBUFFER.
+	By default it's set as GL_DRAW_FRAMEBUFFER.
 	*/
-	FrameBuffer(GLenum Usage = GL_FRAMEBUFFER) : Usage(Usage)
+	FrameBuffer(GLenum Usage = GL_DRAW_FRAMEBUFFER) : Usage(Usage)
 	{
 		glGenFramebuffers(1, &this->AssetID);
 
@@ -49,6 +49,16 @@ public:
 	~FrameBuffer()
 	{
 		glBindFramebuffer(this->Usage, this->AssetID);
+		GLenum *drawTargets = new GLenum[Targets.size()];
+		unsigned index = 0;
+		for (auto i : Targets)
+		{
+			drawTargets[index] = i;
+		}
+		glInvalidateFramebuffer(this->Usage, Targets.size(), drawTargets);
+
+		delete[] drawTargets;
+
 		glDeleteFramebuffers(1, &this->AssetID);
 		CheckStatus(__FUNCTION__);
 
@@ -99,6 +109,16 @@ public:
 	@param param The value of the parameter.
 	*/
 	void Param(GLenum pname, GLint value);
+
+	/**
+	@brief Bind the framebuffer so that off-screen rendering is performed as you wish.
+	*/
+	void Bind();
+
+	/**
+	@brief Unbind the framebuffer so that rendering output is shown on the screen again.
+	*/
+	void UnBind();
 private:
 	/**
 	@brief Usage of the framebuffer.

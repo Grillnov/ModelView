@@ -1,9 +1,10 @@
 # version 430 core
 
 smooth in vec4 vFragColor;
-out vec4 pixColor;
+
+layout (location = 0) out vec3 color;
 
 void main()
 {
-	pixColor = vFragColor;
+	color = vFragColor.xyz;
 }

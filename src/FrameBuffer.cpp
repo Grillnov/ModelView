@@ -36,7 +36,8 @@ void FrameBuffer::AddRenderTargetAt(Texture2D& texture, GLuint target)
 	}
 
 	glBindFramebuffer(this->Usage, this->AssetID);
-	glFramebufferTexture(this->Usage, target, texture, 0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glFramebufferTexture2D(this->Usage, target, GL_TEXTURE_2D, texture, 0);
 	Targets.emplace(target);
 
 	Log(debugMsg, "Framebuffer %u: Render target(to 2D texture) %u was successfully added."
@@ -61,14 +62,12 @@ void FrameBuffer::DrawFrameBuffer()
 	glBindFramebuffer(this->Usage, this->AssetID);
 	glDrawBuffers(Targets.size(), drawTargets);
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (glCheckFramebufferStatus(this->Usage) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		Error(debugMsg, "Framebuffer %u is now incomplete. Please refer to the docs of your OpenGL implementation."
 			, this->AssetID);
 		return;
 	}
-
-	glBindFramebuffer(this->Usage, 0);
 	delete[] drawTargets;
 }
 
@@ -78,5 +77,15 @@ void FrameBuffer::Param(GLenum pname, GLint value)
 
 	glFramebufferParameteri(this->Usage, pname, value);
 
+	glBindFramebuffer(this->Usage, 0);
+}
+
+void FrameBuffer::Bind()
+{
+	glBindFramebuffer(this->Usage, this->AssetID);
+}
+
+void FrameBuffer::UnBind()
+{
 	glBindFramebuffer(this->Usage, 0);
 }

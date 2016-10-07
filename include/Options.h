@@ -60,8 +60,8 @@ Comment this macro below during release build to boost performance.
 @brief Try modifying this to USEGL3W if glew initialization failed or you found out that
 some nullptr is invoked as a function pointer.
 */
-//# define USEGLEW
-# define USEGL3W
+# define USEGLEW
+//# define USEGL3W
 
 
 

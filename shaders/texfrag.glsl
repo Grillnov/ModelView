@@ -8,9 +8,6 @@ uniform sampler2D tex;
 
 void main()
 {
-	ivec2 texIndex = ivec2(texCoord.x > 0.5f ? 1 : 0, texCoord.y > 0.5f ? 1 : 0);
-
-	//vec4 texcolor = texelFetch(tex, texIndex, 0);
 	vec4 texcolor = texture(tex, texCoord.xy);
 
 	color = texcolor;

@@ -138,15 +138,6 @@ void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLuint>& ElementAr
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLint>& ElementArray, GLenum mode)
-{
-	this->Bind();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementArray);
-
-	glDrawElements(mode, Amount, GL_INT, nullptr);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLushort>& ElementArray, GLenum mode)
 {
 	this->Bind();
@@ -156,30 +147,12 @@ void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLushort>& Element
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLshort>& ElementArray, GLenum mode)
-{
-	this->Bind();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementArray);
-
-	glDrawElements(mode, Amount, GL_SHORT, nullptr);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLubyte>& ElementArray, GLenum mode)
 {
 	this->Bind();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementArray);
 
 	glDrawElements(mode, Amount, GL_UNSIGNED_BYTE, nullptr);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void VertexArrayPack::DrawElements(GLsizei Amount, BufferPack<GLbyte>& ElementArray, GLenum mode)
-{
-	this->Bind();
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementArray);
-
-	glDrawElements(mode, Amount, GL_BYTE, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 

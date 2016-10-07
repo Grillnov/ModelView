@@ -9,7 +9,6 @@ uniform mat4 transformMatrix;
 const float scale = 0.007f;
 
 smooth out vec2 texCoord;
-//smooth out vec3 tangentE;
 
 void main()
 {
