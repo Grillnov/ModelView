@@ -69,7 +69,9 @@
     <None Include="..\Shaders\simpleFragment.glsl" />
     <None Include="..\Shaders\phongfrag.glsl" />
     <None Include="..\Shaders\phongvert.glsl" />
+    <None Include="..\shaders\simpleFragmentFBO.glsl" />
     <None Include="..\Shaders\simpleVertex.glsl" />
+    <None Include="..\shaders\simpleVertexFBO.glsl" />
     <None Include="..\shaders\texfrag.glsl" />
     <None Include="..\shaders\texvert.glsl" />
   </ItemGroup>
@@ -102,12 +104,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\util;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rdParty\gl3w\include;$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\util;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(SolutionDir)\3rdParty\gl3w\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\util;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rdParty\gl3w\include;$(SolutionDir)\3rdParty\glew\include;$(SolutionDir)\3rdParty\glfw\include;$(SolutionDir)\include;$(SolutionDir)\demo;$(SolutionDir)\3rdParty\glm;$(SolutionDir)\util;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rdParty\glew\lib\Release\Win32;$(SolutionDir)\3rdParty\glfw\lib-vc2013;$(SolutionDir)\3rdParty\gl3w\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -118,7 +120,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;DbgHelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;DbgHelp.lib;gl3wd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>

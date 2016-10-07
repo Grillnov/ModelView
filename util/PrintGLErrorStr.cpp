@@ -26,8 +26,10 @@ const char* getGLErrorString(GLenum errorId)
 		return ("GL Stack Overflow");
 	case GL_STACK_UNDERFLOW:
 		return ("GL Stack Underflow");
+# ifdef USEGLEW
 	case GL_TABLE_TOO_LARGE:  
 		return ("GL Table Too Large");  
+# endif
 	default:
 		return "Unrecognized OpenGL Error";
 	};

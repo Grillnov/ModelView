@@ -142,6 +142,83 @@ public:
 	@brief Deactivate the attribute.
 	*/
 	void DeleteAttribAt(GLuint index);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+	
+	@param ElementArray The element array, specifying how the primitives are assembled.
+
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLuint>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+
+	@param ElementArray The element array, specifying how the primitives are assembled.
+
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLint>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+
+	@param ElementArray The element array, specifying how the primitives are assembled.
+
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLushort>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+
+	@param ElementArray The element array, specifying how the primitives are assembled.
+
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLshort>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+
+	@param ElementArray The element array, specifying how the primitives are assembled.
+
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLubyte>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw elements.
+
+	@param Amount Total vertices of the primitives to be drawn.
+
+	@param ElementArray The element array, specifying how the primitives are assembled.
+	
+	@param mode The type of the primitives.
+	By default it's set as GL_TRIANGLES.
+	*/
+	void DrawElements(GLsizei Amount, BufferPack<GLbyte>& ElementArray, GLenum mode = GL_TRIANGLES);
+
+	/**
+	@brief Draw this array.
+	*/
+	void DrawArray(GLsizei Amount, GLenum mode = GL_TRIANGLES);
 private:
 	/*
 	Attributes are stored here, ready for attaching.

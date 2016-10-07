@@ -80,10 +80,7 @@ public:
 		Program["MVP"] = MVP;
 		Program["color"] = glm::vec3(0.0f, 0.0f, 1.0f);
 		Program.Use();
-
-		VertArr.Bind();
-		ElementArr.Bind(GL_ELEMENT_ARRAY_BUFFER);
-		glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, nullptr);
+		VertArr.DrawElements(18, ElementArr);
 	}
 	~DrawMeshDemo()
 	{

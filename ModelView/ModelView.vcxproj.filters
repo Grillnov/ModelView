@@ -199,5 +199,11 @@
     <None Include="..\shaders\texfrag.glsl">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\shaders\simpleFragmentFBO.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\simpleVertexFBO.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

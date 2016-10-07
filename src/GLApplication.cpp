@@ -60,6 +60,16 @@ GLApplication::GLApplication() : fWindow(nullptr)
 
 	glfwMakeContextCurrent(fWindow);
 
+# ifdef USEGL3W
+	/*
+	Initiate Gl3w to retrieve function pointers to OpenGL interfaces.
+	*/
+	if (0 != gl3wInit())
+	{
+		Error(debugMsg, "Gl3w initialization failed!");
+	}
+# endif
+
 	std::string device = reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 	std::string vendor = reinterpret_cast<const char*>(glGetString(GL_VENDOR));
 
@@ -72,6 +82,7 @@ GLApplication::GLApplication() : fWindow(nullptr)
 		Warning(debugMsg, "Running this framework on Windows platform with an Intel device may cause crashing due to glew support.");
 	}
 
+# ifdef USEGLEW
 	/*
 	It might be troublesome if a laptop video card is detected on windows platform.
 	Glew expects global flag glewExperimental to be on so that function pointers are retrieved properly.
@@ -89,6 +100,7 @@ GLApplication::GLApplication() : fWindow(nullptr)
 	{
 		Error(debugMsg, "Glew initialization failed!");
 	}
+# endif
 
 	Info(debugMsg, "OpenGL version: %s", glGetString(GL_VERSION));
 	Info(debugMsg, "Running on rendering device: %s", device.c_str());
