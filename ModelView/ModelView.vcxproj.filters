@@ -170,9 +170,6 @@
     <ClCompile Include="..\demo\PhongDemo.cpp">
       <Filter>demo</Filter>
     </ClCompile>
-    <ClCompile Include="..\demo\NormalMapDemo.cpp">
-      <Filter>demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\demo\FrameBufferDemo.cpp">
       <Filter>demo</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="..\Shaders\simpleVertex.glsl">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Shaders\phong_normalMap.glsl">
       <Filter>shaders</Filter>
     </None>
     <None Include="..\Shaders\phongvert.glsl">

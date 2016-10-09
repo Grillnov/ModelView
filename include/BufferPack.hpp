@@ -147,7 +147,7 @@ BufferPack<GLclientside>::~BufferPack()
 template<typename GLclientside>
 void BufferPack<GLclientside>::Alloc(GLsizei num_of_elements)
 {
-	Alloc(num_of_elements, GL_COPY_WRITE_BUFFER, GL_STATIC_DRAW);
+	Alloc(num_of_elements, GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 }
 
 template<typename GLclientside>

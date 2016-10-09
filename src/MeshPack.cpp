@@ -181,3 +181,111 @@ void MeshPack::DrawMesh(GLenum mode)
 		(*ptr)[i + 2] -= MassCenter[2];
 	}
 }*/
+
+BufferPack<GLfloat>& MeshPack::getCoordBuffer()
+{
+	if (this->isAttached)
+	{
+		return this->VertexCoord;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->VertexCoord;
+	}
+}
+
+BufferPack<GLfloat>& MeshPack::getNormBuffer()
+{
+	if (this->isAttached)
+	{
+		return this->NormalCoord;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->NormalCoord;
+	}
+}
+
+BufferPack<GLfloat>& MeshPack::getTexCoordBuffer()
+{
+	if (this->isAttached)
+	{
+		return this->TextureCoord;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->TextureCoord;
+	}
+}
+
+BufferPack<GLuint>& MeshPack::getElementArrBuffer()
+{
+	if (this->isAttached)
+	{
+		return this->ElementArr;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->ElementArr;
+	}
+}
+
+size_t MeshPack::getTriangleAmount()
+{
+	if (this->isAttached)
+	{
+		return this->SizeInTriangles;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->SizeInTriangles;
+	}
+}
+
+size_t MeshPack::getVertexAmount()
+{
+	if (this->isAttached)
+	{
+		return this->SizeInVertices;
+	}
+	else
+	{
+		Warning(debugMsg, "Mesh object %s is not attached yet, bailing.", this->Path);
+		return this->SizeInVertices;
+	}
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLfloat>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLdouble>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLint>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLuint>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLshort>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}
+
+void MeshPack::AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components)
+{
+	this->VertexArray.AddAttribAt(buffer, index, components);
+}

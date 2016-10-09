@@ -194,6 +194,13 @@ public:
 		float nearP = 0.1f, float farP = 100.0f);
 
 	/**
+	@brief Get the normal matrix.
+
+	@param Model The model matrix provided. Set as identical by default.
+	*/
+	glm::mat4 GetNormalMatrix(glm::mat4 Model = glm::mat4(1.0f));
+
+	/**
 	@brief Get the camera's position.
 	*/
 	glm::vec3 GetCameraLocation();

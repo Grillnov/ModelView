@@ -38,7 +38,6 @@
   <ItemGroup>
     <ClCompile Include="..\demo\DrawMeshDemo.cpp" />
     <ClCompile Include="..\demo\FrameBufferDemo.cpp" />
-    <ClCompile Include="..\demo\NormalMapDemo.cpp" />
     <ClCompile Include="..\demo\PhongDemo.cpp" />
     <ClCompile Include="..\demo\TextureDemo.cpp" />
     <ClCompile Include="..\src\CameraView.cpp" />
@@ -65,7 +64,6 @@
     <ClCompile Include="..\util\PrintGLErrorStr.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shaders\phong_normalMap.glsl" />
     <None Include="..\Shaders\simpleFragment.glsl" />
     <None Include="..\Shaders\phongfrag.glsl" />
     <None Include="..\Shaders\phongvert.glsl" />

@@ -33,6 +33,8 @@ public:
 		Plain.Attach();
 
 		Text1.Alloc(GetWindowWidth(), GetWindowHeight());
+		Text1.Param(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		Text1.Param(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		FBO.AddRenderTargetAt(Text1, GL_COLOR_ATTACHMENT0);
 	}
 	virtual void RenderFrame()
@@ -47,7 +49,7 @@ public:
 		ProgramRender["varyingcolor"] = glm::vec4(r, 0.0f, 1.0f, 1.0f);
 		ProgramRender["MVP"] = FPSCamera.GetModelViewProjection();
 		ProgramRender.Use();
-		Android.DrawMesh();
+		Plain.DrawMesh();
 
 		FBO.UnBind();
 
@@ -72,4 +74,4 @@ public:
 		Plain.Detach();
 	}
 };
-RunInstance(FrameBufferDemo)
+//RunInstance(FrameBufferDemo)

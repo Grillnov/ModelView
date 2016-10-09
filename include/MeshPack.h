@@ -115,7 +115,7 @@ public:
 	/**
 	@brief Generate tangent for normal mapping.
 	*/
-	void GenTangent();
+	//void GenTangent();
 
 	/**
 	@brief Add customized buffers as new vertex attrib arrays.
@@ -182,6 +182,36 @@ public:
 	@param components How many components of the attribute one vertex can have. A value of 1/2/3/4 is expected.
 	*/
 	void AddAttribAt(BufferPack<GLushort>& buffer, GLuint index, GLuint components);
+
+	/**
+	@brief Get the coordinate buffer object.
+	*/
+	BufferPack<GLfloat>& getCoordBuffer();
+
+	/**
+	@brief Get the normal buffer object.
+	*/
+	BufferPack<GLfloat>& getNormBuffer();
+
+	/**
+	@brief Get the texture coordinate buffer object.
+	*/
+	BufferPack<GLfloat>& getTexCoordBuffer();
+
+	/**
+	@brief Get the element array buffer object.
+	*/
+	BufferPack<GLuint>& getElementArrBuffer();
+
+	/**
+	@brief How many triangles are there?
+	*/
+	size_t getTriangleAmount();
+
+	/**
+	@brief How many vertices are there?
+	*/
+	size_t getVertexAmount();
 };
 
 # endif

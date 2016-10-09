@@ -37,4 +37,4 @@ public:
 		Pack.Detach();
 	}
 };
-//RunInstance(PhongDemo)
+RunInstance(PhongDemo)

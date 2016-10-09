@@ -139,6 +139,11 @@ glm::mat4 CameraView::GetModelViewProjection(float AspectRatio, glm::mat4 Model,
 	return Projection * View * Model;
 }
 
+glm::mat4 CameraView::GetNormalMatrix(glm::mat4 Model)
+{
+	return glm::transpose(glm::inverse(this->GetModelView(Model)));
+}
+
 glm::vec3 CameraView::GetCameraOrientation()
 {
 	return this->getOrientation();
