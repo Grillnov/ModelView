@@ -20,7 +20,7 @@ Get a quick grip of the abstraction through the [demo sample1](https://github.co
 
 # Further readings
 
-For further details, You may want to refer to the [API documents](http://www.grillnov.com/modelview/index.html) here.
+For further details, You may want to refer to the [API documents](http://www.grillnov.com/ModelView/index.html) here.
 
 # How to build it:
 
