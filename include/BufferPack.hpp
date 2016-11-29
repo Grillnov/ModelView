@@ -17,7 +17,7 @@ Generic class for all kinds of buffers.
 Note that this buffer class only serves as a shell injecting data into server side.
 There's not a copy of the memory on the client side.
 
-@param GLclientside the client side types defined by OpenGL standard protocol.
+@param GLclientside The client side types defined by OpenGL standard protocol.
 Such as GLint, GLuint, GLfloat, GLdouble, etc.
 */
 template<typename GLclientside>
