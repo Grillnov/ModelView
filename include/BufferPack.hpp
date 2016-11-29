@@ -89,7 +89,7 @@ public:
 	@brief Bind the buffer to some target.
 	Deprecated. Use glBindBuffer() instead.
 
-	@param Target the target you want to bind the buffer to.
+	@param Target The target you want to bind the buffer to.
 	A value among GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER......etc. is
 	expected.
 	*/
