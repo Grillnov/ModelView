@@ -6,6 +6,10 @@
 //  Copyright (c) 2016 Bowen Yang. All rights reserved.
 //
 
+//  Why I chose this cpp file as my showcase: 
+//  I invented a memory control model between OpenGL server side(GPU) and client side(CPU) in a way that resembles to
+//  the way caffe handles blobs between GPU and CPU without knowing how caffe managed its memory.
+
 # ifndef __ModelView__BufferPack__
 # define __ModelView__BufferPack__
 
