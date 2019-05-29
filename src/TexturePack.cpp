@@ -26,7 +26,7 @@ TexturePack::TexturePack(GLenum Slot, GLint internalFormat, GLsizei levels, bool
 	}
 	else
 	{
-		Error(debugMsg, "Failed to create a program.");
+		Error(debugMsg, "Failed to create a texture.");
 	}
 }
 
